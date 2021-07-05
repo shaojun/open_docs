@@ -61,8 +61,8 @@ Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatche
 
 下图是用某mqtt client工具进行调用show me api的示例:
 
-![如看不到图,请右键另开](https://gitee.com/bugslife/open_docs/blob/master/images/UniversalAPI_Call_Service_Sample.png)
 
+![Image description](https://images.gitee.com/uploads/images/2021/0705/110753_6a2d740b_8024409.png "屏幕截图.png")
 
 ## 解析API
 发现 API 的返回结果是一个这样的数组结构, 每一个元素代表了一个 API.

@@ -61,7 +61,7 @@ Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatche
 
 下图是用某mqtt client工具进行调用show me api的示例:
 
-![如看不到图,请右键另开](https://bitbucket.org/healthcoding/litefcccore_doc/src/main/images/UniversalAPI_Call_Service_Sample.png)
+![如看不到图,请右键另开](https://gitee.com/bugslife/open_docs/blob/master/images/UniversalAPI_Call_Service_Sample.png)
 
 
 ## 解析API

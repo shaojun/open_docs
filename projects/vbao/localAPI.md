@@ -3,7 +3,14 @@ v宝在站级的一后台服务器将在感应到车主的车载信标后,通过
 
 ## 流程图
 
+### 会员注册流程
+
+注册的流程始于司机申请v宝车载设备,司机信息由v宝后台收集后, **主动** 发往稳牌服务器端
+
 ![Image description](https://images.gitee.com/uploads/images/2021/0705/113608_50aa4a32_8024409.png "屏幕截图.png")
+
+
+### 无感加油流程
 
 ![Image description](https://images.gitee.com/uploads/images/2021/0705/113630_b178d936_8024409.png "屏幕截图.png")
 

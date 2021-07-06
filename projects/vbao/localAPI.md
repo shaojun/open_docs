@@ -21,6 +21,6 @@ v宝在站级的一后台服务器将在感应到车主的车载信标后,通过
 
 API描述的示例(以实际运行时为准):
 
-![Image description](https://images.gitee.com/uploads/images/2021/0706/170756_1e3445ff_8024409.png "屏幕截图.png")
+![Image description](https://images.gitee.com/uploads/images/2021/0706/172348_81aba4a5_8024409.png "屏幕截图.png")
 
 ![Image description](https://images.gitee.com/uploads/images/2021/0706/170945_dfb7be75_8024409.png "屏幕截图.png")

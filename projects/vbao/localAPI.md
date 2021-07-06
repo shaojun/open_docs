@@ -17,6 +17,7 @@ v宝在站级的一后台服务器将在感应到车主的车载信标后,通过
 ## FCC API定义
 
 `api tag`: `V宝`
+
 `ProviderType`: `VBaoProxyApp.App`
 
 API描述的示例(以实际运行时为准):

@@ -2,8 +2,21 @@
 
 LiteFccCore is a software application which is also called as **FCC** in fueling industry, it runs on a PC with I/O Ports(like serial port, Ethernet), by using these Ports, the FCC can communicating with different devices(Dispenser, ATGs, Sensors).
 
-LiteFccCore is internally implemented as many PlugIn(s), each plugin is take a charge to communicate with a specific external devices, thus, the FCC can read devices state, and operate devices.
+It is internally implemented as PlugIn(s), there're 2 types of plugin:
 
+ - Device Drivers
+
+Each driver is responsible for communicating with a specific external device, it does not contain business logic(or very limited), just simply using the device protocol msg to communicate with device, and open and serve basic functions to higher level Apps.
+
+Take `WayneDartPump` driver for example, it implemented `Wayne Dart` protocol, the protocol defined basic function for a dispenser, like read pump status, authorize pump, change pump price and etc., the `driver` just open these function interface, and wait for external to call.
+
+ - Apps
+
+Each App is for a specific business scenario, and mostly binding to a specific business project or product, it's sitting above the `Device Driver`, thus can use the `Device Driver` to compose any business logic and form a complete product features.
+
+Take `IFSF-FDC-POS Server` app for example, it opens a TCP port to wait external POS to connect in, also, it defined several standard msg according from `IFSF Forum`, implemented `Wayne Dart` protocol, the protocol defined basic function for a dispenser, like read pump status, authorize pump, change pump price and etc., the `driver` just open these function interface, and wait for external to call.
+
+![Image description](https://images.gitee.com/uploads/images/2021/0805/163247_9ae35ed9_8024409.png "屏幕截图.png")
 
 **Universal API**
 

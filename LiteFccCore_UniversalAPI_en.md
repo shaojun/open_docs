@@ -16,7 +16,7 @@ Each App is for a specific business scenario, and mostly binding to a specific b
 
 Take `IFSF-FDC-POS Server` app for example, it opens a TCP port to wait external POS to connect in, also, it defined several standard msg according from `IFSF Forum`, implemented `Wayne Dart` protocol, the protocol defined basic function for a dispenser, like read pump status, authorize pump, change pump price and etc., the `driver` just open these function interface, and wait for external to call.
 
-![Image description](https://images.gitee.com/uploads/images/2021/0805/163247_9ae35ed9_8024409.png "屏幕截图.png")
+![Image description](https://images.gitee.com/uploads/images/2021/0805/163717_4b24c2db_8024409.png "屏幕截图.png")
 
 **Universal API**
 

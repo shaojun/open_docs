@@ -39,7 +39,7 @@ Providing user interface to allow user input parameters for a PlugIn to initiali
 
 Providing user interface to show the status of the internal functions(like a control panel):
 
-![Image description](https://images.gitee.com/uploads/images/2021/0809/101852_2e3179e9_8024409.png "屏幕截图.png" 200)
+![Image description](https://images.gitee.com/uploads/images/2021/0809/101852_2e3179e9_8024409.png "屏幕截图.png")
 
 
 The `Universal API` can be called directly by external any applications, like the POS.

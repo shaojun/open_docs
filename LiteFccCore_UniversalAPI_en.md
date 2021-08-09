@@ -1,12 +1,17 @@
-**LiteFccCore**
+# LiteFccCore Overview
 
-LiteFccCore is a software application which is also called as **FCC** in fueling industry, it runs on a PC with I/O Ports(like serial port, Ethernet), by using these Ports, the FCC can communicating with different devices(Dispenser, ATGs, Sensors).
 
-It is internally implemented as PlugIn(s), there're 2 types of plugin:
+LiteFccCore is a software application (also called as **FCC** in fueling industry), it runs on a PC with I/O Ports(like serial port, Ethernet), the FCC internally integrated(implemented) many device communication protocols, by using I/O Ports, it can communicating with different devices(Dispenser, ATGs, Sensors) with protocol defined messages.
+
+LiteFccCore is designed for modularization, different functions are implemented as PlugIn(s) internally, for most sceniaro, the developer or the user are work or use a PlugIn, each PlugIn can providing a configuration user interface(Config UI), and some other functions.
+
+
+
+There're 2 types of plugin:
 
  - Device Drivers
 
-Each driver is responsible for communicating with a specific external device, it does not contain business logic(or very limited), just simply using the device protocol msg to communicate with device, and open and serve basic functions to higher level Apps.
+Each driver is responsible for communicating with a specific external device, it does not contain business logic(or very limited), just simply using the device protocol msg to communicate with device, and providing basic functions to higher level Apps.
 
 Take `WayneDartPump` driver for example, it implemented `Wayne Dart` protocol, the protocol defined basic function for a dispenser, like read pump status, authorize pump, change pump price and etc., the `driver` just open these function interface, and wait for external to call.
 
@@ -16,7 +21,27 @@ Each App is for a specific business scenario, and mostly binding to a specific b
 
 Take `IFSF-FDC-POS Server` app for example, it opens a TCP port to wait external POS to connect in, also, it defined several standard msg according from `IFSF Forum`, implemented `Wayne Dart` protocol, the protocol defined basic function for a dispenser, like read pump status, authorize pump, change pump price and etc., the `driver` just open these function interface, and wait for external to call.
 
-![Image description](https://images.gitee.com/uploads/images/2021/0805/163717_4b24c2db_8024409.png "屏幕截图.png")
+
+ ### Overall Arch
+
+
+![Image description](https://images.gitee.com/uploads/images/2021/0809/100650_96fac195_8024409.png "屏幕截图.png")
+can see the `Device Drviers` are the underlying parts, the `Apps` can use them to compose business logic, and both of them can implement the `Universal API` feature to expose function to external, there're 2 major internal features are using the `Universal API`, they're:
+ - Config UI
+Providing user interface to allow user input parameters for a PlugIn to initialize:
+
+![Image description](https://images.gitee.com/uploads/images/2021/0809/100530_14e45f41_8024409.png "屏幕截图.png")
+
+ - Web Console
+Providing user interface to show the status of the internal functions(like a device control panel):
+
+![Image description](https://images.gitee.com/uploads/images/2021/0809/101852_2e3179e9_8024409.png "屏幕截图.png" 200)
+
+
+The `Universal API` can be called directly by external any applications, like the POS.
+
+
+
 
 **Universal API**
 

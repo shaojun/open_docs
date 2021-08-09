@@ -3,7 +3,7 @@
 
 LiteFccCore is a software application (also called as **FCC** in fueling industry), it runs on a PC with I/O Ports(like serial port, Ethernet), the FCC internally integrated(implemented) many device communication protocols, by using I/O Ports, it can communicating with different devices(Dispenser, ATGs, Sensors) with protocol defined messages.
 
-LiteFccCore is designed for modularization, different functions are implemented as PlugIn(s) internally, for most sceniaro, the developer or the user are work or use a PlugIn, each PlugIn can providing a configuration user interface(Config UI), and some other functions.
+LiteFccCore is designed for modularization, different functions are implemented as PlugIn(s) internally, for most sceniaro, the developer or the user are work or use for a PlugIn, each PlugIn can providing a configuration user interface(Config UI), and some other functions.
 
 
 
@@ -26,14 +26,18 @@ Take `IFSF-FDC-POS Server` app for example, it opens a TCP port to wait external
 
 
 ![Image description](https://images.gitee.com/uploads/images/2021/0809/100650_96fac195_8024409.png "屏幕截图.png")
-can see the `Device Drviers` are the underlying parts, the `Apps` can use them to compose business logic, and both of them can implement the `Universal API` feature to expose function to external, there're 2 major internal features are using the `Universal API`, they're:
+
+can see the `Device Drviers` are the most underlying parts, the higher level `Apps` can use `Drivers` to compose specific business logic, and both of them can implement the `Universal API` feature for expose functions to external, there're 2 major internal features are using the `Universal API`, they're:
+
  - Config UI
+
 Providing user interface to allow user input parameters for a PlugIn to initialize:
 
 ![Image description](https://images.gitee.com/uploads/images/2021/0809/100530_14e45f41_8024409.png "屏幕截图.png")
 
  - Web Console
-Providing user interface to show the status of the internal functions(like a device control panel):
+
+Providing user interface to show the status of the internal functions(like a control panel):
 
 ![Image description](https://images.gitee.com/uploads/images/2021/0809/101852_2e3179e9_8024409.png "屏幕截图.png" 200)
 
@@ -43,72 +47,68 @@ The `Universal API` can be called directly by external any applications, like th
 
 
 
-**Universal API**
+# Universal API
 
-LiteFccCore 是作为平台目的设计的,它将对接的硬件功能进行简化和抽象,并制定了对外开放接口,外部应用程序可以访问这些接口,以快捷实现的对硬件的控制,并形成业务功能.
+The `Device Driver` or the `Apps` can expose their function to external, the external can access these function by APIs, which is call Universal API.
 
-这类开放的接口称为 Universal API, 以下简称 API.
+> API support to be called via: **HTTP(webapi), WebSocket, MQTT**
 
-> API 支持外部通过**HTTP(webapi),WebSocket,MQTT**三种方式调用.
 
----
+## Discover API
 
-## 发现API
+Depends on the release of the LiteFccCore or the configuration, each instance of LiteFccCore may providing different API set, even for a same API, it may get changed by different release of LiteFccCore, so the external caller side should treat the APIs are a `dynamic resource`, thus every time it get disconnected with LiteFccCore, it should re-run the discover procedure to get the correct API list and or other call details.
 
-依 LiteFccCore 的具体配置(如连接了什么设备,开启了哪些功能),它所提供的**API集**将是不同的;同时,哪怕同一个 API,也因技术原因,在 LiteFccCore 每次重启后,它的调用路径也可能发生改变.
+LiteFccCore provided one only fixed API which is the **Discover API** (also called `show me api`), external should always access this API first to get other API list.
 
-所以,外部应用程序应将API作为一种**动态资源**来对待,即在每次与 LiteFccCore 重新建立连接后,都应该重新进行API发现,以获得有效的 API 调用入口和方式列表.
+You can access the discover API by a browser[human readable version](http://localhost:8384/Home/ShowMeApi?apiType=localmqtt&tags=,&format=pretty)
 
-为了给外部提供一个获取当前所支持的API列表功能, LiteFccCore 提供了一个固定的 API,即 **发现API**,外部应用程序应通过调用此 API,来发现其它**动态API**.
+or another version that used for application:
 
-发现API 可以由通过浏览器访问一个[可读性的版本](http://localhost:8384/Home/ShowMeApi?apiType=localmqtt&tags=,&format=pretty)
+* use HTTP POST to discover the API
 
-同时也提供一个供程序获取的版本,以下做介绍:
-
-* 使用HTTP POST进行API服务发现
-
-以下示例将返回 webapi 格式的所有API信息
+below sample is to get all available APIs with `webapi` format:
 ```
 URL: http://localhost:8384/u/?apitype=service&an=ShowMeApi&pn=ProcessorsDispatcher&en=Edge.Core.Processor.Dispatcher.DefaultDispatcher
 Content-Type: application/json
 Content: ["webapi",[]]"  
 ```
 
-以下示例将返回 mqtt 格式的 API 信息
+below sample is to get all available APIs with `mqtt` format:
 ```
 URL: http://localhost:8384/u/?apitype=service&an=ShowMeApi&pn=ProcessorsDispatcher&en=Edge.Core.Processor.Dispatcher.DefaultDispatcher
 Content-Type: application/json
 Content: ["localmqtt",[]]
 ```
 
-如果要指定设备类型,即只需要发现某些类别的API,则需要传入特定的 API TAG, 以下示例将返回<i>Pump</i>(油机)相关的API:
+if you want to limit the API by targeting a specific Device or tag, then you need pass in `API TAG`, below sample is to only get <i>Pump</i>(dispenser) releated APIs:
 ```
 URL: http://localhost:8384/u/?apitype=service&an=ShowMeApi&pn=ProcessorsDispatcher&en=Edge.Core.Processor.Dispatcher.DefaultDispatcher
 Content-Type: application/json
 Content: ["localmqtt",["Pump"]] 
 ```
 
-* 使用MQTT进行API服务发现
+* use MQTT to discover the API
 
 mqtt server url:  mqtt://127.0.0.1:8388
-publish to(请将+号换成唯一id以模拟RPC调用):
+publish to(replace the `+` to a local unique id to simulate RPC call):
 ```
 Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatcher/thing/service/ShowMeApi/+
 Content: ["localmqtt",[]]
 ```
-subscribe to(请将+号换成上一步publish时用的唯一id以模拟RPC调用):
+subscribe to(replace the `+` to above value used in publish):
 ```
 Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatcher/thing/service/ShowMeApi_reply/+
 ```
 
 
-下图是用某mqtt client工具进行调用show me api的示例:
+below is a sample that using a 3rd party mqtt client tool to call the `show me api`:
 
 
 ![Image description](https://images.gitee.com/uploads/images/2021/0705/110753_6a2d740b_8024409.png "屏幕截图.png")
 
-## 解析API
-发现 API 的返回结果是一个这样的数组结构, 每一个元素代表了一个 API.
+## Resolve the result from Show Me API
+
+the result of the Discover API is a below data structure, each element stands for an API.
 ```
 [
 {
@@ -148,24 +148,24 @@ Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatche
 }
 ]
 ```
-`providerType`是提供 API 的插件名称,每个插件对接了不同的设备.
+`providerType` is the PlugIn name of the API.
 
-`apiName`是指 API 的名称,每个 providerType 中的 apiName 是唯一的,请用此值来唯一确定一个将要调用的 API.
+`apiName` is the name of API, apiName in each providerType is unique.
 
-`baseCategory`是指此 API 的分类,现有3种分类, `service`是指外部应用可以主动调用的,就像一个rpc函数, `event`是指由LiteFccCore主动发起的,外部则被动来接收,就是一个事件,如某硬件设备进入了异常状态,则会引发一个event.
+`baseCategory` is a category of an API, there're 3 types of category, `service` is for calling from external, like a rpc function, `event` is triggered from FCC, external just wait for the notification, like a device entered an invalid state, then a event will be fired and notify external.
 
-`path`是指调用此 API 的路径,如果 baseCategory 是`service`,如外部应用使用 mqtt 形式的调用 ,则请直接调用此 path 进行 publish. 而对于 event,则 subscribe 它并等待通知.
+`path` is the full address of an API,if baseCategory is `service`, and external is using mqtt,then publish to this path to start a service call. if it's a `event`, then just  subscribe this topic to wait for notification.
 
-`inputParametersJsonSchemaStrings`是指输入参数的 json schema,在调用时,输入的参数必须符合此规则,如果为 null,则说明此API不需要输入.
+`inputParametersJsonSchemaStrings` is the json schema for the input paramters,when call the API, the input parameter must satisfy the schema,if the schemal is null, then means this API does not support input parameter.
 
-`inputParametersExampleJson`是指输入参数的示例 json 内容,以帮助调用者理解如何构建输入参数.
+`inputParametersExampleJson` a sample for input parameter, help external to understand how to call the API.
 
-`outputParametersJsonSchema`是指输出结果的 json schema,外部应用可以根据它来预期返回值的结构.
+`outputParametersJsonSchema` is the json schema for the output result, the external can know what the result structure would be.
 
 
 
-## 使用API
+## USE API
 
-* 与开发者联系,咨询所要访问的API的`tag`,`providerType`,`apiName`
-* 通过 `showmeapi` API进行服务发现, 基于第一步中的信息,确定自己要调用的API,并通过发现结果以获取调用技术细节
-* 发起实际调用
+* Contact with developer to know what is the `tag`,`providerType`,`apiName` of the targeting API
+* Call `showmeapi` API to discover based on step1's tag name, read schema info,and prepare the input parameter.
+* Start the call.

@@ -60,7 +60,7 @@ Depends on the release of the LiteFccCore or the configuration, each instance of
 
 LiteFccCore provided one only fixed API which is the **Discover API** (also called `show me api`), external should always access this API first to get other API list.
 
-You can access the discover API by a browser[human readable version](http://localhost:8384/Home/ShowMeApi?apiType=localmqtt&tags=,&format=pretty)
+You can access the discover API by a browser [human readable version](http://localhost:8384/Home/ShowMeApi?apiType=localmqtt&tags=,&format=pretty)
 
 or another version that used for application:
 

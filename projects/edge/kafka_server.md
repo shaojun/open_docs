@@ -60,8 +60,82 @@ CONTAINER ID        IMAGE                             COMMAND                  C
 Now test if you can publish / subscribe to kafka, I am using python for this.
 Install python client using:
 
+`pip3 install kafka-python==2.0.2`
+
+Create a file called producer.py and put in below content.
+
+
+```
+import time
+from json import dumps
+from kafka import KafkaProducer
+
+producer = KafkaProducer(
+    bootstrap_servers='< _**ADD-YOUR-HOST-IP-HERE**_ >:9092',
+    value_serializer=lambda x: dumps(x).encode('utf-8')
+)
+
+idx = 0
+while True:
+    data = {'idx': idx,'type':'producer-consumer_test_msg'}
+    producer.send('test', value=data)
+    print(data)
+    time.sleep(1.5)
+    idx += 1
+```
+Run producer.py
+`python3 producer.py`
+Output:
+
+```
+{'idx': 0,'type':'producer-consumer_test_msg'}
+{'idx': 1,'type':'producer-consumer_test_msg'}
+.
+.
+.
 ```
 
-pip3 install kafka-python==2.0.2
+This means we are able to publish data to kafka. Now let’s try to consume.
+Create another file consumer.py and put in below content.
+
+
+```
+import time
+from kafka import KafkaConsumer
+from json import loads
+import uuid 
+
+consumer = KafkaConsumer(
+    'test',
+    bootstrap_servers='<ADD-YOUR-HOST-IP-HERE>:9092',
+    auto_offset_reset='latest',from latest
+    enable_auto_commit=True,
+    group_id=str(uuid.uuid1()),
+    value_deserializer=lambda x: loads(x.decode('utf-8'))
+)
+
+# do a dummy poll to retrieve some message
+consumer.poll()
+
+# go to end of the stream
+consumer.seek_to_end()
+
+for event in consumer:
+    event_data = event.value
+    print(event_data)
+```
+Note I am using random group_id so that I can have Independent consumers receiving the same data.
+Run consumer.py
+
+`python3 consumer.py`
+
+Output:
+```
+{'idx': 31,'type':'producer-consumer_test_msg'}
+{'idx': 32,'type':'producer-consumer_test_msg'}
+.
+.
+.
 ```
 
+If you are able to receive the messages, that means your kafka broker is working. just to make sure that deepstream will be able to connect, try to run the producer from Jetson and consumer from Host machine. This will confirm that the kafka is reachable from other machines too.

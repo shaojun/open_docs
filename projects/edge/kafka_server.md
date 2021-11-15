@@ -6,6 +6,7 @@ Kafka is a distributed streaming platform that is used to publish and subscribe 
 Make sure you have docker and docker-compose installed on your host machine.
 create a file namely docker-compose.yml and put below content.
 
+ **_replace the <ADD-YOUR-HOST-IP-HERE> with your condition, url domain name or Ip is all acceptable._** 
 ```
 kafka:
     image: confluentinc/cp-kafka:5.4.3
@@ -19,7 +20,7 @@ kafka:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST:// _**<ADD-YOUR-HOST-IP-HERE>**_ :9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://<ADD-YOUR-HOST-IP-HERE>:9092
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -64,7 +65,7 @@ Install python client using:
 `pip3 install kafka-python==2.0.2`
 
 Create a file called producer.py and put in below content.
-
+**_replace the <ADD-YOUR-HOST-IP-HERE> with your condition, url domain name or Ip is all acceptable._** 
 
 ```
 import time
@@ -72,7 +73,7 @@ from json import dumps
 from kafka import KafkaProducer
 
 producer = KafkaProducer(
-    bootstrap_servers='< _**ADD-YOUR-HOST-IP-HERE**_ >:9092',
+    bootstrap_servers='<ADD-YOUR-HOST-IP-HERE>:9092',
     value_serializer=lambda x: dumps(x).encode('utf-8')
 )
 
@@ -98,7 +99,7 @@ Output:
 
 This means we are able to publish data to kafka. Now let’s try to consume.
 Create another file consumer.py and put in below content.
-
+**_replace the <ADD-YOUR-HOST-IP-HERE> with your condition, url domain name or Ip is all acceptable._** 
 
 ```
 import time

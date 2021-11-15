@@ -1,0 +1,1 @@
+kafka dependency on Jetson

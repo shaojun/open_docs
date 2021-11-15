@@ -6,7 +6,7 @@ Kafka is a distributed streaming platform that is used to publish and subscribe 
 Make sure you have docker and docker-compose installed on your host machine.
 create a file namely docker-compose.yml and put below content.
 
- **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip areall acceptable._** 
+ **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip are all acceptable._** 
 
 ```
 kafka:
@@ -67,7 +67,7 @@ Install python client using:
 
 Create a file called producer.py and put in below content.
 
-**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip areall acceptable._** 
+**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip are all acceptable._** 
 
 ```
 import time

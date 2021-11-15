@@ -1,4 +1,5 @@
-Background on Kafka
+### Background on Kafka
+
 Kafka is a distributed streaming platform that is used to publish and subscribe to streams of records.
 
 - Step 1: Start Kafka broker on Host machine

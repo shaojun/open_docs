@@ -6,7 +6,8 @@ Kafka is a distributed streaming platform that is used to publish and subscribe 
 Make sure you have docker and docker-compose installed on your host machine.
 create a file namely docker-compose.yml and put below content.
 
- **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip is all acceptable._** 
+ **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip areall acceptable._** 
+
 ```
 kafka:
     image: confluentinc/cp-kafka:5.4.3
@@ -65,7 +66,8 @@ Install python client using:
 `pip3 install kafka-python==2.0.2`
 
 Create a file called producer.py and put in below content.
-**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip is all acceptable._** 
+
+**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip areall acceptable._** 
 
 ```
 import time
@@ -99,7 +101,8 @@ Output:
 
 This means we are able to publish data to kafka. Now let’s try to consume.
 Create another file consumer.py and put in below content.
-**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip is all acceptable._** 
+
+**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip are all acceptable._** 
 
 ```
 import time

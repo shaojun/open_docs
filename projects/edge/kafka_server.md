@@ -65,7 +65,7 @@ Install python client using:
 `pip3 install kafka-python==2.0.2`
 
 Create a file called producer.py and put in below content.
-**_replace the <ADD-YOUR-HOST-IP-HERE> with your condition, url domain name or Ip is all acceptable._** 
+**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip is all acceptable._** 
 
 ```
 import time
@@ -99,7 +99,7 @@ Output:
 
 This means we are able to publish data to kafka. Now let’s try to consume.
 Create another file consumer.py and put in below content.
-**_replace the <ADD-YOUR-HOST-IP-HERE> with your condition, url domain name or Ip is all acceptable._** 
+**_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip is all acceptable._** 
 
 ```
 import time

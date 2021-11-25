@@ -51,7 +51,7 @@ Content: ["localmqtt",["Pump"]]
 
 * 使用MQTT进行API服务发现
 
-mqtt server url:  mqtt://127.0.0.1:8388
+ **mqtt server url:  mqtt://127.0.0.1:8388** 
 publish to(请将+号换成唯一id以模拟RPC调用):
 ```
 Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatcher/thing/service/ShowMeApi/+

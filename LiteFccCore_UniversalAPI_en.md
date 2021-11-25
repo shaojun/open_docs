@@ -89,7 +89,7 @@ Content: ["localmqtt",["Pump"]]
 
 * use MQTT to discover the API
 
-mqtt server url:  mqtt://127.0.0.1:8388
+mqtt server url:   **mqtt://127.0.0.1:8388** 
 publish to(replace the `+` to a local unique id to simulate RPC call):
 ```
 Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatcher/thing/service/ShowMeApi/+

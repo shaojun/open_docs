@@ -51,7 +51,8 @@ Content: ["localmqtt",["Pump"]]
 
 * 使用MQTT进行API服务发现
 
- **mqtt server url:  mqtt://127.0.0.1:8388** 
+ **mqtt server url and port:  mqtt://127.0.0.1:8388**, 因暂不对用户名和密码进行验证, 所以填写任意值均可。
+
 publish to(请将+号换成唯一id以模拟RPC调用):
 ```
 Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatcher/thing/service/ShowMeApi/+

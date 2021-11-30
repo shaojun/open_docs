@@ -29,6 +29,8 @@ after a while, you should see the file `./deepstream-test4-app` is created at th
 
 now, run the test demo on the app just compiled, it just send detected data to kafka server on topic `test`:
 
+
+ **make sure the video file is h.264 encoded, otherwise the app may hang!!**
  **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your kafka server's ip or url domain name value_** 
 
 

@@ -1,5 +1,5 @@
 ### kafka dependency on Jetson
-We are going to run deepstream-test4 in this example. First let’s install librdkafka
+We are going to run deepstream-test4 in this example. First install `librdkafka`
 
 
 ```
@@ -12,8 +12,8 @@ sudo make
 sudo make install
 sudo cp /usr/local/lib/librdkafka* /opt/nvidia/deepstream/deepstream/lib/
 sudo ldconfig
-sudo apt-get install libglib2.0 libglib2.0-dev
-sudo apt-get install  libjansson4  libjansson-dev
+#sudo apt-get install libglib2.0 libglib2.0-dev
+#sudo apt-get install  libjansson4  libjansson-dev
 ```
 Now librdkafka is installed, we will start out deepstream-application with proper configuration.
 

@@ -1,3 +1,10 @@
+First clone the source repo of python apps: 
+```
+cd /opt/nvidia/deepstream/deepstream/sources
+git clone https://github.com/NVIDIA-AI-IOT/deepstream_python_apps.git
+```
+
+
 Can refer full doc at [deepstream_python_apps bindings](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md)
 or follow this for short:
 ### 2.1 Base dependencies
@@ -16,6 +23,7 @@ apt install python3-gi python3-dev python3-gst-1.0 python-gi-dev git python-dev 
 
 ### 2.2 Initialization of submodules
 ```
+cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps
 git submodule update --init
 ```
 ### 2.3 Installing Gst-python
@@ -31,13 +39,18 @@ Go to https://developer.nvidia.com/deepstream-sdk, download and install Deepstre
 
 ## 3 - Building the bindings
 
-here directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases)
+Rather than build the bindings by youself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the latest `.whl` with arch: `aarch64` to download.
 
-for Jetson board, from the **Assets** section, choose the latest `.whl` with arch: `aarch64`, download link sample like: https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v1.1.0/pyds-1.1.0-py3-none-linux_aarch64.whl
+download link sample like: 
+
+https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v1.1.0/pyds-1.1.0-py3-none-linux_aarch64.whl
 
 ...
+
 ...
+
 ...
+
 
 ## 4 - Using the generated pip wheel
 

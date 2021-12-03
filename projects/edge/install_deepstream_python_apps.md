@@ -39,7 +39,7 @@ if you see errors like:
 
 > Server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
 
-you can disable the GIT ssl certificate verification by:
+you can disable the GIT ssl certificate verification and re-run the make by:
 
 ```
 export GIT_SSL_NO_VERIFY=1
@@ -48,13 +48,13 @@ sudo make
 sudo install
 ```
 
-### 2.4 - Deepstream SDK
+### 2.4 - DeepStream SDK
 
-Go to https://developer.nvidia.com/deepstream-sdk, download and install Deepstream SDK and its dependencies
+Go to https://developer.nvidia.com/deepstream-sdk, download and install DeepStream SDK and its dependencies
 
 ## 3 - Building the bindings
 
-Rather than build the bindings by youself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the latest `.whl` with arch: `aarch64` to download.
+Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the latest `.whl` with arch: `aarch64` to download.
 
 download link sample like: 
 
@@ -76,7 +76,12 @@ targeting the `whl` file you downloaded from above steps.
 ```
 pip3 install ./pyds-1.1.0-py3-none*.whl
 ```
-you may see errors, then check `4.1.1`
+you may see errors like:
+
+> Failed building wheel for pycairo
+
+then check `4.1.1`.
+
 #### 4.1.1 pip wheel troubleshooting
 Please make sure you upgrade pip if the wheel installation fails
 ```

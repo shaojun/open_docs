@@ -91,7 +91,7 @@ and try `4.1` again.
 ### 4.2 launching test 1 app
 ```
 cd apps/deepstream-test1
-python3 deepstream_test_1.py <input .h264 file>
+python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
 ### 4.3 launching test 4 app
 make sure you build the `librdkafka` already by checking if the below file exists:

@@ -33,6 +33,21 @@ cd 3rdparty/gst-python/
 make
 make install
 ```
+
+if you see errors like:
+
+
+> Server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
+
+you can disable the GIT ssl certificate verification by:
+
+```
+export GIT_SSL_NO_VERIFY=1
+sudo -E sh ./autogen.sh
+sudo make
+sudo install
+```
+
 ### 2.4 - Deepstream SDK
 
 Go to https://developer.nvidia.com/deepstream-sdk, download and install Deepstream SDK and its dependencies

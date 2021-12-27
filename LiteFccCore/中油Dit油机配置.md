@@ -1,5 +1,6 @@
-在中油站中，加油机一般分为以下几个类型:
-# 恒山中油TQC油机
+# 加油机类型
+在中油站中，加油机一般分为以下几个类型, 应该先确定了油机类型后方开始进行中控端的配置:
+## 恒山中油TQC油机
 
 此机型实际上就是标准TQC油机但针对中油的要求做了些小改动，与较老的DIT中油油机不同之处有:
 - 油机 **并未提供 web 后台**
@@ -12,7 +13,7 @@
 
 > 一块油机主板的IFSF NODE值，在此油机型号上，根据经验，其实并不影响与中控的通讯，任何都可以，这可能和不严格的油机技术实现有关，所以一个站有重复的也没有关系，因为其实在一个油机的IP地址上，肯定只会有唯一的IFSF NODE
 
-## 油品号更改
+### 油品号更改
 
 下图为涉及进行 **油品号更改** 的主要流程界面，图2中有两行数据，表示此台油机最多可以支持两种油品，序号`1、2`分别硬件固定指向了`IFSF product db 0x41, 0x42`，然后，分别在这两项上，点击键盘上的 **“确定”** 进去后，就是设置 **“外部油品号”** ，此号才是`IFSF `中的`product code`，即中控上所使用的油品号，中控端应严格按此`product code`进行油枪油品号配置。
 
@@ -22,7 +23,7 @@
 
 
 
-# 恒山中油DIT
+## 恒山中油DIT
 DIT是一类较老用于中油站的油机，大概生产于2013年及以前？？ 之后都由 恒山中油TQC油机 所替换。
 判断它最好的方式就是在同局域网内的PC上，用浏览器打开油机的IP，如果看到像下图：
 
@@ -34,7 +35,7 @@ DIT是一类较老用于中油站的油机，大概生产于2013年及以前？�
  
 ![输入图片说明](../images/ditpump_config_check_nodevalue.png)
 
-## 油品号更改
+### 油品号更改
 1. 打开目标油机的WEB管理页面。   
 2. 如果 待新加油品不存在，则添加一个新的油品，能用的 ‘油品名称（油品号）’根据经验是有范围的，如 128(2)，127(7)，122(3)，124(3)，-20(20)，-10(10) ，不要随便自己定义，奇怪问题会出现。     
 3. 分配新的油品至相应的油枪，点确认后，建议再刷新一次当前页面，确保油机保存成功。
@@ -43,6 +44,46 @@ DIT是一类较老用于中油站的油机，大概生产于2013年及以前？�
 6. 重启加油机    
 7. 开启FCC。
 
-# 富仁中油DIT
+## 富仁中油DIT
 与恒山DIT类似
  
+# LiteFccCore的配置
+- 运行LiteFccCore
+
+在Windows平台上，运行相应的`LiteFccCore.exe`即可。
+在Linux平台上，运行`dotnet LiteFccCore.dll`即可。
+- 进入配置界面
+
+通过浏览器打开网页 http://localhost:8384/Home/Configure 可以看到以下界面：
+![输入图片说明](../images/litefcccore_configUI_indexpage.png)
+
+- 配置加油机
+
+先点击最上方的按钮加油机
+
+
+![输入图片说明](../images/litefcccore_configui_select_tag_pump.png)
+
+左右可以看到驱动列表，接下来请确认加油机类型。
+
+如果是  _恒山中油TQC油机_  则选择：
+
+![输入图片说明](../images/litefcccore_configui_select_hs_tqc_pump.png)
+
+如果是  _恒山中油DIT_  则选择：
+
+![输入图片说明](../images/litefcccore_configui_select_hs_dit_pump.png)
+
+
+ - 更改油品名称
+
+依图中进入此插件的具体配置页：
+
+![输入图片说明](../images/litefcccore_configui_delayfdcserverapp_setting.png)
+
+先查看目标油品是否已经存在了（之前可能已经添加过了):
+![输入图片说明](../images/litefcccore_configui_delayauthfdcserverapp_addfuelproduct.png)
+
+查看和更改目标油枪上的油品分配状况：
+
+![输入图片说明](../images/litefcccore_configui_delayauthfdcserverapp_changenzlproduct.png)

@@ -120,12 +120,34 @@ DIT是一类较老用于中油站的油机，大概生产于2013年及以前？�
 
 ![输入图片说明](../images/litefcccore_configui_dit_pump_furen.png)
  
-# LiteFccCore的配置
-- 运行LiteFccCore
+# 中控程序(LiteFccCore)的使用与配置
+- 运行
 
 在Windows平台上，运行相应的`LiteFccCore.exe`即可。
+
 在Linux平台上，运行`dotnet LiteFccCore.dll`即可。
-- 进入配置界面
+
+- 使用
+通过 http://localhost:8384/TankDetails  可以查看当前油罐列表和状态
+
+通过 http://localhost:8384/SmartFuel  可以查看油枪列表和状态， 注意，`外部延迟授权模式`的中油站不支持此功能查看
+
+通过 http://localhost:8384/swagger/index.html 可以完成其它高级功能，如手工改油价：
+
+![输入图片说明](../images/litefcccore_configui_swaggerpage_changefuelprice.png)
+
+![输入图片说明](../images/litefcccore_configui_swagger_manualchangeprice_input_params.png)
+
+下图为改价成功的返回结果显示：
+
+![输入图片说明](../images/litefcccore_configui_manualpricechange_succeed.png)
+
+
+如果`Response Body`中是这样的内容，则说明改价失败了，一般原因可能是对应的油品并不存在于任何油枪上，或者油机端各种原因失败：
+
+![输入图片说明](../images/litefcccore_configui_swagger_manualpricechange_failed.png)
+
+- 配置
 
 通过浏览器打开网页 http://localhost:8384/Home/Configure 可以看到以下界面：
 ![输入图片说明](../images/litefcccore_configUI_indexpage.png)

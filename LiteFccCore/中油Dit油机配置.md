@@ -97,15 +97,28 @@ DIT是一类较老用于中油站的油机，大概生产于2013年及以前？�
 
 4. 更新中控机端的中控程序的配置
 
-如果中控程序是`2.0`的 **老版本** ，则将目标油枪上的 `productBarcode` 改为以上新加入或者已更改的油品号，以及  `description` 改为POS上希望的油品名称，如 `0,92,95,10` 等, 示例：
+如果中控程序是`2.0`的 **老版本** ，则将目标油枪上的 `productBarcode` 改为以上新加入或者已更改的油品号，以及  `description` 改为POS上希望的油品名称(即油罐中的`油罐油品名称`)，如 `0,92,95,10` 等, 示例：
 
 ![输入图片说明](../images/litefcccore_configui_settingsfile_nozzle_config.png)   
-5. 关闭FCC    
-6. 重启加油机    
-7. 开启FCC。
+
+如果中控程序是`3.0`的版本，则请先确保目标油品已经存在于中控程序中：
+
+![输入图片说明](../images/litefcccore_configui_fuelproduct_list.png)
+
+> 请确保此处的`油品编号`与加油机端所配置的`油品号`一致
+
+![输入图片说明](../images/litefcccore_configui_update_nozzle_product_tank_fuelproduct_name.png)
+
+保存配置
+
+5. 关闭中控程序    
+6. 重启（断电再上电）更改过油品的加油机
+7. 开启中控程序
 
 ## 富仁中油DIT
-与恒山DIT类似
+与恒山DIT类似，此型号油机可以参考以下油机侧面的铭牌:
+
+![输入图片说明](../images/litefcccore_configui_dit_pump_furen.png)
  
 # LiteFccCore的配置
 - 运行LiteFccCore

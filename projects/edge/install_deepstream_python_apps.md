@@ -125,19 +125,25 @@ python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/stream
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
 ```
-Input/Edit the unique id(`whoami`) to identify the Jetson device you're using, this id will be carried and send from current app to remote kafka server.
+Input/Edit the unique id: `whoami` for identify the Jetson device you're using, this `id` will be carried and send from current app to remote kafka server:
 ```
 nano cfg_kafka.txt
-#input your id under the section `custom-uploader` -> `whoami`
+#input your unique id under the section custom-uploader -> whoami
 ``` 
-For using SDK build-in `pgie config file`(dstest51_pgie_config.txt) and local file, then upload to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
+For using default `pgie config file` ( _dstest51_pgie_config.txt_ ) and a local video file, then upload to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
 
 ```
 python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 
 ```
 
-For using your own `pgie config file` and local file, then upload to specified kafka server:
+For using your own `pgie config file` and a local video file, then upload to specified kafka server:
 ```
 python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str dev-iot.ipos.biz;9092 --topic test 
+
+```
+
+For disable local video window, instead setup a RTSP server:
+```
+python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str dev-iot.ipos.biz;9092 --topic test --no-display
 
 ```

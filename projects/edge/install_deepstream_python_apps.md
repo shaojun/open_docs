@@ -9,14 +9,15 @@
 > ```
 > 
 
-
-First clone the source repo of python apps, below is the official source,  **for project purpose** , you may need your private source: 
+## 1 Clone source 
+**For project purpose** , clone this repo which contains extended functions:
+ 
 ```
 cd /opt/nvidia/deepstream/deepstream/sources
-git clone https://github.com/NVIDIA-AI-IOT/deepstream_python_apps.git
+git clone https://github.com/shaojun/deepstream_python_apps
 ```
 
-
+## 2 Create python bindings
 Can refer full doc at [deepstream_python_apps bindings](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md)
 or follow this for short:
 ### 2.1 Base dependencies
@@ -64,11 +65,11 @@ sudo install
 
 Go to https://developer.nvidia.com/deepstream-sdk, download and install DeepStream SDK and its dependencies
 
-## 3 - Building the bindings
+### 3 - Building the bindings
 
-Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the latest `.whl` with arch: `aarch64` to download.
+Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the  **latest ** `.whl` with arch: `aarch64` to download.
 
-download link sample like: 
+download link sample like,  **may not the latest** : 
 
 https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v1.1.0/pyds-1.1.0-py3-none-linux_aarch64.whl
 
@@ -117,4 +118,26 @@ Run:
 ```
 cd apps/deepstream-test4
 python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264 -p /opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so --conn-str="dev-iot.ipos.biz;9092"  --topic="test" -s 0
+```
+
+### 4.4 launching test51 app
+
+```
+cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
+```
+Input/Edit the unique id(`whoami`) to identify the Jetson device you're using, this id will be carried and send from current app to remote kafka server.
+```
+nano cfg_kafka.txt
+#input your id under the section `custom-uploader` -> `whoami`
+``` 
+For using SDK build-in `pgie config file`(dstest51_pgie_config.txt) and local file, then upload to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
+
+```
+python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 
+```
+
+For using your own `pgie config file` and local file, then upload to specified kafka server:
+```
+python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str dev-iot.ipos.biz;9092 --topic test 
+
 ```

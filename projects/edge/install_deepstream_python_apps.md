@@ -1,4 +1,16 @@
-First clone the source repo of python apps: 
+
+
+> Note: For Jetson devices, use the following commands to manually increase the Jetson Power mode and maximize performance further by using the Jetson Clocks mode:
+> 
+> 
+> ```
+> sudo nvpmodel -m 0
+> sudo /usr/bin/jetson_clocks
+> ```
+> 
+
+
+First clone the source repo of python apps, below is the official source,  **for project purpose** , you may need your private source: 
 ```
 cd /opt/nvidia/deepstream/deepstream/sources
 git clone https://github.com/NVIDIA-AI-IOT/deepstream_python_apps.git

@@ -120,6 +120,46 @@ DIT是一类较老用于中油站的油机，大概生产于2013年及以前？�
 
 ![输入图片说明](../images/litefcccore_configui_dit_pump_furen.png)
  
+
+此油机的网页管理后台的用户名是  furen     密码是动态的，是 `固定字符串`+`当天的日期` 例如：   haosheng20220104
+
+
+
+```
+<!--        文件范例：login.htm     -->
+<!--        文件说明：系统登录      -->
+
+<html>
+	<head>
+		<title>系统登录</title>
+	</head>
+	<body bgcolor = #00FF80 >	
+		<br />
+		<br />
+		<form method="post" action="http://192.168.3.101/cgi-bin/login.cgi">
+		<table class="Login" border=1 width=420 align=center>
+		<caption>系统登录
+		<br />
+		<br />
+		<tr align=center>
+			<td id="td_User">用户名</td>
+			<td ><input type="text" name="text_User" id="text_User" style="width:150;text-align:center;"></td>
+		</tr>
+		<tr align=center>
+			<td id="td_Password">密&nbsp;&nbsp;码</td>
+			<td><input type="password" name="password_Password" id="password_Password" style="width:150;text-align:center;"></td>
+		</tr>
+		</table >
+			<p align=center><input type="submit" name="btnSubmit" id="btnSubmit" value="确定" class="btn">
+				&emsp;<input type="reset" value="重置" class="btn">
+			</p>
+		</form>
+	</body>
+</html>
+```
+
+
+
 # 中控程序(LiteFccCore)的使用与配置
 - 运行
 

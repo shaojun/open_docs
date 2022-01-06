@@ -7,8 +7,8 @@
 
 
 ```
-datum create -o Download/datum_test_project
-cd Download/datum_test_project
+datum create -o datum_test_project
+cd datum_test_project
 ```
 
 

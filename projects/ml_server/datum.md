@@ -33,7 +33,7 @@ cd datum_test_project
 
     you can remove the source from project with `source name`:
 
-        datum remove myKittiDataset
+        datum remove my_kitti_dataset
 
 
 
@@ -43,7 +43,7 @@ the sources may contains different sizes of images, for align their size, need d
  
 `datum transform -t resize -- -dw 800 -dh 600`
 
-you may not want to export all classess of objects from sources:
+you may not want to export all classess of objects from sources, then:
 
 `datum filter -e '/item/annotation[label="cat" or label="dog"]' -m i+a`
 
@@ -51,7 +51,7 @@ you may not want to export all classess of objects from sources:
 
 export the sources into a subfolder: `myFinalExportFolder`, and rename all the images with extension name: `.jpg`:
 
-`datum export -o myFinalExportFolder -f kitti -- --save-images --image-ext='.jpg'`
+`datum export -o my_final_export_subfolder -f kitti -- --save-images --image-ext='.jpg'`
 
 
 

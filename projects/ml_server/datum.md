@@ -19,17 +19,17 @@ cd datum_test_project
 
 - import the `CVAT` dataset into datum project:
 
-    - for import CVAT dataset with  **datumaro 1.0**  format, and naming the dataset with `myDatumDataset` as its source name:
+    - for import CVAT dataset with  **datumaro 1.0**  format, and naming the dataset with `my_datum_dataset` as its source name:
 
-        `datum import -f datumaro -n myDatumDataset ../project_labeling_door_closedsign_proj-2022_01_05_03_13_01-datumaro\ 1.0`
+        `datum import -f datumaro -n my_datum_dataset ../project_labeling_door_closedsign_proj-2022_01_05_03_13_01-datumaro\ 1.0`
 
         should see like：
 
             Source 'myDatumDataset' with format 'datumaro' has been added to the project
 
-    - for import CVAT dataset with  **kitti 1.0**  format, and naming the dataset with `myKittiDataset` as its source name:
+    - for import CVAT dataset with  **kitti 1.0**  format, and naming the dataset with `my_kitti_dataset` as its source name:
     
-        `datum import -f kitti -n myKittiDataset ../project_labeling_door_closedsign_proj-2022_01_05_03_13_01-kitti\ 1.0`
+        `datum import -f kitti -n my_kitti_dataset ../project_labeling_door_closedsign_proj-2022_01_05_03_13_01-kitti\ 1.0`
 
     you can remove the source from project with `source name`:
 

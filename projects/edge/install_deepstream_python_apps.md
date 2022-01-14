@@ -21,13 +21,42 @@ git clone https://github.com/shaojun/deepstream_python_apps
 Can refer full doc at [deepstream_python_apps bindings](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md)
 or follow this for short:
 ### 2.1 Base dependencies
-Ubuntu - 18.04 :
+- #### Ubuntu - 18.04 :
 ```
 apt install -y git python-dev python3 python3-pip python3.6-dev python3.8-dev cmake g++ build-essential \
     libglib2.0-dev libglib2.0-dev-bin python-gi-dev libtool m4 autoconf automake
 ```
 
-Ubuntu - 20.04 [use python-3.8, python-3.6 will not work] :
+you may see the error in your  **jetson**  board like:
+
+
+
+> The following packages have unmet dependencies:
+>  python-gi-dev : Depends: python-gi (= 3.26.1-2) but 3.26.1-2ubuntu1 is to be installed
+>                  Depends: python3-gi (= 3.26.1-2) but 3.26.1-2ubuntu1 is to be installed
+> E: Unable to correct problems, you have held broken packages.
+
+ **Solution 1**  is to purge current installed `python-gi` and `python3-gi`, this will wipe out some system build-in functions though I didn't find anything broken for this project:
+
+
+```
+sudo apt purge python-gi
+sudo apt purge python3-gi
+```
+
+and the re-run the  **2.1 Base dependencies** to install the correct ones.
+
+ **Solution 2** (have not tried yet) is to force install the specific version of packages that can let the process go through:
+
+
+```
+sudo apt-get install python-gi=3.26.1-2
+sudo apt-get install python3-gi=3.26.1-2
+```
+
+
+
+- #### Ubuntu - 20.04 [use python-3.8, python-3.6 will not work] :
 ```
 apt install python3-gi python3-dev python3-gst-1.0 python-gi-dev git python-dev \
     python3 python3-pip python3.8-dev cmake g++ build-essential libglib2.0-dev \
@@ -103,7 +132,7 @@ pip3 install --upgrade pip
 and try `4.1` again.
 ### 4.2 launching test 1 app
 ```
-cd apps/deepstream-test1
+cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test1
 python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
 ### 4.3 launching test 4 app

@@ -169,6 +169,14 @@ also put the  **PGIE file**  here:
 
 ### 4.5 launching test51 app
 
+as this app support rtsp input and output, so install these packages:
+
+```
+sudo apt-get install libgstrtspserver-1.0-0 gstreamer1.0-rtsp
+sudo apt-get install libgirepository1.0-dev
+sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
+```
+
 
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4

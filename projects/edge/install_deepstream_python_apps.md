@@ -149,9 +149,9 @@ cd apps/deepstream-test4
 python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264 -p /opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so --conn-str="dev-iot.ipos.biz;9092"  --topic="test" -s 0
 ```
 
-### 4.4 launching test51 app
+### 4.4 prepare the folder structure for owned trained tao models
 
-for deploy custom models trained from `TAO`, suggest follow the step for create folder structures for better view, you're  **not required**  to use the naming of `doorsignnet`, just use your own but also do update the  **PGIE file** :
+for deploy custom models trained from `TAO`, suggest follow the step to create folder structures for better orgnize, you're  **not required**  to use the naming of `doorsignnet`, just use your own but don't forget  **update the PGIE file** :
 
 
 ```
@@ -162,9 +162,13 @@ mkdir tao_pretrained_models/doorsignnet
 ```
 ![输入图片说明](../../images/deepstream_copy_model_to_tao_folder_sample.png)
 
-also put the  **pgie ** here:
+also put the  **PGIE file**  here:
 
 ![输入图片说明](../../images/deepstream_pgie_from_tao_sample.png)
+
+
+### 4.5 launching test51 app
+
 
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4

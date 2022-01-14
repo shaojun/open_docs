@@ -151,6 +151,21 @@ python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/stream
 
 ### 4.4 launching test51 app
 
+for deploy custom models trained from `TAO`, suggest follow the step for create folder structures for better view, you're  **not required**  to use the naming of `doorsignnet`, just use your own but also do update the  **PGIE file** :
+
+
+```
+cd /opt/nvidia/deepstream/deepstream/samples/models/
+mkdir tao_pretrained_models/doorsignnet
+#copy your models and labels files here, see below picture for refer:
+
+```
+![输入图片说明](../../images/deepstream_copy_model_to_tao_folder_sample.png)
+
+also put the  **pgie ** here:
+
+![输入图片说明](../../images/deepstream_pgie_from_tao_sample.png)
+
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
 ```

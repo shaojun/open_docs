@@ -9,6 +9,12 @@
 > ```
 > 
 
+
+install the DeepStream 6:
+
+`sudo apt-get install ./deepstream-6.0_6.0.0-1_arm64.deb`
+
+
 ## 1 Clone source 
 **For project purpose** , clone this repo which contains extended functions:
  

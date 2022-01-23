@@ -1,4 +1,5 @@
 
+# Boost Jetson Nano to full power
 
 > Note: For Jetson devices, use the following commands to manually increase the Jetson Power mode and maximize performance further by using the Jetson Clocks mode:
 > 
@@ -9,11 +10,49 @@
 > ```
 > 
 
+# Experienced memory low?
+then could try:
 
-install the DeepStream 6:
+- Disable teamviewer
+
+```
+sudo systemctl stop teamviewerd.service
+sudo systemctl disable teamviewerd.service
+```
+
+then check `top` to see all teamviewer related process are gone.
+
+
+- Disabling the Desktop GUI
+
+This will free up extra memory that the window manager and desktop uses (around ~800MB for Unity/GNOME or ~250MB for LXDE)
+
+You can disable the desktop temporarily, run commands in the console, and then re-start the desktop when you are done training:
+
+
+```
+$ sudo init 3     # stop the desktop
+# log your user back into the console
+# run the PyTorch training scripts
+$ sudo init 5     # restart the desktop
+```
+
+If you wish to make this persistent across reboots, you can use the follow commands to change the boot-up behavior:
+
+
+```
+$ sudo systemctl set-default multi-user.target     # disable desktop on boot
+$ sudo systemctl set-default graphical.target      # enable desktop on boot
+```
+
+Then after you reboot, the desktop will remain disabled or enabled (whichever default you set).
+
+
+# Install the DeepStream 6
 
 `sudo apt-get install ./deepstream-6.0_6.0.0-1_arm64.deb`
 
+# Install the Python App of DeepStream 6:
 
 ## 1 Clone source 
 **For project purpose** , clone this repo which contains extended functions:

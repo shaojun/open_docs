@@ -3,6 +3,10 @@
 
 `cvdata_convert --images_dir image_2/ --in_format jpeg --out_format jpg`
 
+### convert `png` to `jpg` files  **in place** :
+
+
+`cvdata_convert --images_dir image_2/ --in_format png --out_format jpg`
 
 ### resize `kitti` images and label files to a  **new folder** :
 

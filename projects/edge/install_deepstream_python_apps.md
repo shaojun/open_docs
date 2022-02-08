@@ -2,7 +2,7 @@
 
 > Jetson Nano 2G and 4G has different image file, please confirm your device first
 
-![输入图片说明](download_jetson_nano_sd_image_2_versions.png)
+![输入图片说明](../../images/download_jetson_nano_sd_image_2_versions.png)
 [download](https://developer.nvidia.com/embedded/downloads)
 
  **For simplify** , please create a `sudo` user with name: 
@@ -121,7 +121,7 @@ Rather than build the bindings by yourself, here choose directly download it fro
 
 Scroll to **Assets section**, for Jetson board,  choose the  **latest**  `.whl` with arch: `aarch64` to download.
 
-![输入图片说明](download_ds_python_app_wheel_directly.png)
+![输入图片说明](../../images/download_ds_python_app_wheel_directly.png)
 
 
 ## 4 - Using the above downloaded pip wheel
@@ -217,7 +217,7 @@ python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_sc
 ```
 you may need a RTSP client to show the detection result:
 
-![输入图片说明](ds_python_app_output_rtsp_and_show_in_vlc.png)
+![输入图片说明](../../images/ds_python_app_output_rtsp_and_show_in_vlc.png)
 
 the rtsp url should like:
 

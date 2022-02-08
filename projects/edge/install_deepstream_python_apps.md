@@ -1,3 +1,11 @@
+# Install SD card image for Jetson Nano
+
+> Jetson Nano 2G and 4G has different image file, please confirm your device first
+
+![输入图片说明](download_jetson_nano_sd_image_2_versions.png)
+[download](https://developer.nvidia.com/embedded/downloads)
+
+ **For simplify** , please create a `sudo` user with name: eow    password: '
 
 # Boost Jetson Nano to full power
 
@@ -51,6 +59,9 @@ Then after you reboot, the desktop will remain disabled or enabled (whichever de
 
 # Install the DeepStream 6
 
+[Download](https://developer.nvidia.com/deepstream-6.0_6.0.0-1_arm64deb) the deepStream 6 package and then run below to install it:
+
+
 `sudo apt-get install ./deepstream-6.0_6.0.0-1_arm64.deb`
 
 # Install the Python App of DeepStream 6:
@@ -82,7 +93,7 @@ you may see the error in your  **jetson**  board like:
 >                  Depends: python3-gi (= 3.26.1-2) but 3.26.1-2ubuntu1 is to be installed
 > E: Unable to correct problems, you have held broken packages.
 
- **Solution 1**  is to purge current installed `python-gi` and `python3-gi`, this will wipe out some system build-in functions though I didn't find anything broken for this project:
+ **Solution 1**  is to purge current installed `python-gi` and `python3-gi`, this will wipe out some system build-in functions though I didn't see anything were broken:
 
 
 ```
@@ -90,7 +101,7 @@ sudo apt purge python-gi
 sudo apt purge python3-gi
 ```
 
-and the re-run the  **2.1 Base dependencies** to install the correct ones.
+and the  **re-run**  the  **2.1 Base dependencies** to install the correct ones.
 
  **Solution 2** (have not tried yet) is to force install the specific version of packages that can let the process go through:
 
@@ -136,15 +147,12 @@ sudo make
 sudo install
 ```
 
-### 2.4 - DeepStream SDK
-
-Go to https://developer.nvidia.com/deepstream-sdk, download and install DeepStream SDK and its dependencies
 
 ### 3 - Building the bindings
 
 Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the  **latest ** `.whl` with arch: `aarch64` to download.
 
-download link sample like,  **may not the latest** : 
+download link sample like,  **below link may not showing the latest build** : 
 
 https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v1.1.0/pyds-1.1.0-py3-none-linux_aarch64.whl
 

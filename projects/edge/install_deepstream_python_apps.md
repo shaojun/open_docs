@@ -5,7 +5,11 @@
 ![输入图片说明](download_jetson_nano_sd_image_2_versions.png)
 [download](https://developer.nvidia.com/embedded/downloads)
 
- **For simplify** , please create a `sudo` user with name: eow    password: '
+ **For simplify** , please create a `sudo` user with name: 
+> eow    
+
+password(left to your  _enter key_ ): 
+> '
 
 # Boost Jetson Nano to full power
 
@@ -18,43 +22,6 @@
 > ```
 > 
 
-# Experienced memory low?
-then could try:
-
-- Disable teamviewer
-
-This will freee up around ~300MB on **Jetson Nano 2G**
-```
-sudo systemctl stop teamviewerd.service
-sudo systemctl disable teamviewerd.service
-```
-
-then check `top` to see all teamviewer related processes:  _TeamViewer_Desk_ ,  _teamviewerd_ ,  _TeamViewer_  are gone.
-
-
-- Disabling the Desktop GUI
-
-This will free up extra memory that the window manager and desktop uses (around ~40MB for `Xorg` on  **Jetson Nano 2G** , ~800MB for Unity/GNOME or ~250MB for LXDE)
-
-You can disable the desktop temporarily, run commands in the console, and then re-start the desktop when you are done training:
-
-
-```
-$ sudo init 3     # stop the desktop
-# log your user back into the console
-# run the PyTorch training scripts
-$ sudo init 5     # restart the desktop
-```
-
-If you wish to make this persistent across reboots, you can use the follow commands to change the boot-up behavior:
-
-
-```
-$ sudo systemctl set-default multi-user.target     # disable desktop on boot
-$ sudo systemctl set-default graphical.target      # enable desktop on boot
-```
-
-Then after you reboot, the desktop will remain disabled or enabled (whichever default you set).
 
 
 # Install the DeepStream 6
@@ -263,3 +230,44 @@ Read a remote RSTP stream with  **authentication**  requried sample:
 python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_doorsignnet.txt 
 
 ```
+
+
+
+
+# Experienced memory low?
+then could try:
+
+- Disable teamviewer
+
+This will freee up around ~300MB on **Jetson Nano 2G**
+```
+sudo systemctl stop teamviewerd.service
+sudo systemctl disable teamviewerd.service
+```
+
+then check `top` to see all teamviewer related processes:  _TeamViewer_Desk_ ,  _teamviewerd_ ,  _TeamViewer_  are gone.
+
+
+- Disabling the Desktop GUI
+
+This will free up extra memory that the window manager and desktop uses (around ~40MB for `Xorg` on  **Jetson Nano 2G** , ~800MB for Unity/GNOME or ~250MB for LXDE)
+
+You can disable the desktop temporarily, run commands in the console, and then re-start the desktop when you are done training:
+
+
+```
+$ sudo init 3     # stop the desktop
+# log your user back into the console
+# run the PyTorch training scripts
+$ sudo init 5     # restart the desktop
+```
+
+If you wish to make this persistent across reboots, you can use the follow commands to change the boot-up behavior:
+
+
+```
+$ sudo systemctl set-default multi-user.target     # disable desktop on boot
+$ sudo systemctl set-default graphical.target      # enable desktop on boot
+```
+
+Then after you reboot, the desktop will remain disabled or enabled (whichever default you set).

@@ -124,7 +124,7 @@ Scroll to **Assets section**, for Jetson board,  choose the  **latest**  `.whl` 
 ![输入图片说明](../../images/download_ds_python_app_wheel_directly.png)
 
 
-## 4 - Using the above downloaded pip wheel
+## 4 Using the above downloaded pip wheel
 
 ### 4.1 Installing the pip wheel
 
@@ -215,24 +215,78 @@ python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_sc
 python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test --no-display
 
 ```
-you may need a RTSP client to show the detection result:
+for observing the real-time process, open a rtsp player to check, like [VLC](https://www.videolan.org/vlc/download-windows.html):
 
 ![输入图片说明](../../images/ds_python_app_output_rtsp_and_show_in_vlc.png)
 
-the rtsp url should like:
+the rtsp url should like(replace the ip for your jetson board):
 
 > rtsp://192.168.0.126:8554/eow
 
 
 
 
-* Testing with Read a remote RSTP stream with  **authentication**  required sample:
-and no local display, and no output rtsp, this is for production use:
+* Testing with a camera RSTP stream with  **authentication**  required sample:
+
+no local display, and no output rtsp, this is mostly for production use:
 
 ```
 python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-display --no-output-rtsp
 
 ```
+check the result should be done at  _kafka_  server side.
+
+## 6 add app to system service
+
+
+```
+cd /etc/systemd/system 
+sudo nano elenet.service
+```
+input below content:
+
+
+
+```
+Install elenet deepstream python app as service:
+[Unit]
+Description=elenet deepstream python app for detect and upload.
+Wants=network.target
+After=network.target
+[Service]
+WorkingDirectory=/opt/nvidia/deepstream/deepstream-6.0/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
+# every start of the service, include restart, will block 5 seconds
+# ExecStartPre=/bin/sleep 5
+
+ExecStart=/usr/bin/python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-display --no-output-rtsp
+Restart=always
+# Restart service after 10 seconds if this service crashes:
+RestartSec=10
+SyslogIdentifier=elenet_ds_python_app
+User=eow   
+[Install]
+WantedBy=multi-user.target
+```
+
+save those content by `ctr`+`o`.
+
+Enable service and will autoly start in next boot:
+
+`sudo systemctl enable elenet.service`
+
+Start service right now:
+
+`sudo systemctl start elenet.service`
+
+Check the status of the service:
+
+`sudo systemctl status elenet.service`
+
+
+Stop the service:
+
+`sudo systemctl stop elenet.service`
+
 
 
 

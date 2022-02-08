@@ -236,7 +236,7 @@ python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-d
 ```
 check the result should be done at  _kafka_  server side.
 
-## 6 add app to system service
+## 6 Regist app to system service
 
 
 ```
@@ -291,7 +291,9 @@ Stop the service:
 
 
 
-# Experienced memory low?
+# Diagnose
+
+## Experienced memory low?
 then could try:
 
 - Disable teamviewer

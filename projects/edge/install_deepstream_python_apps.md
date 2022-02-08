@@ -196,12 +196,14 @@ nano cfg_kafka.txt
 #input your unique id under the section custom-uploader -> whoami
 ``` 
 * Testing with a local video file
+
 the upload will against to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
 ```
 python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 
 ```
 
 * Testing with your own `pgie config file` and a local video file
+
 the upload will against to a specified kafka server:
 ```
 python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test 
@@ -215,7 +217,7 @@ python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_sc
 ```
 you may need a RTSP client to show the detection result:
 
-![输入图片说明](ds_python)app_output_rtsp_and_show_in_vlc.png)
+![输入图片说明](ds_python_app_output_rtsp_and_show_in_vlc.png)
 
 the rtsp url should like:
 

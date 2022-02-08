@@ -33,7 +33,7 @@ password(left to your  _enter key_ ):
 
 # Install the Python App of DeepStream 6:
 
-## 1 Clone source 
+## 1 - Clone source 
 **For project purpose** , clone this repo which contains extended functions:
  
 ```
@@ -41,7 +41,7 @@ cd /opt/nvidia/deepstream/deepstream/sources
 git clone https://github.com/shaojun/deepstream_python_apps
 ```
 
-## 2 Create python bindings
+## 2 - Create python bindings
 Can refer full doc at [deepstream_python_apps bindings](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md)
 or follow this for short:
 ### 2.1 Base dependencies
@@ -115,7 +115,7 @@ sudo install
 ```
 
 
-## 3 - Building the bindings
+## 3 - Building python bindings
 
 Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases).
 
@@ -124,7 +124,7 @@ Scroll to **Assets section**, for Jetson board,  choose the  **latest**  `.whl` 
 ![输入图片说明](../../images/download_ds_python_app_wheel_directly.png)
 
 
-## 4 Using the above downloaded pip wheel
+## 4 Using python pip wheel
 
 ### 4.1 Installing the pip wheel
 
@@ -236,7 +236,7 @@ python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-d
 ```
 check the result should be done at  _kafka_  server side.
 
-## 6 Regist app to system service
+## 6 - Regist app to system service
 
 
 ```

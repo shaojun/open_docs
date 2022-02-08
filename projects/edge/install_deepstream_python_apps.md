@@ -124,7 +124,7 @@ Scroll to **Assets section**, for Jetson board,  choose the  **latest**  `.whl` 
 ![输入图片说明](download_ds_python_app_wheel_directly.png)
 
 
-## 4 - Using the generated pip wheel
+## 4 - Using the above downloaded pip wheel
 
 ### 4.1 Installing the pip wheel
 
@@ -145,16 +145,20 @@ Please make sure you upgrade pip if the wheel installation fails
 pip3 install --upgrade pip
 ```
 and try `4.1` again.
-### 4.2 launching test 1 app
+
+### 4.2 Copy in librdkafka files:
+
+sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/libs/librdkafka* /opt/nvidia/deepstream/deepstream/lib/
+sudo ldconfig 
+
+## 5 - Testing
+### 5.1 (NOT required)launching test 1 app
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test1
 python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
-### 4.3 launching test 4 app
-make sure you build the `librdkafka` already by checking if the below file exists:
-```
-/opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so
-```
+### 5.2 (NOT required)launching test 4 app
+make sure you build the `librdkafka` already.
 
 If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
 
@@ -164,25 +168,7 @@ cd apps/deepstream-test4
 python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264 -p /opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so --conn-str="dev-iot.ipos.biz;9092"  --topic="test" -s 0
 ```
 
-### 4.4 prepare the folder structure for owned trained tao models
-
-for deploy custom models trained from `TAO`, suggest follow the step to create folder structures for better orgnize, you're  **not required**  to use the naming of `doorsignnet`, just use your own but don't forget  **update the PGIE file** :
-
-
-```
-cd /opt/nvidia/deepstream/deepstream/samples/models/
-mkdir tao_pretrained_models/doorsignnet
-#copy your models and labels files here, see below picture for refer:
-
-```
-![输入图片说明](../../images/deepstream_copy_model_to_tao_folder_sample.png)
-
-also put the  **PGIE file**  here:
-
-![输入图片说明](../../images/deepstream_pgie_from_tao_sample.png)
-
-
-### 4.5 launching test51 app
+### 5.3 launching test51 app
 
 as this app support rtsp input and output, so install these packages:
 

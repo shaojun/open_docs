@@ -15,12 +15,13 @@ then could try:
 
 - Disable teamviewer
 
+This will freee up around ~300MB on **Jetson Nano 2G**
 ```
 sudo systemctl stop teamviewerd.service
 sudo systemctl disable teamviewerd.service
 ```
 
-then check `top` to see all teamviewer related process are gone.
+then check `top` to see all teamviewer related processes:  _TeamViewer_Desk_ ,  _teamviewerd_ ,  _TeamViewer_  are gone.
 
 
 - Disabling the Desktop GUI

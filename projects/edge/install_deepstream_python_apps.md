@@ -115,7 +115,7 @@ sudo install
 ```
 
 
-### 3 - Building the bindings
+## 3 - Building the bindings
 
 Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases).
 

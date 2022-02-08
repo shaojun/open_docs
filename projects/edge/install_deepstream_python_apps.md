@@ -25,7 +25,7 @@ then check `top` to see all teamviewer related process are gone.
 
 - Disabling the Desktop GUI
 
-This will free up extra memory that the window manager and desktop uses (around ~800MB for Unity/GNOME or ~250MB for LXDE)
+This will free up extra memory that the window manager and desktop uses (around ~40MB for `Xorg` on  **Jetson Nano 2G** , ~800MB for Unity/GNOME or ~250MB for LXDE)
 
 You can disable the desktop temporarily, run commands in the console, and then re-start the desktop when you are done training:
 

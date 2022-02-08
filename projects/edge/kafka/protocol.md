@@ -1,0 +1,3 @@
+each edge board (Jetson Nano) will upload below sample message to kafka server periodically, the interval could be vary, default is around 2 seconds:
+
+{'version': '4.0', 'id': 20112, '@timestamp': '2022-02-07T05:01:05.134Z', 'sensorId': 'default_shaoLocalJsNxBoard', 'objects': ['18446744073709551615|279.561|197.867|476.846|503.844|Vehicle|#|TwoWheeler|B|M|b|X|CN|0.981058', '18446744073709551615|354.695|42.6953|669.148|459.346|Person|#|m|18|b|n|f|0.248717', '18446744073709551615|434.297|151.125|597.471|483.01|Person|#|m|18|b|n|f|0.999874', '18446744073709551615|365.938|117.453|575.322|429.719|Person|#|m|18|b|n|f|0.999982']}

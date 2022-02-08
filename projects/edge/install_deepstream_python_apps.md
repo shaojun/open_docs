@@ -117,17 +117,11 @@ sudo install
 
 ### 3 - Building the bindings
 
-Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases), scroll to **Assets section**, for Jetson board,  choose the  **latest ** `.whl` with arch: `aarch64` to download.
+Rather than build the bindings by yourself, here choose directly download it from [release page](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases).
 
-download link sample like,  **below link may not showing the latest build** : 
+Scroll to **Assets section**, for Jetson board,  choose the  **latest**  `.whl` with arch: `aarch64` to download.
 
-https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/releases/download/v1.1.0/pyds-1.1.0-py3-none-linux_aarch64.whl
-
-...
-
-...
-
-...
+![输入图片说明](download_ds_python_app_wheel_directly.png)
 
 
 ## 4 - Using the generated pip wheel

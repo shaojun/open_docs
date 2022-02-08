@@ -42,8 +42,11 @@ git clone https://github.com/shaojun/deepstream_python_apps
 ```
 
 ## 2 - Create python bindings
-Can refer full doc at [deepstream_python_apps bindings](https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md)
-or follow this for short:
+follow below steps for short, or you still can refer full steps at:
+
+
+> https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md
+
 ### 2.1 Base dependencies
 - #### Ubuntu - 18.04 :
 ```
@@ -105,7 +108,7 @@ if you see errors like:
 
 > Server certificate verification failed. CAfile: /etc/ssl/certs/ca-certificates.crt CRLfile: none
 
-you can disable the GIT ssl certificate verification and re-run the make by:
+you can disable the GIT ssl certificate verification and run below the `make` by:
 
 ```
 export GIT_SSL_NO_VERIFY=1
@@ -124,7 +127,7 @@ Scroll to **Assets section**, for Jetson board,  choose the  **latest**  `.whl` 
 ![输入图片说明](../../images/download_ds_python_app_wheel_directly.png)
 
 
-## 4 Using python pip wheel
+## 4 - Using python pip wheel
 
 ### 4.1 Installing the pip wheel
 
@@ -159,8 +162,15 @@ sudo ldconfig
 
 ## 5 - Testing
 ### 5.1 (NOT required)launching test 1 app
+
+enter directory:
+
 ```
-cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test1
+cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps
+```
+
+```
+cd deepstream-test1
 python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
 ### 5.2 (NOT required)launching test 4 app
@@ -187,7 +197,7 @@ sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
 enter the directory of the app:
 
 ```
-cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
+cd deepstream-test51-on-test4
 ```
 
  **Input/Edit**  the unique id: `whoami` for identify the Jetson device you're using, this `id` will be carried and send to a remote  _kafka_  server:

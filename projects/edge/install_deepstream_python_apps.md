@@ -146,10 +146,16 @@ pip3 install --upgrade pip
 ```
 and try `4.1` again.
 
-### 4.2 Copy in librdkafka files:
+### 4.2 Copy in external lib files:
 
+for librdkafka:
+
+
+```
 sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/libs/librdkafka* /opt/nvidia/deepstream/deepstream/lib/
 sudo ldconfig 
+```
+
 
 ## 5 - Testing
 ### 5.1 (NOT required)launching test 1 app
@@ -178,36 +184,51 @@ sudo apt-get install libgirepository1.0-dev
 sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
 ```
 
+enter the directory of the app:
 
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
 ```
-Input/Edit the unique id: `whoami` for identify the Jetson device you're using, this `id` will be carried and send from current app to remote kafka server:
+
+ **Input/Edit**  the unique id: `whoami` for identify the Jetson device you're using, this `id` will be carried and send to a remote  _kafka_  server:
 ```
 nano cfg_kafka.txt
 #input your unique id under the section custom-uploader -> whoami
 ``` 
-For using default `pgie config file` ( _dstest51_pgie_config.txt_ ) and a local video file, then upload to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
-
+* Testing with a local video file
+the upload will against to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
 ```
 python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 
 ```
 
-For using your own `pgie config file` and a local video file, then upload to specified kafka server:
+* Testing with your own `pgie config file` and a local video file
+the upload will against to a specified kafka server:
 ```
 python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test 
 
 ```
 
-For disable local video window, instead setup a RTSP server:
+* Testing with disable local video window(OSD), instead setup a RTSP server to output real-time process:
 ```
 python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test --no-display
 
 ```
+you may need a RTSP client to show the detection result:
 
-Read a remote RSTP stream with  **authentication**  requried sample:
+![输入图片说明](ds_python)app_output_rtsp_and_show_in_vlc.png)
+
+the rtsp url should like:
+
+> rtsp://192.168.0.126:8554/eow
+
+
+
+
+* Testing with Read a remote RSTP stream with  **authentication**  required sample:
+and no local display, and no output rtsp, this is for production use:
+
 ```
-python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_doorsignnet.txt 
+python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-display --no-output-rtsp
 
 ```
 

@@ -1,8 +1,18 @@
-Each edge board (Jetson Nano) will upload below sample message to  _kafka server_  periodically once target objects detected via the camera video stream. 
+Each edge board (Jetson Nano) will upload below sample message to  _kafka server_  periodically
 
-The upload interval could be vary, default is around 2 seconds, and If no target objects were detected, then no uploading.
+# Upload criteria 
 
-Message sample:
+Only target objects were detected from the camera video stream. 
+
+# Upload interval
+
+could be vary and changed in future, now the default is around 2 seconds, that means, there's max 2 seconds delay before notifying server.
+
+# Kafka server info
+
+url: dev-iot.ipos.biz;9092, topic: test
+
+# Message sample:
 
 - ONLY 2 door sign were detected
 

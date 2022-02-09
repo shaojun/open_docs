@@ -267,6 +267,7 @@ check the result should be done at  _kafka_  server side.
 
 ## 6 - Regist app to system service
 
+for production, need install the elenet deepstream python app as a system service to facilitate maintenance.
 
 ```
 cd /etc/systemd/system 
@@ -274,10 +275,8 @@ sudo nano elenet.service
 ```
 input below content:
 
-
-
 ```
-Install elenet deepstream python app as service:
+
 [Unit]
 Description=elenet deepstream python app for detect and upload.
 Wants=network.target
@@ -297,7 +296,7 @@ User=eow
 WantedBy=multi-user.target
 ```
 
-save those content by `ctr`+`o`.
+save above content by `ctr`+`o`.
 
 Enable service and will autoly start in next boot:
 
@@ -311,10 +310,9 @@ Check the status of the service:
 
 `sudo systemctl status elenet.service`
 
+restart the service:
 
-Stop the service:
-
-`sudo systemctl stop elenet.service`
+`sudo systemctl restart elenet.service`
 
 
 

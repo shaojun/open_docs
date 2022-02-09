@@ -1,4 +1,4 @@
-There's a  **Python App**  in each edge board (Jetson Nano), the App take charge to analyze camera live video stream, and upload message to a _kafka server_  periodically with the detected objects info.
+There's a  **Python App**  in each edge board (Jetson Nano), the App takes charge to analyze camera live video stream, and upload analyzed message to a _kafka server_  periodically with the detected objects info.
 
 # Upload criteria 
 
@@ -8,12 +8,13 @@ Camera live video stream is real-time send into edge board for detection analyze
 
 for performance consideration, uploading is not real-time but by a interval, the interval now is around  _2 seconds_ , and could be changed in future. 
 
-> current camera live video stream is 24FPS, but the App only uploading(if objects detected) at every 48 frame, so the interval is 2 seconds. 
+> current camera live video stream is 24FPS, and the App is uploading(if objects detected) at every 48 frame, the objects in other frames will be ignored. 
 
 # Kafka server info
 
 Url:
-> dev-iot.ipos.biz;9092
+> dev-iot.ipos.biz
+> port: 9092
 
 Topic: 
 > test

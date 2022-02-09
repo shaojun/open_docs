@@ -14,6 +14,7 @@ for performance consideration, uploading is not real-time but by a interval, the
 
 Url:
 > dev-iot.ipos.biz
+
 > port: 9092
 
 Topic: 

@@ -265,9 +265,11 @@ python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-d
 ```
 check the result should be done at  _kafka_  server side.
 
-## 6 - Regist app to system service
+## 6 - Regist app to system service and run it
 
 for production, need install the elenet deepstream python app as a system service to facilitate maintenance.
+
+### 6.1 Regist as a service
 
 ```
 cd /etc/systemd/system 
@@ -304,26 +306,39 @@ WantedBy=multi-user.target
 
 save above content by `ctr`+`o`.
 
-Enable service and will autoly start in next boot:
+### 6.2 Run the service
+
+`Enable` service and it'll autoly get started in next boot:
 
 `sudo systemctl enable elenet.service`
 
-Start service right now:
+`Start` service right now:
 
 `sudo systemctl start elenet.service`
 
-Check the status of the service:
 
-`sudo systemctl status elenet.service`
+> Check the status of the service:
+> 
+> `sudo systemctl status elenet.service`
+> 
+> if `elenet.service` file get updated, then reload the config and restart the service:
+> 
+> ```
+> systemctl daemon-reload
+> sudo systemctl restart elenet.service
+> ```
 
-if `elenet.service` file get updated, then reload the config and restart the service:
+### 6.3 Check service
+
+check system process to see the service is running fine:
 
 ```
-systemctl daemon-reload
-sudo systemctl restart elenet.service
+top
 ```
 
+should see similar process is there with process name `python3`, and resource usage similar to below picture:
 
+![输入图片说明](../../images/python_ds_app_run_with_processname_resourceused.png)
 
 
 

@@ -162,7 +162,6 @@ sudo ldconfig
 
 
 ## 5 - Testing
-### 5.1 (NOT required)launching test 1 app
 
 enter directory:
 
@@ -170,11 +169,14 @@ enter directory:
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps
 ```
 
+### 5.1 (NOT required, SKIP it for most case)launching test 1 app
+
+
 ```
 cd deepstream-test1
 python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
-### 5.2 (NOT required)launching test 4 app
+### 5.2 (NOT required, SKIP it for most case)launching test 4 app
 make sure you build the `librdkafka` already.
 
 If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
@@ -186,6 +188,8 @@ python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/stream
 ```
 
 ### 5.3 launching test51 app
+
+This app support upload detected objects send to a remote kafka server.
 
 as this app support rtsp input and output, so install these packages:
 
@@ -201,11 +205,25 @@ enter the directory of the app:
 cd deepstream-test51-on-test4
 ```
 
- **Input/Edit**  the unique id: `whoami` for identify the Jetson device you're using, this `id` will be carried and send to a remote  _kafka_  server:
+#### 5.3.1 Edit the unique id: `whoami`
+
+`whoami` is for identify the Jetson board device you're currently using,  **SHOULD**  keep this id unique  **per board** .
+
+This `id` will be carried into a message and send to a remote  _kafka_  server, then the server message subscribers would know the source of the messages.
+
+> you should align this id with cloud side offline
+
 ```
-nano cfg_kafka.txt
+ls cfg_kafka.txt  # you should see the file exists!
+nano cfg_kafka.txt  # start edit it.
 #input your unique id under the section custom-uploader -> whoami
 ``` 
+also can refer picture below, the red part is the `whoami id`:
+
+![输入图片说明](../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
+
+#### 5.3.2 Run
+
 * Testing with a local video file
 
 the upload will against to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):

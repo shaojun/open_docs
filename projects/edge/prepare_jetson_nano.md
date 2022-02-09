@@ -275,6 +275,12 @@ sudo nano elenet.service
 ```
 input below content:
 
+> **make sure**  current system user account is: `eow` as the below content based on it, otherwise need update the below `User` to it;
+
+> --no-display is required here, otherwise the app would not start.
+
+> --no-output-rtsp depends on your situation, for production should keep it here for performance consideration.
+
 ```
 
 [Unit]

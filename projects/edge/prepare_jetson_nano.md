@@ -310,9 +310,12 @@ Check the status of the service:
 
 `sudo systemctl status elenet.service`
 
-restart the service:
+if `elenet.service` file get updated, then reload the config and restart the service:
 
-`sudo systemctl restart elenet.service`
+```
+systemctl daemon-reload
+sudo systemctl restart elenet.service
+```
 
 
 

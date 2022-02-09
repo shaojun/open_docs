@@ -38,6 +38,7 @@ password(left to your  _enter key_ ):
  
 ```
 cd /opt/nvidia/deepstream/deepstream/sources
+sudo rm -rf deepstream_python_apps   #delete the old one
 git clone https://github.com/shaojun/deepstream_python_apps
 ```
 

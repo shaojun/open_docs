@@ -1,24 +1,34 @@
-Each edge board (Jetson Nano) will upload below sample message to  _kafka server_  periodically
+There's a  **Python App**  in each edge board (Jetson Nano), the App take charge to analyze camera live video stream, and upload message to a _kafka server_  periodically with the detected objects info.
 
 # Upload criteria 
 
-Only target objects were detected from the camera video stream. 
+Camera live video stream is real-time send into edge board for detection analyze, only when pre-defined(door sign, people, electric bicycle) objects are detected will trigger uploading. 
 
 # Upload interval
 
-could be vary and changed in future, now the default is around 2 seconds, that means, there's max 2 seconds delay before notifying server.
+for performance consideration, uploading is not real-time but by a interval, the interval now is around  _2 seconds_ , and could be changed in future. 
+
+> current camera live video stream is 24FPS, but the App only uploading(if objects detected) at every 48 frame, so the interval is 2 seconds. 
 
 # Kafka server info
 
-url: dev-iot.ipos.biz;9092, topic: test
+Url:
+> dev-iot.ipos.biz;9092
 
-# Message sample:
+Topic: 
+> test
+
+# Message samples
 
 - ONLY 2 door sign were detected
 
-this is the most common case that the elevator door is closed, and no one in it, the elevator is in idle.
+this is the most common case that means the elevator door are closed, and no one in it, indicates the elevator is in `idle` or `on calling`.
 
-there're 2 moving doors for most elevators, so the `door sign` count is 2 here.
+> idle: the elevator is not moving, and door closed.
+
+> on calling: the elevator is going to floor because someone pressed  _go down_  or  _up_ button to ask a lift.
+
+there're 2 moving doors for  _most_  (but 1 is possible) elevators, so the `door sign` count is 2 here.
 
 > NOTE, the `Vehicle` string value here is dummy, please ignore.
 ```
@@ -54,9 +64,13 @@ no door sign indicates the door is in opened state (could not see the door sign 
 
 - 1 person + 2 door sign were detected
 
-door sign indicates the door is in closed state, this is the case that elevator is about to moving.
+door sign indicates the door is in closed state and carried a person, this is the case that elevator is about to moving to target floor.
 ```
 
-{'version': '4.0', 'id': 19104, '@timestamp': '2022-02-07T05:00:24.822Z', 'sensorId': 'default_shaoLocalJsNxBoard', 'objects': ['18446744073709551615|5.87891|333.82|512.148|822.59|Person|#|m|18|b|n|f|1', '18446744073709551615|147.618|97.7041|226.539|154.511|Vehicle|#|DoorWarningSign|B|M|y|l|CN|0.570212', '18446744073709551615|517.02|61.1372|584.524|105.502|Vehicle|#|DoorWarningSign|B|M|y|l|CN|0.687945']}
+{'version': '4.0', 'id': 19104, '@timestamp': '2022-02-07T05:00:24.822Z', 
+'sensorId': 'default_shaoLocalJsNxBoard', 
+'objects': ['18446744073709551615|5.87891|333.82|512.148|822.59|Person|#|m|18|b|n|f|1', 
+    '18446744073709551615|147.618|97.7041|226.539|154.511|Vehicle|#|DoorWarningSign|B|M|y|l|CN|0.570212', 
+    '18446744073709551615|517.02|61.1372|584.524|105.502|Vehicle|#|DoorWarningSign|B|M|y|l|CN|0.687945']}
 
 ```

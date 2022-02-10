@@ -1,8 +1,9 @@
 # 云端
 
-1. 提供 `litefcccore app` 和 `elenet app` 的文件包的人工  _上传_ / _下载_ / _删除_  功能页面
+1. 提供 `litefcccore app` 和 `elenet app` 或者其它app 的文件包的人工  _上传_ / _下载_ / _删除_  功能页面
 
     允许上传的文件包为zip格式。 
+    每个app上传时，应指定app本地的更新路径、app对应的service name信息，这样程序才具有通用性。
     > 当前仅支持每个app上传一个文件包
 
 2. 提供查看当前已经上传的app包，以及包的版本号功能页面。   

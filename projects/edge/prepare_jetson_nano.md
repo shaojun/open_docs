@@ -164,34 +164,22 @@ sudo ldconfig
 
 ## 5 - Testing
 
-enter directory:
+Enter apps root directory:
 
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps
 ```
 
-### 5.1 (NOT required, SKIP it for most case)launching test 1 app
+### 5.1 launching test 1 app
 
 ```
 cd deepstream-test1
 python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
 
+ start app may take **3 minutes or more**, then should see a popup video window with object detection.
+ 
 ### 5.2 launching test51 app
-
-This app support upload detected objects send to a remote kafka server.
-
-as this app support rtsp input and output, so install these packages:
-
-```
-sudo apt-get install libgstrtspserver-1.0-0 gstreamer1.0-rtsp
-sudo apt-get install libgirepository1.0-dev
-sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
-```
-make sure you build the `librdkafka` already.
-
-If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
-
 
 enter the directory of the app:
 
@@ -199,29 +187,46 @@ enter the directory of the app:
 cd deepstream-test51-on-test4
 ```
 
+This app support detect objects from a rtsp input stream, and upload detected objects info to a remote kafka server.
+
+as this app support rtsp input and output(for local monitoring), so install these packages is required:
+
+```
+sudo apt-get install libgstrtspserver-1.0-0 gstreamer1.0-rtsp
+sudo apt-get install libgirepository1.0-dev
+sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
+```
+
+make sure you build the `librdkafka` already which used for uploading to remote kafka server.
+
+If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
+
+
+
 #### 5.2.1 Edit the unique id: `whoami`
 
 
-for config files:
-
-```
-sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
-```
 
 `whoami` is for identify the Jetson board device you're currently using,  **SHOULD**  keep this id unique  **per board** .
 
-This `id` will be carried into a message and send to a remote  _kafka_  server, then the server message subscribers would know the source of the messages.
+This `id` will be carried into a message and send to a remote  _kafka_  server as the objects detected constantly from local video stream, then the server message subscribers would know the source of the messages.
 
-> you should align this id with cloud side offline
+> you should align this id with cloud side manually
 
 ```
-ls cfg_kafka.txt  # you should see the file exists!
-nano cfg_kafka.txt  # start edit it.
+ls config_elenet.txt  # you should see the file exists!
+nano config_elenet.txt  # start edit it.
 #input your unique id under the section custom-uploader -> whoami
 ``` 
 also can refer picture below, the red part is the `whoami id`:
 
 ![输入图片说明](../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
+
+copy config files to target path:
+
+```
+sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+```
 
 #### 5.2.2 Run
 

@@ -43,9 +43,10 @@ git clone https://github.com/shaojun/deepstream_python_apps
 ```
 
 ## 2 - Create python bindings
-follow below steps for short, or you still can refer full steps at:
 
+follow the below steps for short.
 
+> Or you still can refer full steps at:
 > https://github.com/NVIDIA-AI-IOT/deepstream_python_apps/blob/master/bindings/README.md
 
 ### 2.1 Base dependencies
@@ -150,9 +151,9 @@ pip3 install --upgrade pip
 ```
 and try `4.1` again.
 
-### 4.2 Copy in external lib files:
+### 4.2 Copy in external lib and config files:
 
-for librdkafka:
+for lib `librdkafka`:
 
 
 ```
@@ -171,23 +172,12 @@ cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps
 
 ### 5.1 (NOT required, SKIP it for most case)launching test 1 app
 
-
 ```
 cd deepstream-test1
 python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264
 ```
-### 5.2 (NOT required, SKIP it for most case)launching test 4 app
-make sure you build the `librdkafka` already.
 
-If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
-
-Run:
-```
-cd apps/deepstream-test4
-python3 deepstream_test_4.py -i /opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.h264 -p /opt/nvidia/deepstream/deepstream/lib/libnvds_kafka_proto.so --conn-str="dev-iot.ipos.biz;9092"  --topic="test" -s 0
-```
-
-### 5.3 launching test51 app
+### 5.2 launching test51 app
 
 This app support upload detected objects send to a remote kafka server.
 
@@ -198,6 +188,10 @@ sudo apt-get install libgstrtspserver-1.0-0 gstreamer1.0-rtsp
 sudo apt-get install libgirepository1.0-dev
 sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
 ```
+make sure you build the `librdkafka` already.
+
+If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
+
 
 enter the directory of the app:
 
@@ -205,7 +199,14 @@ enter the directory of the app:
 cd deepstream-test51-on-test4
 ```
 
-#### 5.3.1 Edit the unique id: `whoami`
+#### 5.2.1 Edit the unique id: `whoami`
+
+
+for config files:
+
+```
+sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+```
 
 `whoami` is for identify the Jetson board device you're currently using,  **SHOULD**  keep this id unique  **per board** .
 
@@ -222,7 +223,7 @@ also can refer picture below, the red part is the `whoami id`:
 
 ![输入图片说明](../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
 
-#### 5.3.2 Run
+#### 5.2.2 Run
 
 * Testing with a local video file
 

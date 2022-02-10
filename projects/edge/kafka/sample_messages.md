@@ -37,7 +37,7 @@ there're 2 moving doors for  _most_  (but 1 is possible) elevators, so the `door
 
 {'version': '4.0', 'id': 41088, 
 '@timestamp': '2022-02-07T05:01:06.354Z', 
-'sensorId': 'shaoLocal2GJtsBoard', 
+'sensorId': 'shaoLocal2GJtsBoard', #the unique id binding to a board, this is set in board local config.
 'objects': [
     '18446744073709551615|383.927|69.3955|449.859|119.981|Vehicle|#|DoorWarningSign|B|M|y|l|CN|0.460956', #detect door sign one, NOTE, the `Vehicle` here is dummy
     '18446744073709551615|306.012|76.0776|376.832|130.611|Vehicle|#|DoorWarningSign|B|M|y|l|CN|0.622918'] #detect door sign two, NOTE, the `Vehicle` here is dummy

@@ -1,8 +1,9 @@
 # Install SD card image for Jetson Nano
 
-> Jetson Nano 2G and 4G has different image file, please confirm your device first
+> Jetson Nano 2G and 4G has  **different**  image file, please confirm your device first
 
 ![输入图片说明](../../images/download_jetson_nano_sd_image_2_versions.png)
+
 [download](https://developer.nvidia.com/embedded/downloads)
 
  **For simplify** , please create a `sudo` user with name: 
@@ -151,7 +152,7 @@ pip3 install --upgrade pip
 ```
 and try `4.1` again.
 
-### 4.2 Copy in external lib and config files:
+### 4.2 Copy in external lib files:
 
 for lib `librdkafka`:
 
@@ -184,7 +185,7 @@ python3 deepstream_test_1.py /opt/nvidia/deepstream/deepstream/samples/streams/s
 enter the directory of the app:
 
 ```
-cd deepstream-test51-on-test4
+cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4
 ```
 
 This app support detect objects from a rtsp input stream, and upload detected objects info to a remote kafka server.
@@ -197,83 +198,79 @@ sudo apt-get install libgirepository1.0-dev
 sudo apt-get install gobject-introspection gir1.2-gst-rtsp-server-1.0
 ```
 
-make sure you build the `librdkafka` already which used for uploading to remote kafka server.
-
-If not, refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
+> make sure you build the lib: `librdkafka` already which used for uploading to remote kafka server, otherwise refer [build kafka lib in Jetson](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/kafka/kafka_dependency_on_Jetson.md).
 
 
 
 #### 5.2.1 Edit the unique id: `whoami`
 
-
-
-`whoami` is for identify the Jetson board device you're currently using,  **SHOULD**  keep this id unique  **per board** .
+`whoami` is for identify each Jetson board device when multiple boards send messages to a remote kafka server,  **SHOULD**  keep this id unique  **per board**.
 
 This `id` will be carried into a message and send to a remote  _kafka_  server as the objects detected constantly from local video stream, then the server message subscribers would know the source of the messages.
 
-> you should align this id with cloud side manually
+> this id also should be known by cloud side, so there must have a webpage provided by cloud side, like device registering portal, to allow you input the id there as well.
 
+editing and input `whoamid` id:
 ```
 ls config_elenet.txt  # you should see the file exists!
 nano config_elenet.txt  # start edit it.
 #input your unique id under the section custom-uploader -> whoami
 ``` 
-also can refer picture below, the red part is the `whoami id`:
+can refer picture below, the red part is the `whoami` id:
 
 ![输入图片说明](../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
 
-copy config files to target path:
+save above content by `ctr`+`o`, and copy config file to target path:
 
 ```
-sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+sudo cp config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
 ```
 
 #### 5.2.2 Run
 
 * Testing with a local video file
 
-the upload will against to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
-```
-python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 
-```
+    the upload will against to default kafka server (url: `dev-iot.ipos.biz;9092`, topic: `test`):
+    ```
+    python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 
+    ```
 
 * Testing with your own `pgie config file` and a local video file
 
-the upload will against to a specified kafka server:
-```
-python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test 
+    the upload will against to a specified kafka server:
+    ```
+    python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test_run 
+    
+    ```
 
-```
+* Testing with local video window(OSD) disabled, instead setup a RTSP server to output real-time object detection result:
+    ```
+    python3 deepstream_test_51.py -i file:///opt/nvidia/deepstream/deepstream/samples/streams/sample_720p.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test_run --no-display    
+    ```
 
-* Testing with disable local video window(OSD), instead setup a RTSP server to output real-time process:
-```
-python3 deepstream_test_51.py -i file:///home/eow/Downloads/video_sample_from_screen_record/screen_captured_elemotor_3person_2111241020.mp4 --pgie-config-file /opt/nvidia/deepstream/deepstream/samples/configs/tao_pretrained_models/config_infer_primary_trafficcamnet.txt --conn-str="dev-iot.ipos.biz;9092" --topic test --no-display
-
-```
-for observing the real-time process, open a rtsp player to check, like [VLC](https://www.videolan.org/vlc/download-windows.html):
-
-![输入图片说明](../../images/ds_python_app_output_rtsp_and_show_in_vlc.png)
-
-the rtsp url should like(replace the ip for your jetson board):
-
-> rtsp://192.168.0.126:8554/eow
-
+    For observing the real-time object detection result, open a rtsp player to check, like [VLC](https://www.videolan.org/vlc/download-windows.html):
+    
+    ![输入图片说明](../../images/ds_python_app_output_rtsp_and_show_in_vlc.png)
+    
+    the rtsp url should like(replace the ip with the ip for your jetson board):
+    
+    > rtsp://192.168.0.126:8554/eow
+    
 
 
 
 * Testing with a camera RSTP stream with  **authentication**  required sample:
 
-no local display, and no output rtsp, this is mostly for production use:
-
-```
-python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-display --no-output-rtsp
-
-```
-check the result should be done at  _kafka_  server side.
+    no local display, and no output rtsp, this is mostly for production use:
+    
+    ```
+    python3 deepstream_test_51.py -i rtsp://admin:KSglfmis1@36.153.41.21:2121 --no-display --no-output-rtsp    
+    ```
+    check the uploading result should be done at  _kafka_  server side.
 
 ## 6 - Regist app to system service and run it
 
-for production, need install the elenet deepstream python app as a system service to facilitate maintenance.
+for production, need install the `elenet deepstream python app` as a system service to facilitate maintenance.
 
 ### 6.1 Regist as a service
 

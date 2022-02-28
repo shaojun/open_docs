@@ -105,18 +105,20 @@ Create another file consumer.py and put in below content.
 **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip are all acceptable._** 
 
 ```
+
 import time
 from kafka import KafkaConsumer
-from json import loads
-import uuid 
+import json
+import uuid
+import sys
 
 consumer = KafkaConsumer(
     'test',
-    bootstrap_servers='<ADD-YOUR-HOST-IP-HERE>:9092',
-    auto_offset_reset='latest',from latest
+    bootstrap_servers='localhost:9092',
+    auto_offset_reset='latest',
     enable_auto_commit=True,
     group_id=str(uuid.uuid1()),
-    value_deserializer=lambda x: loads(x.decode('utf-8'))
+    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
 # do a dummy poll to retrieve some message
@@ -127,7 +129,24 @@ consumer.seek_to_end()
 
 for event in consumer:
     event_data = event.value
-    print(event_data)
+    #js_obj = json.loads(event_data)
+    objs_pretty_log_str = ""
+    raw_objs_log_str = ""
+    for obj in event_data["objects"]:
+        conf = obj.split('|')[-1][0:4]
+        raw_objs_log_str += obj+"; "
+        if "Vehicle|#|DoorWarningSign" in obj:
+            objs_pretty_log_str += "DS("+conf+");"
+        elif "Vehicle|#|TwoWheeler" in obj:
+            objs_pretty_log_str += "EleBic("+conf+");"
+        elif "Person|#" in obj:
+            objs_pretty_log_str += "Per("+conf+");"
+        elif "Vehicle|#|Bicycle" in obj:
+            objs_pretty_log_str += "Bic("+conf+");"
+    if len(sys.argv) ==1:
+        raw_objs_log_str = ""
+    print(event_data['@timestamp']+": "+ event_data['sensorId'].ljust(32,' ')+", objs: "+objs_pretty_log_str+"        "+raw_objs_log_str)
+
 ```
 Note I am using random group_id so that I can have Independent consumers receiving the same data.
 Run consumer.py

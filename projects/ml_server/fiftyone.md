@@ -1,8 +1,12 @@
 
 ```
 conda activate fiftyone
+
 export HTTP_PROXY=http://127.0.0.1:7890
 export HTTPS_PROXY=https://127.0.0.1:7890
+export all_proxy=socks://127.0.0.1:7890
+export no_proxy=localhost,127.0.0.0,127.0.1.1,127.0.1.1,local.home
+
 python3
 import fiftyone as fo
 import fiftyone.zoo as foz

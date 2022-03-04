@@ -106,14 +106,18 @@ Create another file consumer.py and put in below content.
 
 ```
 
+
 import time
 from kafka import KafkaConsumer
 import json
 import uuid
 import sys
-
+#
+#sys.argv[2] - topic
+print("sys.argv[1] - '-raw' or '-pretty', control append raw or just show pretty msg.")
+print("sys.argv[2] - 'yourSpecificTopic' or '\".*\"' for all topics")
+print(sys.argv)
 consumer = KafkaConsumer(
-    'test',
     bootstrap_servers='localhost:9092',
     auto_offset_reset='latest',
     enable_auto_commit=True,
@@ -121,6 +125,11 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
+if(sys.argv[2]==".*"):
+    print("will use pattern to match topics...")
+    consumer.subscribe(pattern=".*")
+else:
+    consumer.subscribe(topics=[sys.argv[2]])
 # do a dummy poll to retrieve some message
 consumer.poll()
 
@@ -143,9 +152,13 @@ for event in consumer:
             objs_pretty_log_str += "Per("+conf+");"
         elif "Vehicle|#|Bicycle" in obj:
             objs_pretty_log_str += "Bic("+conf+");"
-    if len(sys.argv) ==1:
+    if sys.argv[1] =="-raw":
+        pass
+    elif sys.argv[1] =="-pretty":
         raw_objs_log_str = ""
+
     print(event_data['@timestamp']+": "+ event_data['sensorId'].ljust(32,' ')+", objs: "+objs_pretty_log_str+"        "+raw_objs_log_str)
+
 
 ```
 Note I am using random group_id so that I can have Independent consumers receiving the same data.

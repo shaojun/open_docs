@@ -162,9 +162,13 @@ for event in consumer:
 
 ```
 Note I am using random group_id so that I can have Independent consumers receiving the same data.
-Run consumer.py
+Run consumer.py to receive messages from all topics:
 
-`python3 consumer.py`
+`python3 consumer.py -pretty ".*"`
+
+only receive message from interested topic:
+
+`python3 consumer.py -pretty testtopic`
 
 Output:
 ```

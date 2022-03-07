@@ -105,20 +105,31 @@ Create another file consumer.py and put in below content.
 **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip are all acceptable._** 
 
 ```
+
+
 import time
 from kafka import KafkaConsumer
-from json import loads
-import uuid 
-
+import json
+import uuid
+import sys
+#
+#sys.argv[2] - topic
+print("sys.argv[1] - '-raw' or '-pretty', control append raw or just show pretty msg.")
+print("sys.argv[2] - 'yourSpecificTopic' or '\".*\"' for all topics")
+print(sys.argv)
 consumer = KafkaConsumer(
-    'test',
-    bootstrap_servers='<ADD-YOUR-HOST-IP-HERE>:9092',
-    auto_offset_reset='latest',from latest
+    bootstrap_servers='localhost:9092',
+    auto_offset_reset='latest',
     enable_auto_commit=True,
     group_id=str(uuid.uuid1()),
-    value_deserializer=lambda x: loads(x.decode('utf-8'))
+    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
+if(sys.argv[2]==".*"):
+    print("will use pattern to match topics...")
+    consumer.subscribe(pattern=".*")
+else:
+    consumer.subscribe(topics=[sys.argv[2]])
 # do a dummy poll to retrieve some message
 consumer.poll()
 
@@ -127,12 +138,37 @@ consumer.seek_to_end()
 
 for event in consumer:
     event_data = event.value
-    print(event_data)
+    #js_obj = json.loads(event_data)
+    objs_pretty_log_str = ""
+    raw_objs_log_str = ""
+    for obj in event_data["objects"]:
+        conf = obj.split('|')[-1][0:4]
+        raw_objs_log_str += obj+"; "
+        if "Vehicle|#|DoorWarningSign" in obj:
+            objs_pretty_log_str += "DS("+conf+");"
+        elif "Vehicle|#|TwoWheeler" in obj:
+            objs_pretty_log_str += "EleBic("+conf+");"
+        elif "Person|#" in obj:
+            objs_pretty_log_str += "Per("+conf+");"
+        elif "Vehicle|#|Bicycle" in obj:
+            objs_pretty_log_str += "Bic("+conf+");"
+    if sys.argv[1] =="-raw":
+        pass
+    elif sys.argv[1] =="-pretty":
+        raw_objs_log_str = ""
+
+    print(event_data['@timestamp']+": "+ event_data['sensorId'].ljust(32,' ')+", objs: "+objs_pretty_log_str+"        "+raw_objs_log_str)
+
+
 ```
 Note I am using random group_id so that I can have Independent consumers receiving the same data.
-Run consumer.py
+Run consumer.py to receive messages from all topics:
 
-`python3 consumer.py`
+`python3 consumer.py -pretty ".*"`
+
+only receive message from interested topic:
+
+`python3 consumer.py -pretty testtopic`
 
 Output:
 ```

@@ -2,20 +2,33 @@
 ```
 conda activate fiftyone
 
-export HTTP_PROXY=http://127.0.0.1:7890
-export HTTPS_PROXY=https://127.0.0.1:7890
-export ALL_PROXY=socks://127.0.0.1:7890
-export NO_PROXY=localhost,dev-iot.ipos.biz,127.0.0.0,127.0.1.1,127.0.1.1,local.home
+#export HTTP_PROXY=http://127.0.0.1:7890
+#export HTTPS_PROXY=https://127.0.0.1:7890
+#export ALL_PROXY=socks://127.0.0.1:7890
+#export NO_PROXY=localhost,dev-iot.ipos.biz,127.0.0.0,127.0.1.1,127.0.1.1,local.home
 
 python3
 import fiftyone as fo
 import fiftyone.zoo as foz
-dataset = foz.load_zoo_dataset("open-images-v6", split="train", label_types=["detections"], classes=["Bicycle"], max_samples=100, seed=51, shuffle=True, dataset_name="open-images-bicycle-mini-set",)
+import sys
+import uuid
+dataset = foz.load_zoo_dataset("open-images-v6", split="train", label_types=["detections"], classes=["Bicycle"], 
+    max_samples=2000, seed=49, shuffle=True, 
+    dataset_name="oi-bi-"+str(uuid.uuid4().hex),)
 #show local web ui to check downloaded images.
-session = fo.launch_app(dataset)
+#session = fo.launch_app(dataset)
 
 #upload to CVAT
 view = dataset.view()
-anno_key="cvat_existing_field_final"
-view.annotate(anno_key, label_field="detections",label_type="detections",classes=["Bicycle","Person"])
+# view = dataset.exists("metadata",False)
+# filepaths = view.values("filepath")
+# for fp in filepaths:
+#     missing_metadata = fo.ImageMetadata.build_for(fp)
+#     sample = fo.Sample(filepath=fp, metadata=missing_metadata)
+#     dataset.add_sample(sample)
+#     print(sample)
+# dataset.reload()
+#print(filepaths)
+anno_key="cvat_"+str(uuid.uuid4().hex)
+view.annotate(anno_key,task_size=200, label_field="detections",label_type="detections",classes=["Bicycle","Person"])
 ```

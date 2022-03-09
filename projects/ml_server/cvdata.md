@@ -28,7 +28,7 @@ cvdata_resize --input_images image_2/ --output_images resized_image_2 --input_an
 ```
 cvdata_rename --images_dir image_2 --annotations_dir label_2 --format kitti --prefix guidOrOtherStr
 ```
-#### Show statistic info for kitti dataset
+#### Crop objects from kitti dataset, and group them into folders with class name and generate new image files under each folders.
 
 ```
 cvdata_crop_objects_to_files --images_dir image_2 --annotations_dir label_2 --image_ext png --output_dir classification

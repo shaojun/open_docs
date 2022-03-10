@@ -131,3 +131,84 @@ Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatche
 * 与开发者联系,咨询所要访问的API的`tag`,`providerType`,`apiName`
 * 通过 `showmeapi` API进行服务发现, 基于第一步中的信息,确定自己要调用的API,并通过发现结果以获取调用技术细节
 * 发起实际调用
+
+### 油机API
+外部调用端一般通过 FdcServerApp 应用插件所提供的 API 来进行油机相关功能的使用。
+请用tag: `IfsfFdcServer` 来进行相关API的发现，如果列表为空，则说明 FdcServerApp 未启用，需要人工配置和启用。
+#### Service
+* GetPumpsLayout
+获取中控上所有油枪的基本信息。
+传入参数请放 _null_ 即`[null]`即可，返回信息示例如下：
+
+
+第一层有4个元素，说明中控连接并且配置了共4个加油点，各字段解释请看注释内容
+> [
+>   {
+>     "Name": "Bogus_Pump handler",
+>     "PumpId": 1,    #加油点1
+>     "Nozzles": [
+>       {
+>         "LogicalId": 1,   #此加油点上的1号逻辑枪
+>         "RealPriceOnPhysicalPump": 831,   #此逻辑枪上的真实价格
+>         "SiteLevelNozzleId": 1,   #此逻辑枪的全站枪号
+>         "ProductBarcode": 0,   #此逻辑枪上的油品代码
+>         "ProductName": "0#"   #此逻辑枪上的油品名称
+>       }
+>     ],
+>     "AmountDecimalDigits": 2,   #此逻辑枪的单笔交易中金额数值中的小数点位数
+>     "VolumeDecimalDigits": 2,   #此逻辑枪的单笔交易中升数数值中的小数点位数
+>     "PriceDecimalDigits": 2,   #此逻辑枪的单笔交易中的价格部分的小数点位数
+>     "VolumeTotalizerDecimalDigits": 2   #此逻辑枪的升累计数值的小数点位数
+>   },
+>   {
+>     "Name": "Bogus_Pump handler",
+>     "PumpId": 2,
+>     "Nozzles": [
+>       {
+>         "LogicalId": 1,
+>         "RealPriceOnPhysicalPump": 831,
+>         "SiteLevelNozzleId": 2,
+>         "ProductBarcode": 0,
+>         "ProductName": "0#"
+>       }
+>     ],
+>     "AmountDecimalDigits": 2,
+>     "VolumeDecimalDigits": 2,
+>     "PriceDecimalDigits": 2,
+>     "VolumeTotalizerDecimalDigits": 2
+>   },
+>   {
+>     "Name": "Bogus_Pump handler",
+>     "PumpId": 3,
+>     "Nozzles": [
+>       {
+>         "LogicalId": 1,
+>         "RealPriceOnPhysicalPump": 831,
+>         "SiteLevelNozzleId": 3,
+>         "ProductBarcode": 0,
+>         "ProductName": "0#"
+>       }
+>     ],
+>     "AmountDecimalDigits": 2,
+>     "VolumeDecimalDigits": 2,
+>     "PriceDecimalDigits": 2,
+>     "VolumeTotalizerDecimalDigits": 2
+>   },
+>   {
+>     "Name": "Bogus_Pump handler",
+>     "PumpId": 4,
+>     "Nozzles": [
+>       {
+>         "LogicalId": 1,
+>         "RealPriceOnPhysicalPump": 831,
+>         "SiteLevelNozzleId": 4,
+>         "ProductBarcode": 0,
+>         "ProductName": "0#"
+>       }
+>     ],
+>     "AmountDecimalDigits": 2,
+>     "VolumeDecimalDigits": 2,
+>     "PriceDecimalDigits": 2,
+>     "VolumeTotalizerDecimalDigits": 2
+>   }
+> ] 

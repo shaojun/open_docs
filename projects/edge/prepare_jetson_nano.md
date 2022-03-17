@@ -4,7 +4,8 @@
 
 ![输入图片说明](../../images/download_jetson_nano_sd_image_2_versions.png)
 
-[download](https://developer.nvidia.com/embedded/downloads)
+[Download the image file](https://developer.nvidia.com/embedded/downloads) and then [follow the steps](https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-2gb-devkit#write) to write it to the SD card.
+
 
  **For simplify** , please create a `sudo` user with name: 
 > eow    

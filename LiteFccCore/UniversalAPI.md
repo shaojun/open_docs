@@ -206,3 +206,41 @@ When pump in fueling state, the fueling progress will be reported via this event
 * OnFdcFuelSaleTransactinStateChange
 
 When pump transaction state changed, like locked or cleared by other POS, the event will fired
+
+
+### 液位仪API
+
+即ATG，可通过`TAG: ATG`进行服务发现。
+
+#### Service
+
+* GetTanksAsync
+
+获取中控上所有油罐的基本信息。
+
+* GetTankReadingAsync
+
+读取某个油罐的液位读数
+
+* GetTankDeliveryAsync
+
+读取某个油罐的进油（卸油）数据
+输入参数示例`[1,8,0,"2020-04-01T18:25:43.511Z"]`，最后一个时间戳表示是查询此时间段以后的进油数据。
+
+* GetTankInventoryAsync
+
+暂时不用
+
+* GetTankAlarmAsync
+
+查询液位仪的历史报警信息，此API需要液位仪端支持才可以得到数据。
+
+#### Event
+
+* OnStateChange
+
+当与液位仪的连接发生变化的时候触发，如连接断开，或者连接重新建立。
+
+* OnAlarm
+
+当获取到液位仪端存在报警时，则触发，此API需要液位仪端支持才可以得到数据。

@@ -5,6 +5,12 @@
 cvdata_convert --images_dir image_2/ --in_format jpeg --out_format jpg
 ```
 
+#### Rename `PNG` to `png` files  **in place** :
+
+
+```
+cvdata_convert --images_dir image_2/ --in_format jpeg --out_format jpg
+```
 
 #### Convert `png` to `jpg` (vice versa) files  **in place** :
 

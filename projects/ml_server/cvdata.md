@@ -9,7 +9,7 @@ cvdata_convert --images_dir image_2/ --in_format jpeg --out_format jpg
 
 
 ```
-cvdata_convert --images_dir image_2/ --in_format jpeg --out_format jpg
+cvdata_convert --images_dir image_2/ --in_format PNG --out_format png
 ```
 
 #### Convert `png` to `jpg` (vice versa) files  **in place** :

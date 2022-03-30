@@ -2,8 +2,8 @@
 ```
 conda activate fiftyone
 
-#export http_proxy=http://127.0.0.1:7890
-#export https_proxy=https://127.0.0.1:7890
+#export http_proxy='http://127.0.0.1:7890'
+#export https_proxy='https://127.0.0.1:7890'
 #export ALL_PROXY=socks://127.0.0.1:7890
 #export NO_PROXY=localhost,dev-iot.ipos.biz,127.0.0.0,127.0.1.1,127.0.1.1,local.home
 

@@ -348,6 +348,44 @@ should see similar process is there with process name `python3`, and resource us
 
 # Diagnose
 
+## 安装TeamViewer到Jetson Nano
+
+choose to download the 64-bit ARM version:
+https://download.teamviewer.com/download/linux/teamviewer_arm64.deb
+
+Run terminal command: 
+
+```
+sudo dpkg -i Downloads/teamviewer_15.23.9_arm64.deb
+```
+
+you’ll see some errors:
+![输入图片说明](../../images/jetson_nano_install_tv_maysee_errorimage.png)
+
+that’s fine, run terminal command: `sudo apt install -f` will fix it.
+
+run terminal command to start the teamviewer as a service:
+
+```
+sudo systemctl enable teamviewerd.service
+sudo service teamviewerd start
+```
+
+then, open the TeamViewer application via Internet->TeamViewer:
+
+![输入图片说明](../../images/jetson_nano_install_tv_open_tv_setup_uiimage.png)
+
+
+Please set a static password for TeamViewer via:
+
+![输入图片说明](../../images/jetson_nano_setup_tv_static_passwordimage.png)
+
+
+Also, check the below to allow start with system
+
+![输入图片说明](../../images/jetson_nano_install_tv_enable_start_with_systemimage.png)
+
+
 ## Experienced memory low?
 then could try:
 

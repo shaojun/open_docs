@@ -24,6 +24,19 @@ password(left to your  _enter key_ ):
 > ```
 > 
 
+# Speed up
+
+
+```
+export http_proxy='http://127.0.0.1:7890'
+export https_proxy='https://127.0.0.1:7890'
+
+unset http_proxy
+unset https_proxy
+
+python -m pip install --upgrade pip
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
 
 
 # Install the DeepStream 6

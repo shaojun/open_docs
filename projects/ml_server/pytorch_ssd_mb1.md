@@ -1,3 +1,4 @@
+1. `cvdata_clean`
 1. `cvdata_split_with_structure`
 2. adding lables files to each subset folder
 3. start training

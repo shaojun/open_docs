@@ -21,3 +21,8 @@ python3 train.py --epochs 50 --img 1280 --data data/elenet/dataset.yaml --weight
 ```
 python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --source ~/Videos/yang_office_demoEle_combined_multiple_sections_4classes.mp4 
 ```
+
+`export`:
+```
+python3 export.py --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
+```

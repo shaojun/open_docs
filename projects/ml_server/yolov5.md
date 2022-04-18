@@ -26,3 +26,4 @@ python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --sou
 ```
 python3 export.py --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
+should see `last.onnx` and `last.torchscript` are there under `runs/train/exp3/weights/`

@@ -7,6 +7,11 @@ conda activate fiftyone
 #export ALL_PROXY=socks://127.0.0.1:7890
 #export NO_PROXY=localhost,dev-iot.ipos.biz,127.0.0.0,127.0.1.1,127.0.1.1,local.home
 
+#unset http_proxy
+#unset https_proxy
+#unset ftp_proxy
+#unset socks_proxy
+
 python3
 import fiftyone as fo
 import fiftyone.zoo as foz

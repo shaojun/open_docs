@@ -6,11 +6,14 @@ conda activate fiftyone
 #export https_proxy='https://127.0.0.1:7890'
 #export ALL_PROXY=socks://127.0.0.1:7890
 #export NO_PROXY=localhost,dev-iot.ipos.biz,127.0.0.0,127.0.1.1,127.0.1.1,local.home
+#git config --global http.proxy http://localhost:7890
+
 
 #unset http_proxy
 #unset https_proxy
 #unset ftp_proxy
 #unset socks_proxy
+#git config --global --unset http.proxy
 
 python3
 import fiftyone as fo

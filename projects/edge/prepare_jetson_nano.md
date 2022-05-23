@@ -34,6 +34,8 @@ export https_proxy='https://127.0.0.1:7890'
 unset http_proxy
 unset https_proxy
 
+wget https://bootstrap.pypa.io/pip/3.6/get-pip.py
+python3 get-pip.py
 python -m pip install --upgrade pip
 pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```

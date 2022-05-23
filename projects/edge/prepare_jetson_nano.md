@@ -174,7 +174,7 @@ for lib `librdkafka`:
 
 
 ```
-sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/libs/librdkafka* /opt/nvidia/deepstream/deepstream/lib/
+sudo cp /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps/apps/deepstream-test51-on-test4/libs/librdkafka/* /opt/nvidia/deepstream/deepstream/lib/
 sudo ldconfig 
 ```
 

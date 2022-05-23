@@ -133,7 +133,7 @@ you can disable the GIT ssl certificate verification and run below the `make` by
 export GIT_SSL_NO_VERIFY=1
 sudo -E sh ./autogen.sh
 sudo make
-sudo install
+sudo make install
 ```
 
 

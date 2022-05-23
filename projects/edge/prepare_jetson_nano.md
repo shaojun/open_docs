@@ -112,7 +112,7 @@ apt install python3-gi python3-dev python3-gst-1.0 python-gi-dev git python-dev 
 ### 2.2 Initialization of submodules
 ```
 cd /opt/nvidia/deepstream/deepstream/sources/deepstream_python_apps
-git submodule update --init
+sudo git submodule update --init
 ```
 ### 2.3 Installing Gst-python
 ```

@@ -117,9 +117,9 @@ sudo git submodule update --init
 ### 2.3 Installing Gst-python
 ```
 cd 3rdparty/gst-python/
-./autogen.sh
-make
-make install
+sudo ./autogen.sh
+sudo make
+sudo make install
 ```
 
 if you see errors like:

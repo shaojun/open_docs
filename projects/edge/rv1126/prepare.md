@@ -58,7 +58,8 @@ source activate your_conda_env
 
 
 
-
+# how to install rknntookitlite
+https://dev.t-firefly.com/thread-104204-1-1.html
 # how to pack rootfs
 https://dev.t-firefly.com/thread-118433-1-3.html
 https://wiki.t-firefly.com/zh_CN/Firefly-RK3399/export_dev_sf.html

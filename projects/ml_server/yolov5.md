@@ -1,3 +1,8 @@
+- Download the raw dataset with `KITTI` format.
+- Create a folder: `prepare_yolov5_dataset_kitti` at the same level of the fiftyone script:
+![输入图片说明](create_folder_of_dataset_kitti_at_the_script_same_level.png)
+
+
 put elenet dataset into the folder of  _yolov5_ , refer folder structure:   _yolov5/data/elenet/images/train/_ 
 
 the content of _dataset.yaml_ , please make sure the class name sequence:

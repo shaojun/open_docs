@@ -1,6 +1,9 @@
 # Prepare the dataset
 
 - Download the raw dataset with `KITTI` format.
+
+- git clone: https://github.com/shaojun/fiftyone_scripts.git
+
 - Process the `.zip` dataset file:
     Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script:
 

@@ -2,11 +2,11 @@
 
 - Download the raw dataset with `KITTI` format.
 - Process the `.zip` dataset file:
-    Create a folder: `prepare_yolov5_dataset_kitti` at the same level of the fiftyone script:
+    Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script:
 
     ![输入图片说明](create_folder_of_dataset_kitti_at_the_script_same_level.png)
 
-    Put the downloaded `KITTI` dataset into the new folder of `prepare_yolov5_dataset_kitti`, and the download dataset file is like:  _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_ 
+    Put the downloaded `KITTI` dataset into the new folder of `prepare_yolov5_dataset_from_kitti_format`, and the download dataset file is like:  _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_ 
 
     Install the  _unzip _ tool by: `sudo apt-get install unzip`, and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip`, you'll get unzipped folder structure like：
 

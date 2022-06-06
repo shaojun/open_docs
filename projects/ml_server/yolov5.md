@@ -14,11 +14,13 @@
 
 - Process the raw `KITTI` dataset with `cvdata` tools:
 
-    `conda activate cvdata`, then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename, resize, convert_  image files.
+    `conda activate cvdata`, then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename, resize, convert_  image files, the `cvdata` processed data will be stored at `resized_image_2` and `resized_label_2`.
+    
+
 
 - Process with fiftyone
 
-    First rename  _image_2_  and  _label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
+    First rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
 
     ![输入图片说明](rename_image2_lable2_to_above_level.png)
 

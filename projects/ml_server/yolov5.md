@@ -1,4 +1,4 @@
-# prepare the dataset
+# Prepare the dataset
 
 - Download the raw dataset with `KITTI` format.
 - Process the `.zip` dataset file:
@@ -24,9 +24,13 @@
 
     Second, run the script to split dataset and export with yolov5 dataset format, you'll get the export dataset in folder:
 
-![输入图片说明](fiftyone_convert_and_export_to_folder.png)
+    ![输入图片说明](fiftyone_convert_and_export_to_folder.png)
+
+    then the yolov5 training will against dataset in it.
 
 
+
+# Training
 
 put elenet dataset into the folder of  _yolov5_ , refer folder structure:   _yolov5/data/elenet/images/train/_ 
 

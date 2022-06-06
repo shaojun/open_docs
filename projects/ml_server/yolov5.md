@@ -1,27 +1,30 @@
 # prepare the dataset
 
 - Download the raw dataset with `KITTI` format.
-- Create a folder: `prepare_yolov5_dataset_kitti` at the same level of the fiftyone script:
+- Process the `.zip` dataset file:
+    Create a folder: `prepare_yolov5_dataset_kitti` at the same level of the fiftyone script:
 
     ![输入图片说明](create_folder_of_dataset_kitti_at_the_script_same_level.png)
 
-- Put the downloaded `KITTI` dataset into the new folder of `prepare_yolov5_dataset_kitti`
+    Put the downloaded `KITTI` dataset into the new folder of `prepare_yolov5_dataset_kitti`, and the download dataset file is like:  _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_ 
 
-    the download dataset file is like:  _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_ 
-
-    install the unzip tool by: `sudo apt-get install unzip`, and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip`, you'll get unzipped folder structure like：
+    Install the  _unzip _ tool by: `sudo apt-get install unzip`, and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip`, you'll get unzipped folder structure like：
 
     ![输入图片说明](../../kitti_unzipped_folder_structure.png)
 
-- Process the raw dataset with `cvdata` tools:
+- Process the raw `KITTI` dataset with `cvdata` tools:
 
     `conda activate cvdata`, then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename, resize, convert_  image files.
 
 - Process with fiftyone
-rename  _image_2_  and  _label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
 
-![输入图片说明](rename_image2_lable2_to_above_level.png)
+    First rename  _image_2_  and  _label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
 
+    ![输入图片说明](rename_image2_lable2_to_above_level.png)
+
+    Second, run the script to split dataset and export with yolov5 dataset format, you'll get the export dataset in folder:
+
+![输入图片说明](fiftyone_convert_and_export_to_folder.png)
 
 
 

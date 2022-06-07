@@ -24,26 +24,27 @@
 
 - Process with fiftyone
 
-    First rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
+    First，rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
 
     ![输入图片说明](rename_image2_lable2_to_above_level.png)
 
-    Second, run the script to split dataset and export with yolov5 dataset format, you'll get the export dataset in folder:
+    Second, run the script to split dataset and export to yolov5 dataset format, you'll get the export dataset in folder:
 
     ![输入图片说明](fiftyone_convert_and_export_to_folder.png)
 
-![输入图片说明](export_data_and_labels_folder.png)
+    ![输入图片说明](export_data_and_labels_folder.png)
 
-    then the above 1 file and 2 folders are the final yolov5 training dataset.
+    then the above 1 file and 2 folders are used as the final yolov5 training dataset.
 
 
 
 # Training
 
+## Orgnize dataset
 put elenet dataset(dataset.yaml, images/, labels/) into the folder of  _yolov5_ repo , refer folder structure:   
 ![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)
 
-but you need to update the path in _dataset.yaml_ by adding the prefix `/data/elenet`, so finally it looks like:
+but you need to update the path in _dataset.yaml_ by adding the prefix `./data/elenet`, otherwise the train script will say data folder could not be found. so finally it looks like:
 ```
 names:
 - electric_bicycle
@@ -56,39 +57,47 @@ train: ./data/elenet/images/train/
 val: ./data/elenet/images/val/
 ```
 
-Download the pretrained model from: https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt and copied it to the same folder which `traing.py` exists:
+Download the pretrained model from: https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt and copy it to the same folder which `traing.py` exists:
 ![输入图片说明](put_pretrained_yolov5s_model_to_folder.png)
 
 
+## Start training
 
-`train` scripts, batch size 24 will use almost 20G GPU memory:
+run the `train.py` scripts, default batch size 24 will use almost 20G GPU memory:
 ```
 python3 train.py --epochs 50 --img 1280 --data data/elenet/dataset.yaml --weights ./yolov5s.pt --batch-size 24
 ```
 
-`detect` scripts, the `exp3` may be changed in your case:
+## Test the trained model
+
+by using the `detect.py` scripts, the `exp3` may be changed in your case:
 ```
 python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --source ~/Videos/yang_office_demoEle_combined_multiple_sections_4classes.mp4 
 ```
+
 check the `detect` result at `yolov5/runs/detect/exp`
 
+## Export the model
 
 `export` for latest yolov5 repo:
 
-if you're using rockchip board, then(you must have applied the patch from rknn_model_zoo) [refer](https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch), or for short:
-
-在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
+if you're using rockchip board, then(you  **must have applied**  the patch from rknn_model_zoo) [refer](https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch), or for short:
 
 ```
+# 在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
 python export.py --rknpu {device_platform}
-#device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
+# device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
 ```
 
+if you're not using board, then:
 
 ```
 python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
- **onnx 1.6.0 only support python3.7** 
+
+# Export to .ONNX
+
+**onnx 1.6.0 only support python3.7** 
 `export` for rknn specified(commit id:  _c5360f6e7009eb4d05f14d1cc9dae0963e949213_  use: `git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213` to switch to, or `git checkout origin` to re-point to latest HEAD) yolov5 repo:
 ```
 python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12
@@ -101,69 +110,3 @@ pip3 install onnx-simplifier
 python3 -m onnxsim runs/train/exp/weights/last.onnx  runs/train/exp/weights/elenet_yolov5s.onnx
 ```
 
-
-
-
-
-
-```
-
-
-import fiftyone as fo
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-
-def load_dataset_from_local_path(dataset_local_dir: str, dataset_name: str,
-                                 force_reload_dataset_if_exists: bool = False):
-    if dataset_name in fo.list_datasets() and force_reload_dataset_if_exists:
-        exists_dataset = fo.load_dataset(dataset_name)
-        print("dataset: {} already exists, will delete it...".format(dataset_name))
-        exists_dataset.delete()
-        print("     deleted with result: {}".format(exists_dataset.deleted))
-    elif dataset_name in fo.list_datasets() and not force_reload_dataset_if_exists:
-        return fo.load_dataset(dataset_name)
-    dataset_type = fo.types.VOCDetectionDataset
-    dataset = fo.Dataset.from_dir(
-        dataset_dir=dataset_local_dir,
-        dataset_type=dataset_type,
-        name=dataset_name,
-    )
-    dataset.persistent = True
-    return dataset
-
-
-def export_dataset_to(src_dataset, export_to_local_dir: str):
-    # The splits to export
-    splits = ["train", "val"]
-    ds_len = len(src_dataset)
-
-    # Perform a random 90-10 test-train split
-    src_dataset.take(0.1 * len(src_dataset)).tag_samples("val")
-    src_dataset.match_tags("val", bool=False).tag_samples("train")
-
-    for split in splits:
-        train_data_view = src_dataset.match_tags(split)
-        train_data_view.export(
-            export_dir=export_to_local_dir,
-            dataset_type=fo.types.YOLOv5Dataset,
-            label_field="ground_truth",
-            split=split,
-        )
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    src_dataset_local_path = "~/Downloads/project_labeling_door_closedsign_proj-2022_03_24_07_35_06-pascal voc 1.1/for_fiftyone_import"
-    dataset_name = "first_time1"
-    load_dataset = load_dataset_from_local_path(src_dataset_local_path, dataset_name)
-    print(load_dataset)
-
-    target_export_dataset_local_path = "~/Downloads/project_labeling_door_closedsign_proj-2022_03_24_07_35_06-pascal voc 1.1/for_fiftyone_export"
-    export_dataset_to(load_dataset, target_export_dataset_local_path)
-```

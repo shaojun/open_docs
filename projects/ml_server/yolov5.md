@@ -38,7 +38,7 @@
 
 # Training
 
-put elenet dataset into the folder of  _yolov5_ , refer folder structure:   _yolov5/data/elenet/images/train/_ 
+put elenet dataset into the folder of  _yolov5_ , refer folder structure:   ![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)
 
 the content of _dataset.yaml_ , please make sure the class name sequence:
 ```
@@ -47,10 +47,16 @@ names:
 - people
 - door_warning_sign
 - bicycle
-nc: 4
+- gastank
+nc: 5
 train: ./data/elenet/images/train/
 val: ./data/elenet/images/val/
 ```
+
+Download the pretrained model from: https://github.com/ultralytics/yolov5/releases/download/v6.1/yolov5s.pt and copied it to the same folder which `traing.py` exists:
+![输入图片说明](put_pretrained_yolov5s_model_to_folder.png)
+
+
 
 `train` scripts, batch size 24 will use almost 20G GPU memory:
 ```

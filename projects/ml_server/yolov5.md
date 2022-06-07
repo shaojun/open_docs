@@ -40,6 +40,11 @@
 
 # Training
 
+## Prepare the training repo
+
+if you're using rockchip board, follow this to clone and patch the repo:
+https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch#%E4%B8%8B%E8%BD%BD%E4%BB%93%E5%BA%93%E5%B9%B6%E6%89%93%E4%B8%8Apatch
+
 ## Orgnize dataset
 put elenet dataset(dataset.yaml, images/, labels/) into the folder of  _yolov5_ repo , refer folder structure:   
 ![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)

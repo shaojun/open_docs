@@ -32,15 +32,18 @@
 
     ![输入图片说明](fiftyone_convert_and_export_to_folder.png)
 
-    then the yolov5 training will against dataset in it.
+![输入图片说明](export_data_and_labels_folder.png)
+
+    then the above 1 file and 2 folders are the final yolov5 training dataset.
 
 
 
 # Training
 
-put elenet dataset into the folder of  _yolov5_ , refer folder structure:   ![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)
+put elenet dataset(dataset.yaml, images/, labels/) into the folder of  _yolov5_ repo , refer folder structure:   
+![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)
 
-the content of _dataset.yaml_ , please make sure the class name sequence:
+but you need to update the path in _dataset.yaml_ by adding the prefix `/data/elenet`, so finally it looks like:
 ```
 names:
 - electric_bicycle
@@ -63,12 +66,25 @@ Download the pretrained model from: https://github.com/ultralytics/yolov5/releas
 python3 train.py --epochs 50 --img 1280 --data data/elenet/dataset.yaml --weights ./yolov5s.pt --batch-size 24
 ```
 
-`detect` scripts:
+`detect` scripts, the `exp3` may be changed in your case:
 ```
 python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --source ~/Videos/yang_office_demoEle_combined_multiple_sections_4classes.mp4 
 ```
+check the `detect` result at `yolov5/runs/detect/exp`
+
 
 `export` for latest yolov5 repo:
+
+if you're using rockchip board, then(you must have applied the patch from rknn_model_zoo) [refer](https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch), or for short:
+
+在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
+
+```
+python export.py --rknpu {device_platform}
+#device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
+```
+
+
 ```
 python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
 ```

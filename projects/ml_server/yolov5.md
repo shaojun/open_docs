@@ -90,9 +90,22 @@ if you're using rockchip board, then(you  **must have applied**  the patch from 
 
 ```
 # 在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
-python export.py --rknpu {device_platform}
+python3 export.py --weights runs/train/exp/weights/last.pt --rknpu rv1126
+
 # device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
 ```
+you can get the anchors are saved into file:
+![输入图片说明](yolov5_export_get_anchors_txt_file.png)
+
+you may see the error for failed to export to .onnx model:
+
+> ONNX: export failure: Descriptors cannot not be created directly.
+> If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc...
+
+then you need downgrade your protobuf with: `pip install protobuf==3.20.1`, and then re-run the above `export ...` and get:
+
+![输入图片说明](yolov5s_export_onnx_model.png)
+
 
 if you're not using board, then:
 

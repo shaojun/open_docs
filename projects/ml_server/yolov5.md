@@ -83,6 +83,28 @@ python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --sou
 check the `detect` result at `yolov5/runs/detect/exp`
 
 ## Export the model
+### check rv1126 board npu driver version
+`strings /usr/lib/librknn_runtime.so | grep version`, if it's not `1.7.1` then need update, could clone the `https://github.com/rockchip-linux/rknpu` at the PC and then adb push to board, but never succeed here at one of the step with an error:
+
+> (base) shao@yaoming:~/rknpu$ adb push drivers/linux-armhf-puma/   /
+> adb: error: failed to copy 'drivers/linux-armhf-puma/usr/lib/libNNGPUBinary.so' to '/linux-armhf-puma/usr/lib/libNNGPUBinary.so': no response: Success
+> 
+> 
+
+you could clone the https://github.com/rockchip-linux/rknpu at the board directly, and then:
+ sudo cp -r drivers/linux-armhf-puma/usr/* /usr/
+
+then adb push from the PC to board with the another file:
+
+
+
+> (base) shao@yaoming:~/rknpu$ adb push drivers/npu_ko/galcore_puma.ko /lib/modules/galcore.ko
+> drivers/npu_ko/galcore_puma.ko: 1 file...hed. 2.7 MB/s (445352 bytes in 0.155s)
+> 
+> 
+
+at last, `strings /usr/lib/librknn_runtime.so | grep version` again to confirm the version is `1.7.1`
+
 
 `export` for latest yolov5 repo:
 

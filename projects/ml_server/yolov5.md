@@ -90,7 +90,7 @@ if you're using rockchip board, then(you  **must have applied**  the patch from 
 
 ```
 # 在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
-python3 export.py --weights runs/train/exp/weights/last.pt --rknpu rv1126
+python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12 --rknpu rv1126
 
 # device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
 ```

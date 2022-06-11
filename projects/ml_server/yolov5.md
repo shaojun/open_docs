@@ -94,7 +94,15 @@ check the `detect` result at `yolov5/runs/detect/exp`
 you could clone the https://github.com/rockchip-linux/rknpu at the board directly, and then:
  sudo cp -r drivers/linux-armhf-puma/usr/* /usr/
 
-then adb push from the PC to board with the another file:
+then the another file:
+
+```
+#bak the old one
+mv /lib/modules/galcore.ko /lib/modules/galcore.ko_bak
+#copy in new one and rename 
+mv ~/rknpu/drivers/npu_ko/galcore_puma.ko /lib/modules/galcore.ko
+```
+
 
 
 

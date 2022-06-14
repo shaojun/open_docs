@@ -144,6 +144,24 @@ python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp3/weig
 
 **onnx 1.6.0 only support python3.7** 
 `export` for rknn specified(commit id:  _c5360f6e7009eb4d05f14d1cc9dae0963e949213_  use: `git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213` to switch to, or `git checkout origin` to re-point to latest HEAD) yolov5 repo:
+if you got cuda error, may caused by your conda already installed some old torch package for you, then uninstall all of them
+```
+pip uninstall torch
+pip uninstall torch
+pip uninstall torchaudio
+pip uninstall torchvision
+pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+python3
+import torch
+torch.__version__
+
+pip list|grep torch
+#should see below the correct versions:
+torch                   1.11.0+cu113
+torchaudio              0.11.0+cu113
+torchvision             0.12.0+cu113
+
+```
 ```
 python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12
 ```

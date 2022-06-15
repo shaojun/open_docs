@@ -1,28 +1,30 @@
 # Prepare the dataset
 
-- Download the raw dataset with `KITTI` format.
+## Download the raw dataset with `KITTI` format.
 
-- Git clone: https://github.com/shaojun/fiftyone_scripts.git
+## Process the `.zip` dataset file
 
-- Process the `.zip` dataset file:
+    Git clone: https://github.com/shaojun/fiftyone_scripts.git
 
-    Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script:
+    Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script（just cloned）:
 
     ![输入图片说明](create_folder_of_dataset_kitti_at_the_script_same_level.png)
 
-    Put the downloaded `KITTI` dataset into the new folder of `prepare_yolov5_dataset_from_kitti_format`, and the download dataset file is like:  _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_ 
+    Put the downloaded `KITTI` dataset file (like: _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_) into the new folder of `prepare_yolov5_dataset_from_kitti_format`.   
 
-    Install the  _unzip_ tool by: `sudo apt-get install unzip`, and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip`, you'll get unzipped folder structure like：
+    Install the  _unzip_ tool by: 
+    ```sudo apt-get install unzip```
+    and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip`, you'll get unzipped folder structure like：
 
     ![输入图片说明](../../kitti_unzipped_folder_structure.png)
 
-- Process the raw `KITTI` dataset with `cvdata` tools:
+## Process the raw `KITTI` dataset with `cvdata` tools:
 
-    `conda activate cvdata`, then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename, resize, convert_  image files, use image format `jpg` is OK, the `cvdata` processed data will be stored at `resized_image_2` and `resized_label_2`.
+    activate your `cvdata` env like: `conda activate cvdata`, then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename, resize, convert_  image files, use image format `jpg` is OK, the `cvdata` processed data will be stored at `resized_image_2` and `resized_label_2`.
     
 
 
-- Process with fiftyone
+## Process with fiftyone for train/val split and convert to yolov5 dataset format
 
     First，rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
 

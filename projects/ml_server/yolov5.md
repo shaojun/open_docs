@@ -24,30 +24,34 @@ Then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/
     
 
 
-## Process with `fiftyone` for `train/val` split and convert to yolov5 dataset format
-First，rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
+## Process unified `KITTI` dataset with `fiftyone` tools
+The purpose here is for `train/val` split, yolov5 dataset format conversion.
+* Rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder, then you'll get:
 ![输入图片说明](rename_image2_lable2_to_above_level.png)
 
-Second, run the script to split dataset and export to yolov5 dataset format, you'll get the export dataset in folder:
+* run the script to split dataset and export to yolov5 dataset format, you'll get the export dataset in folder:
 ![输入图片说明](fiftyone_convert_and_export_to_folder.png)
 ![输入图片说明](export_data_and_labels_folder.png)
 
 then the above 1 file and 2 folders are used as the final yolov5 training dataset.
 
+# Prepare the training
+Depends on what rv1126 repo you referenced, the clone _yolov5_ way it's a bit different(different historical commit).
+## rknn-toolkit 1.7.1 based
 
+git clone yolov5 firstly, then use: `git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213` to switch to the historical commit which the rknn works, you still can `git checkout origin` to re-point to latest HEAD.
 
-# Training based on steps from rknn_model_zoo (doesn't work for me)
+## rknn_model_zoo based
 
-## Prepare the training data
-
-if you're using rockchip board, follow this to clone and patch the repo:
+follow this to clone and patch the repo:
 https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch#%E4%B8%8B%E8%BD%BD%E4%BB%93%E5%BA%93%E5%B9%B6%E6%89%93%E4%B8%8Apatch
 
 ## Organize dataset
-put elenet dataset(dataset.yaml, images/, labels/) into the folder of  _yolov5_ repo , refer folder structure:   
+put elenet dataset(dataset.yaml, images/, labels/) into the folder of  _yolov5_ repo , refer folder structure: 
+
 ![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)
 
-but you need to update the path in _dataset.yaml_ by adding the prefix `./data/elenet`, otherwise the train script will say data folder could not be found. so finally it looks like:
+but you need to update the path in _dataset.yaml_ by adding the prefix `./data/elenet`, otherwise the train script will say data folder could not be found. so finally the _dataset.yaml_ looks like:
 ```
 names:
 - electric_bicycle
@@ -68,7 +72,7 @@ Download the pretrained model from: https://github.com/ultralytics/yolov5/releas
 
 run the `train.py` scripts, default batch size 24 will use almost 20G GPU memory:
 ```
-python3 train.py --epochs 50 --img 1280 --data data/elenet/dataset.yaml --weights ./yolov5s.pt --batch-size 24
+python3 train.py --epochs 60 --img 1280 --data data/elenet/dataset.yaml --weights ./yolov5s.pt --batch-size 24
 ```
 
 ## Test the trained model
@@ -80,8 +84,9 @@ python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --sou
 
 check the `detect` result at `yolov5/runs/detect/exp`
 
-## Export the model
-### check rv1126 board npu driver version
+# Export and convert to `.rknn` based on steps from `rknn_model_zoo` (doesn't work for me)
+
+## check rv1126 board npu driver version
 `strings /usr/lib/librknn_runtime.so | grep version`, if it's not `1.7.1` then need update, could clone the `https://github.com/rockchip-linux/rknpu` at the PC and then adb push to board, but never succeed here at one of the step with an error:
 
 > (base) shao@yaoming:~/rknpu$ adb push drivers/linux-armhf-puma/   /
@@ -101,23 +106,18 @@ mv /lib/modules/galcore.ko /lib/modules/galcore.ko_bak
 mv ~/rknpu/drivers/npu_ko/galcore_puma.ko /lib/modules/galcore.ko
 ```
 
-
-
-
 > (base) shao@yaoming:~/rknpu$ adb push drivers/npu_ko/galcore_puma.ko /lib/modules/galcore.ko
 > drivers/npu_ko/galcore_puma.ko: 1 file...hed. 2.7 MB/s (445352 bytes in 0.155s)
-> 
 > 
 
 at last, `strings /usr/lib/librknn_runtime.so | grep version` again to confirm the version is `1.7.1`
 
-
-`export` for latest yolov5 repo:
+## `Export` to `onnx`:
 
 if you're using rockchip board, then(you  **must have applied**  the patch from rknn_model_zoo) [refer](https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch), or for short:
 
 ```
-# 在yolov5 目录下执行以下命令，即可导出针对npu优化的模型，同时打印并将anchors保存成txt文件。
+# 在yolov5 目录下执行以下命令，即可导出 **针对npu** 优化的模型，同时打印并将anchors保存成txt文件。
 python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12 --rknpu rv1126
 
 # device platform 替换成手上板子对应的平台，有以下选择 [rk1808/rv1109/rv1126/rk3399pro/rk3566/rk3568/rk3588]
@@ -138,10 +138,10 @@ if you're not using board, then:
 python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
 
-# Training based on the steps from rknn_toolkit 
+# Export and convert to `.rknn` based on the steps from `rknn_toolkit`
 
 **onnx 1.6.0 only support python3.7** 
-`export` for rknn-toolkit 1.7.1 specified(commit id:  _c5360f6e7009eb4d05f14d1cc9dae0963e949213_  use: `git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213` to switch to, or `git checkout origin` to re-point to latest HEAD) yolov5 repo:
+
 if you got cuda error, may caused by your conda already installed some old torch package for you, then uninstall all of them
 ```
 pip uninstall torch
@@ -183,4 +183,23 @@ open the `.onnx` with Netron, find these nodes and it's OUTPUTS name:
 
 ![输入图片说明](../../images/open_onnx_with_netron_find_3_conv_outputs_name.png)
 
+and input into here for convert (to `.rknn`):
+
+![输入图片说明](../../images/input_3_conv_name_into_testpy_for_rknn_model_convert.png)
+
+prepare `dataset.txt` for  **QUANTIZE** , you can create a folder under `rknn-toolkit/examples/onnx/yolov5` with name `images`, and put into 200-500 images files in it, and then compose the `dataset.txt` with content like:
+
+
+> images/frame_000177.jpg
+> images/frame_000178.jpg
+> images/frame_000180.jpg
+> images/frame_000181.jpg
+> images/frame_000182.jpg
+> images/frame_000183.jpg
+> images/frame_000185.jpg
+> ...
+
+run for convert to `.rknn` model:
+
+```(rknntk) shao@yaoming:~/rknn-toolkit/examples/onnx/yolov5$ python3 test.py ```
 

@@ -38,14 +38,14 @@
 
 
 
-# Training
+# Training based on steps from rknn_model_zoo (doesn't work for me)
 
-## Prepare the training repo
+## Prepare the training data
 
 if you're using rockchip board, follow this to clone and patch the repo:
 https://github.com/airockchip/rknn_model_zoo/tree/main/models/vision/object_detection/yolov5-pytorch#%E4%B8%8B%E8%BD%BD%E4%BB%93%E5%BA%93%E5%B9%B6%E6%89%93%E4%B8%8Apatch
 
-## Orgnize dataset
+## Organize dataset
 put elenet dataset(dataset.yaml, images/, labels/) into the folder of  _yolov5_ repo , refer folder structure:   
 ![输入图片说明](copy_data_and_labels_to_yolov5_folder_refer.png)
 
@@ -140,10 +140,10 @@ if you're not using board, then:
 python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
 
-# Export to .ONNX
+# Training based on the steps from rknn_toolkit 
 
 **onnx 1.6.0 only support python3.7** 
-`export` for rknn specified(commit id:  _c5360f6e7009eb4d05f14d1cc9dae0963e949213_  use: `git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213` to switch to, or `git checkout origin` to re-point to latest HEAD) yolov5 repo:
+`export` for rknn-toolkit 1.7.1 specified(commit id:  _c5360f6e7009eb4d05f14d1cc9dae0963e949213_  use: `git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213` to switch to, or `git checkout origin` to re-point to latest HEAD) yolov5 repo:
 if you got cuda error, may caused by your conda already installed some old torch package for you, then uninstall all of them
 ```
 pip uninstall torch
@@ -156,20 +156,33 @@ import torch
 torch.__version__
 
 pip list|grep torch
-#should see below the correct versions:
+#should see below which are the correct versions:
 torch                   1.11.0+cu113
 torchaudio              0.11.0+cu113
 torchvision             0.12.0+cu113
 
 ```
+you may need install `onnx` and `coremltools` for your conda:
+```
+pip install onnx==1.6.0
+pip install coremltools
+```
+
+then go with `export.py`:
 ```
 python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
 should see `last.onnx` and `last.torchscript` are there under `runs/train/exp3/weights/`
 
+Optional for simplifier(I didn't do it)?
 `simplifier` for rknn specified version, for the `.onnx` model as required by RKNN:
 pip3 install onnx-simplifier
 ```
 python3 -m onnxsim runs/train/exp/weights/last.onnx  runs/train/exp/weights/elenet_yolov5s.onnx
 ```
+
+open the `.onnx` with Netron, find these nodes and it's OUTPUTS name:
+
+![输入图片说明](../../images/open_onnx_with_netron_find_3_conv_outputs_name.png)
+
 

@@ -166,6 +166,8 @@ pip install onnx==1.6.0
 pip install coremltools
 ```
 
+## Export to `.onnx`
+
 then go with `export.py`:
 ```
 python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12
@@ -173,11 +175,14 @@ python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 
 should see `last.onnx` and `last.torchscript` are there under `runs/train/exp3/weights/`
 
 Optional for simplifier(I didn't do it)?
+
 `simplifier` for rknn specified version, for the `.onnx` model as required by RKNN:
 pip3 install onnx-simplifier
 ```
 python3 -m onnxsim runs/train/exp/weights/last.onnx  runs/train/exp/weights/elenet_yolov5s.onnx
 ```
+
+## Get the Conv node name
 
 open the `.onnx` with Netron, find these nodes and it's OUTPUTS name:
 
@@ -198,6 +203,8 @@ prepare `dataset.txt` for  **QUANTIZE** , you can create a folder under `rknn-to
 > images/frame_000183.jpg
 > images/frame_000185.jpg
 > ...
+
+## Convert to `.rknn`
 
 run for convert to `.rknn` model:
 

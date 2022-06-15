@@ -2,7 +2,7 @@
 
 ## Download the raw dataset with `KITTI` format.
 
-## Process the `.zip` dataset file
+## Process the `kitt.zip` dataset file
 Git clone: https://github.com/shaojun/fiftyone_scripts.git
 
 Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script（just cloned）:
@@ -15,15 +15,16 @@ Install the  _unzip_ tool by:
 sudo apt-get install unzip
 ```
 and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip`, you'll get unzipped folder structure like：
+
 ![输入图片说明](../../kitti_unzipped_folder_structure.png)
 
-## Process the raw `KITTI` dataset with `cvdata` tools:
-
-    activate your `cvdata` env like: `conda activate cvdata`, then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename, resize, convert_  image files, use image format `jpg` is OK, the `cvdata` processed data will be stored at `resized_image_2` and `resized_label_2`.
+## Process the `KITTI` dataset with `cvdata` tools
+Activate your `cvdata` env with: `conda activate cvdata`.
+Then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename(.jpeg to .jpg, .PNG to .png), resize, convert(.png to .jpg)_  image files, use image format `jpg` is OK, the processed data will be stored at folder: `resized_image_2` and `resized_label_2`.
     
 
 
-## Process with fiftyone for train/val split and convert to yolov5 dataset format
+## Process with `fiftyone` for `train/val` split and convert to yolov5 dataset format
 First，rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder:
 ![输入图片说明](rename_image2_lable2_to_above_level.png)
 

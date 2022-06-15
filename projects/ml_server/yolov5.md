@@ -182,7 +182,7 @@ pip3 install onnx-simplifier
 python3 -m onnxsim runs/train/exp/weights/last.onnx  runs/train/exp/weights/elenet_yolov5s.onnx
 ```
 
-## Get the Conv node name
+## Get the 3 Conv Node name
 
 open the `.onnx` with Netron, find these nodes and it's OUTPUTS name:
 
@@ -196,17 +196,23 @@ prepare `dataset.txt` for  **QUANTIZE** , you can create a folder under `rknn-to
 
 
 > images/frame_000177.jpg
+>
 > images/frame_000178.jpg
+>
 > images/frame_000180.jpg
+>
 > images/frame_000181.jpg
+>
 > images/frame_000182.jpg
+>
 > images/frame_000183.jpg
+>
 > images/frame_000185.jpg
 > ...
 
 ## Convert to `.rknn`
 
-run for convert to `.rknn` model:
+run for convert to `.rknn` model, the `infer` will take minutes to finish, but actually the `.rknn` has already generated:
 
 ```(rknntk) shao@yaoming:~/rknn-toolkit/examples/onnx/yolov5$ python3 test.py ```
 

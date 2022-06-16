@@ -1,12 +1,12 @@
 # Flash Debian 10
 
->进入recovery mode的板子是不会在windows下的device manager里有任何item的。
+>进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
 
-拔掉usb otg线，拔掉电源，见板子上所有灯都熄灭了，再接入usb otg到pc。
-打开dev tool：
-> c:\Users\music\Downloads\games\3ds_roms\RKDevTool\RKDevTool_Release_v2.86\RKDevTool.exe
+拔掉 usb otg 线，拔掉电源，确保板子上所有灯都熄灭了，再接入usb otg线到PC。
+打开 RKDevTool：
+> c:\xxxxx\RKDevTool\RKDevTool_Release_v2.86\RKDevTool.exe
 
-手按住板子上的 update button, 保持， 再接上电源，等2秒钟，松按钮， dev tool应该能发现adb device. 
+手按住板子上的 Recover 按钮, 保持, 再接上电源，等2秒钟，松 Recover 按钮，RKDevTool应该能发现adb device. 
 > 在现在情况下, WindowsDeviceManager不会有任何设备出现，而只有板子在正常完全进入系统后，才有rk3xxx出现在usb设备中
 
 ![输入图片说明](../../../images/RKDevTool_import_config.png)
@@ -18,7 +18,10 @@ Select the debian 10 config file:
 Select each `.img` one by one:
 ![输入图片说明](../../../images/RKDev_tool_flash_in_debian10_each_img.png)
 
-putty into the Debian 10.
+# Setup Debian 10
+
+## Install packages
+putty into the Debian 10, and then install these packages:
 ```
 sudo apt update
 sudo apt install git
@@ -31,7 +34,7 @@ git clone https://gitlab.com/firefly-linux/external/rknn-toolkit.git -b rv1126_r
 #wget https://bootstrap.pypa.io/get-pip.py
 #python3 get-pip.py
 
-#建议全都pip3安装
+#建议全都pip3安装?no need python3 -m
 sudo apt-get install python3-pip
 python3 -m pip install numpy==1.16.3
 python3 -m pip install psutil==5.6.2
@@ -57,10 +60,49 @@ then need add this at the most begining of application python file, otherwise, r
 firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/packages$ python3 -m pip install rknn_toolkit_lite-1.7.0.dev_0cfb22-cp37-cp37m-linux_armv7l.whl
 firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/examples-lite/inference_with_lite$ sudo python3 test.py
 ```
+## Install elenet
+```
+cd ~/
+git clone https://github.com/shaojun/rv1126_elenet.git
+cd rv1126_elenet
+sudo python3 test_yolov5s_rtsp.py
 
-# how to install rknntookitlite
+# or for use specified rstp stream
+# sudo python3 test_yolov5s_rtsp.py -i rtsp://YourSpecifiedUrl
+
+# or for print debug to console and output infer result to local output folder:
+# sudo python3 test_yolov5s_rtsp.py --enable-verbose true --enable-output true
+```
+## Config config_elenet.txt
+`whoami` is for identify each board device when multiple boards send messages to a remote kafka server,  **SHOULD**  keep this id unique  **per board**.
+
+This `id` will be carried into a message and send to a remote  _kafka_  server as the objects detected constantly from local video stream, then the server message subscribers would know the source of the messages.
+
+> this id also should be known by cloud side, so there must have a webpage provided by cloud side, like device registering portal, to allow you input the id there as well.
+
+editing and input `whoamid` id:
+```
+ls config_elenet.txt  # you should see the file exists!
+nano config_elenet.txt  # start edit it.
+#input your unique id under the section custom-uploader -> whoami
+``` 
+can refer picture below, the red part is the `whoami` id:
+
+![输入图片说明](../../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
+
+make sure the below path exists:
+> /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+
+save above content by `ctr`+`o`, and copy config file to target path:
+
+```
+sudo cp config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+```
+
+# Useful links
+## how to install rknntookitlite
 this is tested and works, basically the above steps are copied from this post
 https://dev.t-firefly.com/thread-104204-1-1.html
-# how to pack rootfs
+## how to pack rootfs
 https://dev.t-firefly.com/thread-118433-1-3.html
 https://wiki.t-firefly.com/zh_CN/Firefly-RK3399/export_dev_sf.html

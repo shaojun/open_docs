@@ -103,7 +103,9 @@ sudo cp config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deep
 # Useful links
 ## how to install rknntookitlite
 this is tested and works, basically the above steps are copied from this post
+
 https://dev.t-firefly.com/thread-104204-1-1.html
 ## how to pack rootfs
 https://dev.t-firefly.com/thread-118433-1-3.html
+
 https://wiki.t-firefly.com/zh_CN/Firefly-RK3399/export_dev_sf.html

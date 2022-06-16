@@ -80,7 +80,7 @@ This `id` will be carried into a message and send to a remote  _kafka_  server a
 
 > this id also should be known by cloud side, so there must have a webpage provided by cloud side, like device registering portal, to allow you input the id there as well.
 
-editing and input `whoamid` id:
+### Editing and input `whoamid` id:
 ```
 ls config_elenet.txt  # you should see the file exists!
 nano config_elenet.txt  # start edit it.
@@ -90,7 +90,8 @@ can refer picture below, the red part is the `whoami` id:
 
 ![输入图片说明](../../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
 
-make sure the below path exists:
+### Save and copy to:
+make sure below path exists:
 > /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
 
 save above content by `ctr`+`o`, and copy config file to target path:

@@ -30,10 +30,11 @@ never worked.
 # Setup Debian 10
 
 ## Install packages
-putty into the Debian 10, and then install these packages:
+putty into the Debian 10, make sure the system is internet connected,ap and then install these packages:
 ```
 sudo apt update
 sudo apt install git
+cd /home/firefly/
 # clone with a branch
 git clone https://gitlab.com/firefly-linux/external/rknn-toolkit.git -b rv1126_rv1109/firefly
 
@@ -74,13 +75,6 @@ firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0c
 cd ~/
 git clone https://github.com/shaojun/rv1126_elenet.git
 cd rv1126_elenet
-sudo python3 test_yolov5s_rtsp.py
-
-# or for use specified rstp stream
-# sudo python3 test_yolov5s_rtsp.py -i rtsp://YourSpecifiedUrl
-
-# or for print debug to console and output infer result to local output folder:
-# sudo python3 test_yolov5s_rtsp.py --enable-verbose true --enable-output true
 ```
 ## Config _whoami_ Id
 `whoami` is for identify each board device when multiple boards send messages to a remote kafka server,  **SHOULD**  keep this id unique  **per board**.
@@ -101,14 +95,27 @@ can refer picture below, the red part is the `whoami` id:
 
 ### Save and copy to:
 make sure below path exists:
-> /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+>  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
+can create it by `mkdir -p  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/`
+
 
 save above content by `ctr`+`o`, and copy config file to target path:
 
 ```
-sudo cp config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
+sudo cp config_elenet.txt  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
 ```
 
+run application:
+
+```
+sudo python3 test_yolov5s_rtsp.py
+
+# or for use specified rstp stream
+# sudo python3 test_yolov5s_rtsp.py -i rtsp://YourSpecifiedUrl
+
+# or for print debug to console and output infer result to local output folder:
+# sudo python3 test_yolov5s_rtsp.py --enable-verbose true --enable-output true
+```
 # Useful links
 ## how to install rknntookitlite
 this is tested and works, basically the above steps is highly concluded from this post

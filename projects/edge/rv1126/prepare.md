@@ -2,7 +2,7 @@
 
 >进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
 
-拔掉 usb otg 线，拔掉电源，确保板子上所有灯都熄灭了，再接入usb otg线到PC。
+拔掉 Usb Otg线、网线、电源线！ 确保板子上所有灯都熄灭了，再接入Usb Otg线到 PC。
 打开 RKDevTool：
 > c:\xxxxx\RKDevTool\RKDevTool_Release_v2.86\RKDevTool.exe
 
@@ -108,6 +108,37 @@ save above content by `ctr`+`o`, and copy config file to target path:
 ```
 sudo cp config_elenet.txt /opt/nvidia/deepstream/deepstream/samples/configs/deepstream-app/
 ```
+# How to putty to board by serial port
+wiring like below picture:
+![输入图片说明](../../../images/putty_to_firefly_rv1126_by_serial.jpg)
+
+you should see a com port is created on you Windows PC:
+![输入图片说明](../../../images/usb_to_ttl_connect_to_pc_have_a_com_port.png)
+
+open putty, Serial line input `COM3` for my situation,Speed to `1500000`,
+
+![输入图片说明](../../../images/open_putty_to_firefly_rv1126_board_with_serial.png)
+
+`Open` then you should get the terminal console, after several `Enter`, input `/sbin/ifconfig` to check ip address (make sure you have LAN cable connected and with `dhcp` enabled):
+```
+root@firefly:/home/firefly# /sbin/ifconfig
+enx00e04cc4edfa: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 00:e0:4c:c4:ed:fa  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.0.130  netmask 255.255.255.0  broadcast 192.168.0.255
+        ether ba:c9:11:2f:02:2c  txqueuelen 1000  (Ethernet)
+        RX packets 10752016  bytes 685211272 (653.4 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1417689  bytes 374737499 (357.3 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 63
+```
+the `eth0` is the LAN interface, the ip address for my situation is `192.168.0.130`, you can then also use the ip to putty in.
 
 # Useful links
 ## how to install rknntookitlite

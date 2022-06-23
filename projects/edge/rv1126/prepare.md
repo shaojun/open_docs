@@ -44,6 +44,11 @@ git clone https://gitlab.com/firefly-linux/external/rknn-toolkit.git -b rv1126_r
 #wget https://bootstrap.pypa.io/get-pip.py
 #python3 get-pip.py
 
+
+chown -hR firefly:firefly /usr/local/lib/python3.7/dist-packages/
+![输入图片说明](../../../images/rv1126_debian10_copy_site_packages_directly.png)
+
+
 #建议全都pip3安装?no need python3 -m
 sudo apt-get install python3-pip
 python3 -m pip install numpy==1.16.3
@@ -73,7 +78,7 @@ firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0c
 ## Install elenet
 ```
 cd ~/
-git clone https://github.com/shaojun/rv1126_elenet.git
+cd
 cd rv1126_elenet
 ```
 ## Config _whoami_ Id

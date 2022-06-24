@@ -30,58 +30,72 @@ never worked.
 # Setup Debian 10
 
 ## Install packages
-putty into the Debian 10, make sure the system is internet connected,ap and then install these packages:
+Below use **serial port** to Putty into board, but the tcp putty should be similar.
+Make sure the system is internet connected
+
+### Install apt packages
 ```
 sudo apt update
-sudo apt install git
-cd /home/firefly/
-# clone with a branch
-git clone https://gitlab.com/firefly-linux/external/rknn-toolkit.git -b rv1126_rv1109/firefly
-
-#sudo apt install wget
-#mkdir Download
-#cd Download
-#wget https://bootstrap.pypa.io/get-pip.py
-#python3 get-pip.py
-
-
-chown -hR firefly:firefly /usr/local/lib/python3.7/dist-packages/
-![输入图片说明](../../../images/rv1126_debian10_copy_site_packages_directly.png)
-
-
-#建议全都pip3安装?no need python3 -m
-sudo apt-get install python3-pip
-python3 -m pip install numpy==1.16.3
-python3 -m pip install psutil==5.6.2
-python3 -m pip install ruamel.yaml==0.15.81
-pip3 install bson
-pip3 install kafka-python
-pip3 install pymongo
-
 sudo apt-get install multiarch-support
 sudo apt --fix-broken install
-firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ sudo dpkg -i libjasper1_1.900.1-debian1-2.4+deb8u6_armhf.deb
-firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ sudo dpkg -i libjasper-dev_1.900.1-debian1-2.4+deb8u6_armhf.deb
+sudo apt install git
+cd /home/firefly/
+
+# Clone from official branch, clone the original repo is not used anymore since the huge size, then I picked # up the necessary files into https://github.com/shaojun/rv1126_elenet.git for convinient
+# git clone https://gitlab.com/firefly-linux/external/rknn-toolkit.git -b rv1126_rv1109/firefly
+#firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ sudo #dpkg -i libjasper1_1.900.1-debian1-2.4+deb8u6_armhf.deb
+#firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ sudo #dpkg -i libjasper-dev_1.900.1-debian1-2.4+deb8u6_armhf.deb
+
+
+git clone https://github.com/shaojun/rv1126_elenet.git
+sudo dpkg -i installation/requires/libjasper1_1.900.1-debian1-2.4+deb8u6_armhf.deb
+sudo dpkg -i installation/requires/libjasper-dev_1.900.1-debian1-2.4+deb8u6_armhf.deb
+
 sudo apt-get install libhdf5-dev
 sudo apt-get install libatlas-base-dev
 sudo apt-get install libqtgui4
 sudo apt-get install libqt4-test
-firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ python3 -m pip install opencv_python-4.0.1.24-cp37-cp37m-linux_armv7l.whl
-# notice the cv2 installed path, if it's like this path:/home/firefly/.local/lib/python3.7/site-packages
-then need add this at the most begining of application python file, otherwise, running the python will got 'cannot found the cv2' error
-#import sys
-#sys.path.append('/home/firefly/.local/lib/python3.7/site-packages')
 
-firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/packages$ python3 -m pip install rknn_toolkit_lite-1.7.0.dev_0cfb22-cp37-cp37m-linux_armv7l.whl
-firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/examples-lite/inference_with_lite$ sudo python3 test.py
 ```
-## Install elenet
+### Install Python packages
+#### Install by simple-copy
+the simple-copy could save some time compare to install by `pip`.
+the `dist-packages` already prepared under repo `rv1126_elenet`, the content is like:
+![输入图片说明](../../../images/python_dist_packages_content_structure.png)
+
 ```
-cd ~/
-cd
-cd rv1126_elenet
+chown -hR firefly:firefly /usr/local/lib/python3.7/dist-packages/
 ```
-## Config _whoami_ Id
+Copy the prepared `dist-packages` to board path:
+```
+cp -r /home/firefly/rv1126_elenet/installation/dist-packages/* /usr/local/lib/python3.7/dist-packages/
+```
+finally, the board folder structure is like:
+![输入图片说明](../../../images/rv1126_debian10_copy_site_packages_directly.png)
+
+you could then see if it works if no errors show after `import cv2`:
+```
+python3
+import cv2
+```
+#### Install by pip - !!!don't do it if already did simple-copy
+```
+pip3 install numpy==1.16.3
+pip3 install psutil==5.6.2
+pip3 install ruamel.yaml==0.15.81
+pip3 install bson
+pip3 install kafka-python
+pip3 install pymongo
+
+#firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ pip3 #install opencv_python-4.0.1.24-cp37-cp37m-linux_armv7l.whl
+pip3 install /home/firefly/rv1126_elenet/installation/requires/opencv_python-4.0.1.24-cp37-cp37m-linux_armv7l.whl
+
+#firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/packages$ pip3 #install rknn_toolkit_lite-1.7.0.dev_0cfb22-cp37-cp37m-linux_armv7l.whl
+pip3 install /home/firefly/rv1126_elenet/installation/packages/rknn_toolkit_lite-1.7.0.dev_0cfb22-cp37-cp37m-linux_armv7l.whl
+```
+## Prepare elenet
+
+### Config  _whoami_ Id
 `whoami` is for identify each board device when multiple boards send messages to a remote kafka server,  **SHOULD**  keep this id unique  **per board**.
 
 This `id` will be carried into a message and send to a remote  _kafka_  server as the objects detected constantly from local video stream, then the server message subscribers would know the source of the messages.
@@ -90,6 +104,7 @@ This `id` will be carried into a message and send to a remote  _kafka_  server a
 
 ### Editing and input `whoamid` id:
 ```
+cd /home/firefly/
 ls config_elenet.txt  # you should see the file exists!
 nano config_elenet.txt  # start edit it.
 #input your unique id under the section custom-uploader -> whoami
@@ -98,17 +113,35 @@ can refer picture below, the red part is the `whoami` id:
 
 ![输入图片说明](../../../images/edit_or_input_whoami_id_for_your_jetson_nano_board.png)
 
-### Save and copy to:
+### Save and copy config_elenet.txt to:
 make sure below path exists:
 >  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
-can create it by `mkdir -p  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/`
+
+or create it by: 
+```
+mkdir -p  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
+```
 
 
-save above content by `ctr`+`o`, and copy config file to target path:
+save above content in `nano` by `ctr`+`o`, and then copy config file to target path:
 
 ```
 sudo cp config_elenet.txt  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
 ```
+
+### Run:
+
+```
+cd /home/firefly/rv1126_elenet
+sudo python3 test_yolov5s_rtsp.py
+
+# or for use specified rstp stream
+# sudo python3 test_yolov5s_rtsp.py -i rtsp://YourSpecifiedUrl
+
+# or for print debug info to console and output infer result to a local output folder:
+# sudo python3 test_yolov5s_rtsp.py --enable-verbose true --enable-output true
+```
+
 # How to putty to board by serial port
 wiring like below picture:
 ![输入图片说明](../../../images/putty_to_firefly_rv1126_by_serial.jpg)
@@ -141,17 +174,6 @@ eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 ```
 the `eth0` is the LAN interface, the ip address for my situation is `192.168.0.130`, you can then also use the ip to putty in.
 
-run application:
-
-```
-sudo python3 test_yolov5s_rtsp.py
-
-# or for use specified rstp stream
-# sudo python3 test_yolov5s_rtsp.py -i rtsp://YourSpecifiedUrl
-
-# or for print debug to console and output infer result to local output folder:
-# sudo python3 test_yolov5s_rtsp.py --enable-verbose true --enable-output true
-```
 # Useful links
 ## how to install rknntookitlite
 this is tested and works, basically the above steps is highly concluded from this post
@@ -174,7 +196,7 @@ The export tool is at `resource/ff_export_rootfs_buildroot.tar`.
 Copy it to `firefly@firefly:~/Download/`.
 De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
 * Plug in the Usb Drive to board usb port
-* Check Usb Drive name in Debian
+* Check Usb Drive name in board Debian
     ```
     firefly@firefly:~/Download/ff_export_rootfs_buildroot$ lsblk
     NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -192,12 +214,12 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     mmcblk0boot0 179:32   0    4M  1 disk
     mmcblk0boot1 179:64   0    4M  1 disk
     ```
-* Create a folder for mount Usb Drive
+* Create a folder in board Debian for mount Usb Drive
 `mkdir /media/usb_drive`
-* Mount Usb Drive
+* Mount Usb Drive in board Debian
 `sudo mount /dev/sda1 /media/usb_drive`
 * Export
-    will take minutes to go:
+    in board Debian, will take minutes to go:
     ```
     firefly@firefly:~/Download/ff_export_rootfs_buildroot$ sudo ./ff_export_rootfs /media/usb_drive/
     MEDIA FREE SPACE SIZE    55975   MBytes
@@ -217,7 +239,9 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     see the export file sample:
     ![输入图片说明](../../../images/rootfs_export_to_img_file_under_usb_drive_mount_folder.png)
 * Resize
+    in board Debian
     ```
+    cd /media/usb_drive
     firefly@firefly:/media/usb_drive$ sudo /sbin/e2fsck -p -f Firefly_ext4_202206170232.img
     [sudo] password for firefly:
     rootfs: 48731/172520 files (14.6% non-contiguous), 7706484/9290489 blocks
@@ -228,8 +252,8 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
 
     ```
 
-* repack
-COPY resource/firefly-rk3399-linux-repack.tgz to your **Ubuntu PC**.
+* Repack
+COPY `resource/firefly-rk3399-linux-repack.tgz` to your **Ubuntu PC**.
 COPY the new packed and resized `.img` file (like above resized one: _Firefly_ext4_202206170232.img_) to same folder, and rename it to `udpate.img`, then the folder structure is like:
     ```
     (base) shawn@DESKTOP-9NG0VFK:~/Downloads/firefly-rk3399-linux-repack$ ls

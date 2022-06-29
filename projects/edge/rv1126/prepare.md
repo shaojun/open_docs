@@ -185,6 +185,8 @@ https://dev.t-firefly.com/thread-118433-1-3.html
 
 https://wiki.t-firefly.com/zh_CN/Firefly-RK3399/export_dev_sf.html
 
+https://wiki.t-firefly.com/zh_CN/CORE-1126-JD4/Debian10.html#
+https://wiki.t-firefly.com/zh_CN/CORE-1126-JD4/Debian10.html#fen-qu-jie-shao
 ### steps
 * Prepare a 32G (or above size) Usb Drive
 * At your windows PC, download the _DiskGenius_ tool
@@ -214,6 +216,7 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     mmcblk0boot0 179:32   0    4M  1 disk
     mmcblk0boot1 179:64   0    4M  1 disk
     ```
+    that `sda1` with size 58.7G is your USB Drive.
 * Create a folder in board Debian for mount Usb Drive
 `mkdir /media/usb_drive`
 * Mount Usb Drive in board Debian
@@ -249,10 +252,10 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     resize2fs 1.44.5 (15-Dec-2018)
     Resizing the filesystem on Firefly_ext4_202206170232.img to 7702411 (1k) blocks.
     The filesystem on Firefly_ext4_202206170232.img is now 7702411 (1k) blocks long.
-
     ```
 
-* Repack
+* Repack - **!!!SKIP this for RV1126**
+**YOU SHOULD NOT DO THIS FOR RV1126**
 COPY `resource/firefly-rk3399-linux-repack.tgz` to your **Ubuntu PC**.
 COPY the new packed and resized `.img` file (like above resized one: _Firefly_ext4_202206170232.img_) to same folder, and rename it to `udpate.img`, then the folder structure is like:
     ```
@@ -268,3 +271,39 @@ COPY the new packed and resized `.img` file (like above resized one: _Firefly_ex
     Error:Check update.img failed!
     Press any key to quit:
     ```
+
+* Prepare the `parameter.txt` file
+here take an export file: `Firefly_ext4_202206240234.img` as example (not the one in above sample, but the theory should be the same).
+Copy the exported file `Firefly_ext4_202206240234.img` from board to Your Windows PC:
+![输入图片说明](../../../images/copy_rv1126_export_rootfs_to_windows_pc.png)
+Can see its size is 5.84GB.
+`parameter.txt` is used in firmware flashing for locating each partition (you can see several `*.img` files are used in flashing), here is the sample of the `parameter.txt` from firefly official Debian 10 firmware packages:
+
+    >FIRMWARE_VER: 8.1
+MACHINE_MODEL: RV1126
+MACHINE_ID: 007
+MANUFACTURER: RV1126
+MAGIC: 0x5041524B
+ATAG: 0x00200800
+MACHINE: 0xffffffff
+CHECK_MASK: 0x80
+PWR_HLD: 0,0,A,0,1
+TYPE: GPT
+CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(misc),0x00010000@0x00008000(boot),0x00010000@0x00018000(recovery),0x00010000@0x00028000(backup),0x00C00000@0x00038000(rootfs),0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
+uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+
+    As you're packing your own fireware, then only 2 Partition info need to be updated correspondingly with your new exported file(size), they are in the: 
+    >0x00C00000@0x00038000(rootfs),0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
+
+    * Partition `rootfs`
+    the exported file is actually a new `rootfs` that is supposed to replacing the old (official) one, once replaced, the partition size need to adjust as well.
+    `0x00C00000` is `rootfs` partition size, it must greater than the file `rootfs.img` size, the requried `rootfs` partition size's caculation can be understood with: `0x00C00000  块 * 512 字节每块 / 1024 / 1024 = 6144 MByte`, obvious the `6144` is greater(**and must**) than actual `rootfs.img` file size(5.84GB), it's a proper value here, it also means you can set higher value(but don't know the impact?).
+
+    * Partition `oem`:
+        >0x00060000@0x00C38000(oem)
+
+        because this partition is following `rootfs` partition, so with the adjustment of `rootfs` partition, we need to update the `oem` partition as well with rule: `分区大小 + 所在地址 = 下一个分区的所在地址` which is `0x00C00000 + 0x00038000 = 0x00C38000`
+
+* Flashing the several `.img` files to board
+for your own fireware pack, replace that 2 files with yours, others still use the firefly official ones.
+![输入图片说明](../../../images/flashing_the_rebuild_rootfs_and_parameter_to_board.png)

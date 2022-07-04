@@ -1,4 +1,4 @@
-# Flash Debian 10
+# Flash in Debian 10 to board
 
 >进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
 
@@ -29,6 +29,37 @@ For Ubuntu PC, unplug otg usb, unplug power cable, all board LED off, then plug 
 never worked.
 # Setup Debian 10
 
+## Install Frp client
+Download frp release (server and client are together) from https://github.com/fatedier/frp/releases and untar it into folder: `/home/firefly/Download/frp_0.43.0_linux_arm/`
+```
+sudo nano /etc/systemd/system/frpc.service
+```
+input these content (default use `6000` port, should **UNIQUE** per board, then please edit the `remote_port` in `frpc.ini`):
+>[Unit]
+Description=Frp client
+Wants=network.target
+After=network.target
+[Service]
+&#35; before start the service, always sleep 5 second, for wait the system ready?
+ExecStartPre=/bin/sleep 5
+WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/
+ExecStart=/home/firefly/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
+Restart=always
+&#35; Restart service after 10 seconds if this service crashes:
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
+
+
+
+ctrl+o, y, ctrl+x, exit from nano.
+```
+sudo systemctl enable frpc.service
+# sudo systemctl start frpc.service
+# sudo systemctl status frpc.service
+# sudo systemctl daemon-reload
+```
+then should see it connected at: http://msg.glfiot.com:7500/static/#/proxies/tcp
 ## Install packages
 Below use **serial port** to Putty into board, but the tcp putty should be similar.
 Make sure the system is internet connected
@@ -304,6 +335,7 @@ uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
 
         because this partition is following `rootfs` partition, so with the adjustment of `rootfs` partition, we need to update the `oem` partition as well with rule: `分区大小 + 所在地址 = 下一个分区的所在地址` which is `0x00C00000 + 0x00038000 = 0x00C38000`
 
-* Flashing the several `.img` files to board
+* Flashing `*.img` files to board
 for your own fireware pack, replace that 2 files with yours, others still use the firefly official ones.
 ![输入图片说明](../../../images/flashing_the_rebuild_rootfs_and_parameter_to_board.png)
+ Detail steps please refer section: *Flash in Debian 10 to board*

@@ -35,21 +35,22 @@ Download frp release (server and client are together) from https://github.com/fa
 sudo nano /etc/systemd/system/frpc.service
 ```
 input these content (default use `6000` port, should **UNIQUE** per board, then please edit the `remote_port` in `frpc.ini`):
->[Unit]
->Description=Frp client
->Wants=network.target
->After=network.target
->[Service]
->&#35; before start the service, always sleep 5 second, for wait the system ready?
->ExecStartPre=/bin/sleep 5
->WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/
->ExecStart=/home/firefly/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
->Restart=always
->&#35; Restart service after 10 seconds if this service crashes:
->RestartSec=10
->[Install]
->WantedBy=multi-user.target
-
+```
+[Unit]
+Description=Frp client
+Wants=network.target
+After=network.target
+[Service]
+#before start the service, always sleep 5 second, for wait the system ready?
+ExecStartPre=/bin/sleep 5
+WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/
+ExecStart=/home/firefly/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
+Restart=always
+#Restart service after 10 seconds if this service crashes:
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
+```
 
 
 ctrl+o, y, ctrl+x, exit from nano.
@@ -350,4 +351,9 @@ select file:
 input each files:
 
 ![输入图片说明](../../../images/flashing_the_rebuild_rootfs_and_parameter_to_board.png)
+<<<<<<< HEAD
  Detail steps please refer section: *Flash in Debian 10 to board*
+=======
+
+执行
+>>>>>>> 533236c26d8087f60ce68158febb133f7c756428

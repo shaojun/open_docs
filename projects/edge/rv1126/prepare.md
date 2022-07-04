@@ -36,19 +36,19 @@ sudo nano /etc/systemd/system/frpc.service
 ```
 input these content (default use `6000` port, should **UNIQUE** per board, then please edit the `remote_port` in `frpc.ini`):
 >[Unit]
-Description=Frp client
-Wants=network.target
-After=network.target
-[Service]
-&#35; before start the service, always sleep 5 second, for wait the system ready?
-ExecStartPre=/bin/sleep 5
-WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/
-ExecStart=/home/firefly/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
-Restart=always
-&#35; Restart service after 10 seconds if this service crashes:
-RestartSec=10
-[Install]
-WantedBy=multi-user.target
+>Description=Frp client
+>Wants=network.target
+>After=network.target
+>[Service]
+>&#35; before start the service, always sleep 5 second, for wait the system ready?
+>ExecStartPre=/bin/sleep 5
+>WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/
+>ExecStart=/home/firefly/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
+>Restart=always
+>&#35; Restart service after 10 seconds if this service crashes:
+>RestartSec=10
+>[Install]
+>WantedBy=multi-user.target
 
 
 

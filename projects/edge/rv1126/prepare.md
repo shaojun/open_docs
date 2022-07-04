@@ -337,5 +337,17 @@ uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
 
 * Flashing `*.img` files to board
 for your own fireware pack, replace that 2 files with yours, others still use the firefly official ones.
+boot your board to flashing mode with previous steps.
+
+import:
+
+![输入图片说明](../../../images/rv_Dev_tool_import_config_file.png)
+
+select file:
+
+![输入图片说明](../../../rv_dev_tool_select_debian10_configfile.png)
+
+input each files:
+
 ![输入图片说明](../../../images/flashing_the_rebuild_rootfs_and_parameter_to_board.png)
  Detail steps please refer section: *Flash in Debian 10 to board*

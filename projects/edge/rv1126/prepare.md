@@ -1,14 +1,24 @@
 # Flash in Debian 10 to board
 
->进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
+Install board Driver at your Windows PC from: 
+> `DriverAssitant_v4.5\DriverInstall.exe`
 
-拔掉 Usb Otg线、网线、电源线！ 确保板子上所有灯都熄灭了，再接入Usb Otg线到 PC。
-打开 RKDevTool：
+打开 RKDevTool at your Windows PC from：
 > c:\xxxxx\RKDevTool\RKDevTool_Release_v2.86\RKDevTool.exe
 
-手按住板子上的 Recover 按钮, 保持, 再接上电源，等2秒钟，松 Recover 按钮，RKDevTool应该能发现adb device. 
-> 在现在情况下, WindowsDeviceManager不会有任何设备出现，而只有板子在正常完全进入系统后，才有rk3xxx出现在usb设备中
+拔掉板子上的 Usb Otg线、网线、电源线，然后确保板子上所有灯（网口旁边的两个绿色LED灯）都熄灭了。
+再接入(请先不要接入电源线)Usb Otg线到板子的 **图示 USB TYPE A 接口** ，另一头到 PC:
 
+![输入图片说明](../../../images/rv1126_firefly_jd4_how_to_conn_usb_otg_cable.jpg)
+
+
+手按住板子上的 Recover 按钮, 保持住, 再接上电源线，等2秒钟，松 Recover 按钮，`RKDevTool`的主界面上将显示发现了adb device，如图：
+![输入图片说明](../../../images/rv1126_firefly_jd4_rkdevtool_found_adb_device.png)
+
+> 应该注意的是，进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
+> 所以在现在还未刷机完成,板子还未进入debian 10系统前， WindowsDeviceManager不会有任何设备出现，而只有板子在正常完全进入系统后，才有rk3xxx出现在usb设备中
+
+导入配置：
 ![输入图片说明](../../../images/RKDevTool_import_config.png)
 
 Select the debian 10 config file:
@@ -22,6 +32,9 @@ Select each `.img` one by one:
 
 ![输入图片说明](../../../images/RKDevTool_flash_in_img_files.png)
 
+10分钟左右，应看到 RKDev_tool 右侧进度都完成，板子将自动重启并进入Debian 10系统了。
+
+验证是否系统正常启动请参考 Section: How to putty to board by serial port
 ## how to adb
 For Ubuntu PC, unplug otg usb, unplug power cable, all board LED off, then plug power cable, wait 5s, plug in otg usb, should see a mobile icon in PC, and then `adb devices` should see the board.
 
@@ -351,9 +364,6 @@ select file:
 input each files:
 
 ![输入图片说明](../../../images/flashing_the_rebuild_rootfs_and_parameter_to_board.png)
-<<<<<<< HEAD
- Detail steps please refer section: *Flash in Debian 10 to board*
-=======
 
-执行
->>>>>>> 533236c26d8087f60ce68158febb133f7c756428
+ Detail steps please refer section: *Flash in Debian 10 to board*
+

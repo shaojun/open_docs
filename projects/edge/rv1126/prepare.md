@@ -45,7 +45,7 @@ never worked.
 ## Install Frp client
 Download frp release (server and client are together) from https://github.com/fatedier/frp/releases and untar it into folder: `/home/firefly/Download/frp_0.43.0_linux_arm/`.
 
-Edit the `frpc.ini`，input below content (here the sample default use `6000` port, you should gurantee it's **UNIQUE per board**, so for most case, please edit the `remote_port` for your situation):
+As a frp client, edit the `/home/firefly/Download/frp_0.43.0_linux_arm/frpc.ini`，input below content (the below sample config defaultly use `6000` port, you should gurantee it's **UNIQUE per board**, so for most case, you need change the `remote_port` for your situation):
 ```
 [common]
 server_addr = msg.glfiot.com
@@ -56,9 +56,8 @@ type = tcp
 local_ip = 127.0.0.1
 local_port = 22
 remote_port = 6000
-
 ```
-Create a system service for auto start the `frp client`:
+Create a system service for auto start the `frp client` when system started:
 
 ```
 sudo nano /etc/systemd/system/frpc.service
@@ -83,7 +82,6 @@ RestartSec=10
 WantedBy=multi-user.target
 ```
 
-
 ctrl+o, y, ctrl+x, exit from nano, and activate the service.
 ```
 sudo systemctl enable frpc.service
@@ -91,7 +89,7 @@ sudo systemctl enable frpc.service
 # sudo systemctl status frpc.service
 # sudo systemctl daemon-reload
 ```
-then should see if it connected at: http://msg.glfiot.com:7500/static/#/proxies/tcp
+then you could check the connection state via the frp server (installed at msg.glfiot.com) web page at: http://msg.glfiot.com:7500/static/#/proxies/tcp
 ## Install packages
 Below use **serial port** to Putty into board, but the tcp putty should be similar.
 Make sure the system is internet connected

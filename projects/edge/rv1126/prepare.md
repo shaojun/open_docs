@@ -34,6 +34,7 @@ Select each `.img` one by one:
 
 10分钟左右，应看到 RKDev_tool 右侧进度都完成，板子将自动重启并进入Debian 10系统了。
 
+Unplug the USB-OTG cable from board, and connect a LAN cable (with DHCP enabled) in any LAN port.
 验证是否系统正常启动请参考 Section: How to putty to board by serial port
 ## how to adb
 For Ubuntu PC, unplug otg usb, unplug power cable, all board LED off, then plug power cable, wait 5s, plug in otg usb, should see a mobile icon in PC, and then `adb devices` should see the board.

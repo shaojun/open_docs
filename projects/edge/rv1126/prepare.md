@@ -97,7 +97,7 @@ then you can use it like:
 
 Also, there's a frp build-in web service for check the overall connection (I installed it at msg.glfiot.com), the web page can be accessed at: http://msg.glfiot.com:7500/static/#/proxies/tcp, default username and password are:
 >admin1
-admin1
+>admin1
 ## Install packages
 Below use **serial port** to Putty into board, but the tcp putty should be similar.
 Make sure the system is internet connected

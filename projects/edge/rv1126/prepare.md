@@ -83,7 +83,7 @@ RestartSec=10
 WantedBy=multi-user.target
 ```
 
-ctrl+o, y, ctrl+x, exit from nano, and activate the service.
+`ctrl+o`, `y`, `ctrl+x`, save and exit from nano, then activate the service:
 ```
 sudo systemctl enable frpc.service
 # sudo systemctl start frpc.service
@@ -94,7 +94,10 @@ sudo systemctl enable frpc.service
 then you can use it like:
 
 ![输入图片说明](../../../images/rv1126_connect_putty_via_frp.png)
-then you could check the connection state via the frp server (installed at msg.glfiot.com) web page at: http://msg.glfiot.com:7500/static/#/proxies/tcp
+
+Also, there's a frp build-in web service for check the overall connection (I installed it at msg.glfiot.com), the web page can be accessed at: http://msg.glfiot.com:7500/static/#/proxies/tcp, default username and password are:
+>admin1
+admin1
 ## Install packages
 Below use **serial port** to Putty into board, but the tcp putty should be similar.
 Make sure the system is internet connected

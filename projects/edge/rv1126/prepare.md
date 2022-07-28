@@ -1,4 +1,4 @@
-# Flash in Debian 10 to board
+# Flash Debian 10 into board
 
 Install board Driver at your Windows PC from: 
 > `DriverAssitant_v4.5\DriverInstall.exe`
@@ -19,6 +19,7 @@ Install board Driver at your Windows PC from:
 > 所以在现在还未刷机完成,板子还未进入debian 10系统前， WindowsDeviceManager不会有任何设备出现，而只有板子在正常完全进入系统后，才有rk3xxx出现在usb设备中
 
 导入配置：
+
 ![输入图片说明](../../../images/RKDevTool_import_config.png)
 
 Select the debian 10 config file:
@@ -26,21 +27,28 @@ Select the debian 10 config file:
 ![输入图片说明](../../../images/RKDevTool_select_debian10_config.png)
 
 Select each `.img` one by one:
+
 ![输入图片说明](../../../images/RKDev_tool_flash_in_debian10_each_img.png)
 
 点击“执行”, 开始刷入：
 
 ![输入图片说明](../../../images/RKDevTool_flash_in_img_files.png)
 
-10分钟左右，应看到 RKDev_tool 右侧进度都完成，板子将自动重启并进入Debian 10系统了。
+写入镜像将持续10分钟左右，请**确保**看到 `RKDev_tool` 右侧进度都完成到`100%`.
 
-Unplug the USB-OTG cable from board, and connect a LAN cable (with DHCP enabled) in any LAN port.
-验证是否系统正常启动请参考 Section: How to putty to board by serial port
-## how to adb
-For Ubuntu PC, unplug otg usb, unplug power cable, all board LED off, then plug power cable, wait 5s, plug in otg usb, should see a mobile icon in PC, and then `adb devices` should see the board.
+板子随后将 **自动重启并进入** 刚刷入的Debian 10系统, 你现在可以 Unplug the USB-OTG cable from board. 
 
-## windows
-never worked.
+## how to test
+确保主板上电, 请将一根`以太网网线`插入刚刷入完系统的板子的任意网口中。
+>请确保此网线位于启用了`DHCP`的局域网中，以便板子可以自动获取到IP地址。
+
+>板子所获取的具体 IP 地址只能通过人工登陆路由器管理页面，并查看`所分配的客户端IP列表`页面来获取得知.
+
+>可能因具体项目(如 Smart Lift)的要求，板子将使用预先在镜像中固定的 IP 地址: 192.168.177.2 所以此时`DHCP`将不再有作用
+
+测试最直接的办法是在位于同一局域网中的 PC 上，对板子进行 `ssh` (Windows上使用 `putty`)，看是否能连接上。
+另外的测试方法是使用串口来ssh连入主板，参考: [How to putty to board by serial port](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#how-to-putty-to-board-by-serial-port)
+
 # Setup Debian 10
 
 ## Install Frp client
@@ -51,7 +59,7 @@ As a frp client, edit the `/home/firefly/Download/frp_0.43.0_linux_arm/frpc.ini`
 [common]
 server_addr = msg.glfiot.com
 server_port = 7000
-
+user = {{ .Envs.FRP_USER }}
 [ssh]
 type = tcp
 local_ip = 127.0.0.1
@@ -72,6 +80,7 @@ Description=Frp client
 Wants=network.target
 After=network.target
 [Service]
+Environment="FRP_USER=replace_me_with_board_id"
 #before start the service, always sleep 5 second, for wait the system ready?
 ExecStartPre=/bin/sleep 5
 WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/

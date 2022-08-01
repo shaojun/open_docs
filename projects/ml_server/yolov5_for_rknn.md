@@ -2,7 +2,7 @@
 
 ## Download the raw dataset with `KITTI` format.
 
-## Process the `kitt.zip` dataset file
+## Process the `kitty.zip` dataset file
 Git clone: https://github.com/shaojun/fiftyone_scripts.git
 
 Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script（just cloned）:
@@ -41,7 +41,7 @@ then the above `.yaml` and 2 folders are used as the yolov5 training dataset.
 Deactivate your conda env: `conda deactivate`
 
 # Prepare the training
-Depends on what RockChip repo you referenced, the source version of [yolov5](https://github.com/ultralytics/yolov5) you gonna use it's different (they use different historical commit for training).
+There're 2 ways from `rockchip` that are provided for training on [yolov5](https://github.com/ultralytics/yolov5).
 ## rknn-toolkit 1.7.1 based
 
 git clone [yolov5](https://github.com/ultralytics/yolov5) firstly, then use: 
@@ -111,7 +111,7 @@ torchvision             0.12.0+cu113
 by using the `detect.py` scripts to do a test against a video file.
 NOTE the below sample folder of `exp3` may be changed in your case:
 ```
-python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --source ~/Videos/yang_office_demoEle_combined_multiple_sections_4classes.mp4 
+python3 detect.py --weights ./runs/train/exp3/weights/last.pt --imgsz 1280 --source ~/Videos/yang_office_demoEle_combined_multiple_sections_4classes.mp4
 ```
 
 check the `detect` result at `yolov5/runs/detect/exp`

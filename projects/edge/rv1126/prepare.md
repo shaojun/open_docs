@@ -1,7 +1,7 @@
 # Flash Debian 10 into board
 
 Install board Driver at your Windows PC from: 
-> `DriverAssitant_v4.5\DriverInstall.exe`
+> c:\xxxxx\DriverAssitant_v4.5\DriverInstall.exe
 
 打开 RKDevTool at your Windows PC from：
 > c:\xxxxx\RKDevTool\RKDevTool_Release_v2.86\RKDevTool.exe
@@ -15,8 +15,8 @@ Install board Driver at your Windows PC from:
 手按住板子上的 Recover 按钮, 保持住, 再接上电源线，等2秒钟，松 Recover 按钮，`RKDevTool`的主界面上将显示发现了adb device，如图：
 ![输入图片说明](../../../images/rv1126_firefly_jd4_rkdevtool_found_adb_device.png)
 
-> 应该注意的是，进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
-> 所以在现在还未刷机完成,板子还未进入debian 10系统前， WindowsDeviceManager不会有任何设备出现，而只有板子在正常完全进入系统后，才有rk3xxx出现在usb设备中
+> 注意，进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
+> 在板子还未启动并进入 Debian 10 系统前， WindowsDeviceManager 也不会有任何设备出现，而只有板子在正常完全进入系统后，才有 rk3xxx 出现在usb设备中列表中
 
 导入配置：
 
@@ -46,13 +46,18 @@ Select each `.img` one by one:
 
 >可能因具体项目(如 Smart Lift)的要求，板子将使用预先在镜像中固定的 IP 地址: 192.168.177.2 所以此时`DHCP`将不再有作用
 
-测试最直接的办法是在位于同一局域网中的 PC 上，对板子进行 `ssh` (Windows上使用 `putty`)，看是否能连接上。
+测试最直接的办法是在位于同一局域网中的 PC 上，对板子进行 `ssh` (Windows上则应使用 [putty](https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe)) 进行连接，看是否能连接成功。
 另外的测试方法是使用串口来ssh连入主板，参考: [How to putty to board by serial port](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#how-to-putty-to-board-by-serial-port)
 
-# Setup Debian 10
+# Setup from official Debian 10
 
 ## Install Frp client
-Download frp release (server and client are together) from https://github.com/fatedier/frp/releases and untar it into folder: `/home/firefly/Download/frp_0.43.0_linux_arm/`.
+Download frp release (server and client are put together) from [frp release](https://github.com/fatedier/frp/releases) and untar it:
+```
+cd /home/firefly/Download/
+tar -xzvf frp_0.43.0_linux_arm.tar.gz
+# then the release files are in: /home/firefly/Download/frp_0.43.0_linux_arm/
+```
 
 As a frp client, edit the `/home/firefly/Download/frp_0.43.0_linux_arm/frpc.ini`，input below content (the below sample config defaultly use `6000` port, you should gurantee it's **UNIQUE per board**, so for most case, you need change the `remote_port` for your situation):
 ```
@@ -221,7 +226,76 @@ sudo python3 test_yolov5s_rtsp.py
 # sudo python3 test_yolov5s_rtsp.py --enable-verbose true --enable-output true
 ```
 
+### Run as service:
+
+First create the `.service` file:
+
+```
+sudo nano /etc/systemd/system/elenet.service
+```
+
+input below content:
+
+```
+[Unit]
+Description=elenet python app for detect and upload.
+Wants=network.target
+After=network.target
+[Service]
+WorkingDirectory=/home/firefly/rv1126_elenet
+# every start of the service, include restart, will block 5 seconds
+# ExecStartPre=/bin/sleep 5
+
+ExecStart=/usr/bin/python3 test_yolov5s_rtsp.py
+Restart=always
+# Restart service after 10 seconds if this service crashes:
+RestartSec=10
+SyslogIdentifier=elenet_python_app
+# User=firefly    comment out this line will defautly use root   
+[Install]
+WantedBy=multi-user.target
+```
+
+start the service:
+```
+sudo systemctl start elenet.service
+```
+
+### Test if run correctly:
+
+when running in `service mode` and defautly `enable-verbose` is disabled (you can enable it by `enable-verbose=true`), then you can try to receive a udp broadcast msg to know the status of the python app: 
+```
+#!/usr/bin/env python3
+
+import socket
+
+client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)  # UDP
+
+# Enable port reusage so we will be able to run multiple clients and servers on single (host, port).
+# Do not use socket.SO_REUSEADDR except you using linux(kernel<3.9): goto https://stackoverflow.com/questions/143$
+# For linux hosts all sockets that want to share the same address and port combination must belong to processes t$
+# So, on linux(kernel>=3.9) you have to run multiple servers and clients under one user to share the same (host, $
+# Thanks to @stevenreddie
+client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+
+# Enable broadcasting mode
+client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+
+# app is keep sending udp broardcast into port 5005
+client.bind(("", 5005))
+while True:
+    # Thanks @seym45 for a fix
+    data, addr = client.recvfrom(1024)
+    print("received message: %s" % data)
+
+```
 # How to putty to board by serial port
+
+> 根据经验，Windows机器对于此串口模块是**免驱**的，即只要连接`Micro Usb`头到串口模块上，同时`Usb-typeA`头到 PC 上，即可在系统中看到被识别出来：
+> ![输入图片说明](../../../images/usb_to_ttl_connect_to_pc_have_a_com_port.png)
+>
+> 在确保线材的质量前提下，如果仍然未看到设备被识别，则请尝试安装 Firefly USB转UART串口模块[驱动程序](https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers).
+
 wiring like below picture:
 ![输入图片说明](../../../images/putty_to_firefly_rv1126_by_serial.jpg)
 

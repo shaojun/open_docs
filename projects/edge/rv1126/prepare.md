@@ -12,8 +12,8 @@ Install board Driver at your Windows PC from:
 ![输入图片说明](../../../images/rv1126_firefly_jd4_how_to_conn_usb_otg_cable.jpg)
 
 
-手按住板子上的 Recover 按钮, 保持住, 再接上电源线，等2秒钟，松 Recover 按钮，`RKDevTool`的主界面上将显示发现了adb device，如图：
-![输入图片说明](../../../images/rv1126_firefly_jd4_rkdevtool_found_adb_device.png)
+手按住板子上的 Recover 按钮, 保持住, 再接上电源线，等2秒钟，松 Recover 按钮，`RKDevTool`的主界面上将显示发现了 **LOADER设备**，如图：
+![输入图片说明](../../../images/rv1126_firefly_jd4_rkdevtool_found_loader_device.png)
 
 > 注意，进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
 > 在板子还未启动并进入 Debian 10 系统前， WindowsDeviceManager 也不会有任何设备出现，而只有板子在正常完全进入系统后，才有 rk3xxx 出现在usb设备中列表中
@@ -30,13 +30,11 @@ Select each `.img` one by one:
 
 ![输入图片说明](../../../images/RKDev_tool_flash_in_debian10_each_img.png)
 
-点击“执行”, 开始刷入：
+点击**执行**, 开始刷入, 将持续10分钟左右，请**确保**看到 `RKDev_tool` 右侧进度都完成到`100%`:
 
 ![输入图片说明](../../../images/RKDevTool_flash_in_img_files.png)
 
-写入镜像将持续10分钟左右，请**确保**看到 `RKDev_tool` 右侧进度都完成到`100%`.
-
-板子随后将 **自动重启并进入** 刚刷入的Debian 10系统, 你现在可以 Unplug the USB-OTG cable from board. 
+板子随后将 **自动重启并进入** 新系统, 你现在可以 Unplug the USB-OTG cable from board. 
 
 ## how to test
 确保主板上电, 请将一根`以太网网线`插入刚刷入完系统的板子的任意网口中。
@@ -69,7 +67,14 @@ user = {{ .Envs.FRP_USER }}
 type = tcp
 local_ip = 127.0.0.1
 local_port = 22
-remote_port = 6000
+remote_port = 6015
+
+[camera]
+type = tcp
+local_ip = 192.168.177.3
+local_port = 80
+remote_port = 6016
+
 ```
 Create a system service for auto start the `frp client` when system started:
 

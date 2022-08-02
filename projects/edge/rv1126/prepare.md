@@ -67,14 +67,13 @@ user = {{ .Envs.FRP_USER }}
 type = tcp
 local_ip = 127.0.0.1
 local_port = 22
-remote_port = 6015
+remote_port = {{ .Envs.FRP_SSH_PORT }}
 
 [camera]
 type = tcp
 local_ip = 192.168.177.3
 local_port = 80
-remote_port = 6016
-
+remote_port = {{ .Envs.FRP_CAMERA_PORT }}
 ```
 Create a system service for auto start the `frp client` when system started:
 
@@ -90,7 +89,9 @@ Description=Frp client
 Wants=network.target
 After=network.target
 [Service]
-Environment="FRP_USER=replace_me_with_board_id"
+Environment="FRP_USER=replace_me_with_real_board_id"
+Environment="FRP_SSH_PORT=6020"
+Environment="FRP_CAMERA_PORT=6021"
 #before start the service, always sleep 5 second, for wait the system ready?
 ExecStartPre=/bin/sleep 5
 WorkingDirectory=/home/firefly/Download/frp_0.43.0_linux_arm/
@@ -268,32 +269,18 @@ sudo systemctl start elenet.service
 
 ### Test if run correctly:
 
-when running in `service mode` and defautly `enable-verbose` is disabled (you can enable it by `enable-verbose=true`), then you can try to receive a udp broadcast msg to know the status of the python app: 
-```
-#!/usr/bin/env python3
-
-import socket
-
-client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)  # UDP
-
-# Enable port reusage so we will be able to run multiple clients and servers on single (host, port).
-# Do not use socket.SO_REUSEADDR except you using linux(kernel<3.9): goto https://stackoverflow.com/questions/143$
-# For linux hosts all sockets that want to share the same address and port combination must belong to processes t$
-# So, on linux(kernel>=3.9) you have to run multiple servers and clients under one user to share the same (host, $
-# Thanks to @stevenreddie
-client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
-
-# Enable broadcasting mode
-client.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-
-# app is keep sending udp broardcast into port 5005
-client.bind(("", 5005))
-while True:
-    # Thanks @seym45 for a fix
-    data, addr = client.recvfrom(1024)
-    print("received message: %s" % data)
+when running in `service mode` and defautly `enable-verbose` is disabled (you can enable it by `enable-verbose=true`), then you can try to receive a udp broadcast msg to know the status of the main app, the receive python script already embeded into main app, just run it by:
 
 ```
+ cd /home/firefly/rv1126_elenet/
+ python3 test_udp_heartbeat.py
+```
+Note, for performance consideration, the heartbeat fires for **every 5 times** of detection, sample like below:
+
+>recv: b'{"sender": "192.168.177.9", "msg_type": "heartbeat", "total_infer_times": 500, "objects": "door_sign;door_sign;", >"timestamp": "2022-08-02 06:35:54.743971"}'
+>recv: b'{"sender": "192.168.177.9", "msg_type": "heartbeat", "total_infer_times": 505, "objects": "door_sign;door_sign;", >"timestamp": "2022-08-02 06:35:57.718444"}'
+
+
 # How to putty to board by serial port
 
 > 根据经验，Windows机器对于此串口模块是**免驱**的，即只要连接`Micro Usb`头到串口模块上，同时`Usb-typeA`头到 PC 上，即可在系统中看到被识别出来：

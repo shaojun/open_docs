@@ -106,7 +106,7 @@ WantedBy=multi-user.target
 `ctrl+o`, `y`, `ctrl+x`, save and exit from nano, then activate the service:
 ```
 sudo systemctl enable frpc.service
-# sudo systemctl start frpc.service
+sudo systemctl start frpc.service
 # sudo systemctl status frpc.service
 # sudo systemctl daemon-reload
 ```
@@ -264,6 +264,7 @@ WantedBy=multi-user.target
 
 start the service:
 ```
+sudo systemctl enable elenet.service
 sudo systemctl start elenet.service
 ```
 

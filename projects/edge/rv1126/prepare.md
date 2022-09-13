@@ -13,6 +13,7 @@ Install board Driver at your Windows PC from:
 
 
 手按住板子上的 Recover 按钮, 保持住, 再接上电源线，等2秒钟，松 Recover 按钮，`RKDevTool`的主界面上将显示发现了 **LOADER设备**，如图：
+
 ![输入图片说明](../../../images/rv1126_firefly_jd4_rkdevtool_found_loader_device.png)
 
 > 注意，进入 RecoveryMode 的板子是不会在 WindowsDeviceManager 里有任何item的。
@@ -49,15 +50,19 @@ Select each `.img` one by one:
 
 # Setup from official Debian 10
 
+## Apt update
+```
+apt update
+```
 ## Install Frp client
-Download frp release (server and client are put together) from [frp release](https://github.com/fatedier/frp/releases) and untar it:
+Download frp release (server and client are put together) from [frp release](https://github.com/fatedier/frp/releases/download/v0.43.0/frp_0.43.0_linux_arm.tar.gz) and untar it:
 ```
 cd /home/firefly/Download/
 tar -xzvf frp_0.43.0_linux_arm.tar.gz
 # then the release files are in: /home/firefly/Download/frp_0.43.0_linux_arm/
 ```
 
-As a frp client, edit the `/home/firefly/Download/frp_0.43.0_linux_arm/frpc.ini`，input below content (the below sample config defaultly use `6000` port, you should gurantee it's **UNIQUE per board**, so for most case, you need change the `remote_port` for your situation):
+As a frp client, edit the `/home/firefly/Download/frp_0.43.0_linux_arm/frpc.ini`，input below content and save:
 ```
 [common]
 server_addr = msg.glfiot.com
@@ -81,7 +86,7 @@ Create a system service for auto start the `frp client` when system started:
 sudo nano /etc/systemd/system/frpc.service
 ```
 
-input below content:
+input below content(it defaultly use `6020` and `6021` port, you should gurantee it's **UNIQUE for all boards**, so please change it):
 
 ```
 [Unit]
@@ -131,13 +136,15 @@ sudo apt --fix-broken install
 sudo apt install git
 cd /home/firefly/
 
-# Clone from official branch, clone the original repo is not used anymore since the huge size, then I picked # up the necessary files into https://github.com/shaojun/rv1126_elenet.git for convinient
+# Clone from official branch, clone the original repo is not used anymore since the huge size, then I picked 
+# up the necessary files into https://github.com/shaojun/rv1126_elenet.git for convinient
 # git clone https://gitlab.com/firefly-linux/external/rknn-toolkit.git -b rv1126_rv1109/firefly
 #firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ sudo #dpkg -i libjasper1_1.900.1-debian1-2.4+deb8u6_armhf.deb
 #firefly@firefly:~/rknn-toolkit/rknn-toolkit-lite/rknn-toolkit-lite-v1.7.0.dev_0cfb22/requires$ sudo #dpkg -i libjasper-dev_1.900.1-debian1-2.4+deb8u6_armhf.deb
 
 
 git clone https://github.com/shaojun/rv1126_elenet.git
+cd rv1126_elenet
 sudo dpkg -i installation/requires/libjasper1_1.900.1-debian1-2.4+deb8u6_armhf.deb
 sudo dpkg -i installation/requires/libjasper-dev_1.900.1-debian1-2.4+deb8u6_armhf.deb
 
@@ -194,7 +201,7 @@ This `id` will be carried into a message and send to a remote  _kafka_  server a
 
 ### Editing and input `whoamid` id:
 ```
-cd /home/firefly/
+cd /home/firefly/rv1126_elenet
 ls config_elenet.txt  # you should see the file exists!
 nano config_elenet.txt  # start edit it.
 #input your unique id under the section custom-uploader -> whoami
@@ -321,6 +328,24 @@ eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 the `eth0` is the LAN interface, the ip address for my situation is `192.168.0.130`, you can then also use the ip to putty in.
 
 # Useful links
+## create frp server service
+
+```
+[Unit]
+Description=Frp server
+Wants=network.target
+After=network.target
+[Service]
+#before start the service, always sleep 5 second, for wait the system ready?
+ExecStartPre=/bin/sleep 5
+WorkingDirectory=/home/Downloads/frp_0.43.0_linux_amd64/
+ExecStart=/home/Downloads/frp_0.43.0_linux_amd64/frps -c 'frps.ini'
+Restart=always
+#Restart service after 10 seconds if this service crashes:
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
+```
 ## how to install rknntookitlite
 this is tested and works, basically the above steps is highly concluded from this post
 
@@ -334,17 +359,22 @@ https://wiki.t-firefly.com/zh_CN/Firefly-RK3399/export_dev_sf.html
 https://wiki.t-firefly.com/zh_CN/CORE-1126-JD4/Debian10.html#
 https://wiki.t-firefly.com/zh_CN/CORE-1126-JD4/Debian10.html#fen-qu-jie-shao
 ### steps
-* Prepare a 32G (or above size) Usb Drive
+* Prepare a 32G (or above size) USB Drive
 * At your windows PC, download the _DiskGenius_ tool
 https://engdownload.eassos.cn/DGEngSetup5431342.exe
-* Format the usb drive with `ext4` by tool
-![输入图片说明](../../../images/use_disk_genius_to_format_usb_drive_with_ext4.png)
+
+    Format the USB Drive with `ext4` by _DiskGenius_:
+
+    ![输入图片说明](../../../images/use_disk_genius_to_format_usb_drive_with_ext4.png)
+
 * Copy the export tool to board Debian system
 The export tool is at `resource/ff_export_rootfs_buildroot.tar`.
 Copy it to `firefly@firefly:~/Download/`.
 De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
-* Plug in the Usb Drive to board usb port
-* Check Usb Drive name in board Debian
+
+* Plug in the USB Drive to board's usb port
+
+    Check Usb Drive name in board Debian
     ```
     firefly@firefly:~/Download/ff_export_rootfs_buildroot$ lsblk
     NAME         MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
@@ -365,26 +395,41 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     that `sda1` with size 58.7G is your USB Drive.
 * Create a folder in board Debian for mount Usb Drive
 `mkdir /media/usb_drive`
+
 * Mount Usb Drive in board Debian
-`sudo mount /dev/sda1 /media/usb_drive`
+    `sudo mount /dev/sda1 /media/usb_drive`
+    should see:
+    >[   93.190391] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+
 * Export
-    in board Debian, will take minutes to go:
+    in board Debian, from experience, it'll take 15m to go, if you see much longer than this, better change another USB Drive:
     ```
-    firefly@firefly:~/Download/ff_export_rootfs_buildroot$ sudo ./ff_export_rootfs /media/usb_drive/
+    apt install rsync
+    firefly@firefly:~/Download/ff_export_rootfs$ sudo ./ff_export_rootfs /media/usb_drive/
+    ```
+    if you see folder not found error like:
+   
+    >Could not open /media/usb_drive/Firefly_Debian_GNU/Linux_10_(buster)_ext4_202209090708.img: No such file or directory
+
+    then create the folder with: `mkdir /media/usb_drive/Firefly_Debian_GNU/`
+
+    if everything is good, you should see below, and finally the file will be created, the whole process should be done in 10m:
+    ```
     MEDIA FREE SPACE SIZE    55975   MBytes
-    EXPORT IMAGE SIZE        8568    MBytes
-    find: '/proc/896/task/896/net': Invalid argument
-    find: '/proc/896/net': Invalid argument
-    find: '/proc/936/task/936/net': Invalid argument
-    find: '/proc/936/net': Invalid argument
-    find: '/proc/1139/task/1139/net': Invalid argument
-    find: '/proc/1139/net': Invalid argument
-    BLOCK_COUNT 9290489
-    INODE_COUNT 169877
+    EXPORT IMAGE SIZE        2404    MBytes
+    BLOCK_COUNT 2408132
+    INODE_COUNT 182183
+    [  160.791718] EXT4-fs (loop0): mounted filesystem with ordered data mode. Opts: (null)
     sync...
+
+
     sync finish
-    Export rootfs to /media/usb_drive//Firefly_ext4_202206170232.img Success
+    e2fsck 1.44.5 (15-Dec-2018)
+    Export rootfs to /media/usb_drive/Firefly_Debian_GNU/Linux_10_(buster)_ext4_202209090709.img Success
+
     ```
+
+    
     see the export file sample:
     ![输入图片说明](../../../images/rootfs_export_to_img_file_under_usb_drive_mount_folder.png)
 * Resize
@@ -392,8 +437,8 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     ```
     cd /media/usb_drive
     firefly@firefly:/media/usb_drive$ sudo /sbin/e2fsck -p -f Firefly_ext4_202206170232.img
-    [sudo] password for firefly:
     rootfs: 48731/172520 files (14.6% non-contiguous), 7706484/9290489 blocks
+    
     firefly@firefly:/media/usb_drive$ sudo /sbin/resize2fs -M Firefly_ext4_202206170232.img
     resize2fs 1.44.5 (15-Dec-2018)
     Resizing the filesystem on Firefly_ext4_202206170232.img to 7702411 (1k) blocks.
@@ -441,14 +486,16 @@ uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
     As you're packing your own fireware, then only 2 Partition info need to be updated correspondingly with your new exported file(size), they are in the: 
     >0x00C00000@0x00038000(rootfs),0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
 
+    understand as: **Partition_Size@Partition_Start_Address**
+
     * Partition `rootfs`
-    the exported file is actually a new `rootfs` that is supposed to replacing the old (official) one, once replaced, the partition size need to adjust as well.
-    `0x00C00000` is `rootfs` partition size, it must greater than the file `rootfs.img` size, the requried `rootfs` partition size's caculation can be understood with: `0x00C00000  块 * 512 字节每块 / 1024 / 1024 = 6144 MByte`, obvious the `6144` is greater(**and must**) than actual `rootfs.img` file size(5.84GB), it's a proper value here, it also means you can set higher value(but don't know the impact?).
+    the exported file is actually a new `rootfs` that is supposed to replacing the old (official) one, once replaced, the partition size and follwed partitions StartAddress are needed to adjust as well.
+    `0x00C00000` is `rootfs` partition size, it must greater than the file `rootfs.img` size, the requried `rootfs` partition size's caculation can be understood with: `0x00C00000  块 * 512 字节每块 / 1024 / 1024 = 6144 MByte`, obvious the `6144` is greater(**and must**) than actual `rootfs.img` file size(5.84GB), it's a proper value here, it also means you can set higher value.
 
     * Partition `oem`:
-        >0x00060000@0x00C38000(oem)
+        >0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
 
-        because this partition is following `rootfs` partition, so with the adjustment of `rootfs` partition, we need to update the `oem` partition as well with rule: `分区大小 + 所在地址 = 下一个分区的所在地址` which is `0x00C00000 + 0x00038000 = 0x00C38000`
+        because these 2 partitions are following `rootfs` partition, so with the adjustment of `rootfs` partition, we need to update above 2 partitions' start address as well with rule: `分区大小 + 所在地址 = 下一个分区的所在地址` which is `0x00C00000 + 0x00038000 = 0x00C38000`
 
 * Flashing `*.img` files to board
 for your own fireware pack, replace that 2 files with yours, others still use the firefly official ones.

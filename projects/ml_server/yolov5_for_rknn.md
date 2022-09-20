@@ -7,6 +7,7 @@ the downloaded file is like: _project_labeling_door_closedsign_proj-2022_05_16_0
 Git clone: https://github.com/shaojun/fiftyone_scripts.git
 
 Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script（just cloned）:
+
 ![输入图片说明](images/create_folder_of_dataset_kitti_at_the_script_same_level.png)
 
 Put the downloaded `KITTI` dataset file (like: _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_) into the new folder of `prepare_yolov5_dataset_from_kitti_format`.   
@@ -20,25 +21,38 @@ and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_
 ![输入图片说明](images/kitti_unzipped_folder_structure.png)
 
 ## Process the `KITTI` dataset with `cvdata` tools
+
 Create your `cvdata` conda env.
+
 Activate your `cvdata` env with: `conda activate cvdata`.
+
 Then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename(.jpeg to .jpg, .PNG to .png), resize, convert(.png to .jpg)_  image files, use image format `jpg` is OK.
+
 The processed data will be stored at folder: `resized_image_2` and `resized_label_2`.
+
 Deactivate your conda env: `conda deactivate`   
 
 
 ## Process the `KITTI` dataset with `fiftyone` tools
+
 The purpose here is for `train/val` folder split, and yolov5 dataset format conversion.
+
 Create your `fiftyone` conda env.
+
 Activate your `fiftyone` env with: `conda activate fiftyone`.
+
 * Rename  _resized_image_2_  and  _resized_label_2_  to  _data_  and  _labels_  respectively and cut to above level of folder, then you'll get:
+
 ![输入图片说明](images/rename_image2_lable2_to_above_level.png)
 
 * run the script to split dataset and export to yolov5 dataset format, you'll get the export dataset in folder:
+
 ![输入图片说明](images/fiftyone_convert_and_export_to_folder.png)
 ![输入图片说明](images/export_data_and_labels_folder.png)
 
+
 then the above `.yaml` and 2 folders are used as the yolov5 training dataset.
+
 Deactivate your conda env: `conda deactivate`
 
 # Prepare the training

@@ -1,8 +1,9 @@
 # Prepare the dataset
 
 ## Download the raw dataset with `KITTI` format.
+the downloaded file is like: _project_labeling_door_closedsign_proj-2022_05_16_03_16_26-kitti 1.0.zip_
 
-## Process the `kitty.zip` dataset file
+## Unzip the raw dataset
 Git clone: https://github.com/shaojun/fiftyone_scripts.git
 
 Create a folder: `prepare_yolov5_dataset_from_kitti_format` at the same level of the fiftyone script（just cloned）:
@@ -26,7 +27,7 @@ The processed data will be stored at folder: `resized_image_2` and `resized_labe
 Deactivate your conda env: `conda deactivate`   
 
 
-## Process unified `KITTI` dataset with `fiftyone` tools
+## Process the `KITTI` dataset with `fiftyone` tools
 The purpose here is for `train/val` folder split, and yolov5 dataset format conversion.
 Create your `fiftyone` conda env.
 Activate your `fiftyone` env with: `conda activate fiftyone`.

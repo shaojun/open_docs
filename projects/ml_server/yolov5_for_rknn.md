@@ -24,13 +24,15 @@ and unzip the file with `unzip project_labeling_door_closedsign_proj-2022_05_16_
 
 Create your `cvdata` conda env.
 
-Activate your `cvdata` env with: `conda activate cvdata`.
+Activate your `cvdata` env with: `conda activate cvdata` under folder: `prepare_yolov5_dataset_from_kitti_format` which created from above steps .
 
 Then follow https://gitee.com/bugslife/open_docs/blob/master/projects/ml_server/cvdata.md to  _rename(.jpeg to .jpg, .PNG to .png), resize, convert(.png to .jpg)_  image files, use image format `jpg` is OK.
 
-The processed data will be stored at folder: `resized_image_2` and `resized_label_2`.
+The processed data will be stored at folder: 
+> `prepare_yolov5_dataset_from_kitti_format/resized_image_2` 
+> `prepare_yolov5_dataset_from_kitti_format/resized_label_2`
 
-Deactivate your conda env: `conda deactivate`   
+Once all done, deactivate your conda env: `conda deactivate`   
 
 
 ## Process the `KITTI` dataset with `fiftyone` tools
@@ -62,7 +64,12 @@ There're 2 ways from `rockchip` that are provided for training on [yolov5](https
 git clone [yolov5](https://github.com/ultralytics/yolov5) firstly, then use: 
 ```git checkout c5360f6e7009eb4d05f14d1cc9dae0963e949213``` 
 to switch to the target commit.
->You still can: `git checkout origin` to re-point to latest HEAD.
+
+You still can: 
+
+>`git checkout origin`
+
+ to re-point to latest HEAD.
 
 ## rknn_model_zoo based
 
@@ -92,13 +99,12 @@ Download the pretrained model from: https://github.com/ultralytics/yolov5/releas
 
 ## Start training
 Create your `yolov5` conda env.
-Activate your `yolov5` env with: `conda activate yolov5`.
-Install the python3 packages by:
+Activate your `yolov5` env with: `conda activate rknntk_yolov5_train`.
+Install the python3 packages by if you have not:
 ```
-cd yolov5
-pip install -r requriments.txt
+cd yolov5pip 
+install -r requriments.txt
 ```
-
 run the `train.py` scripts, default batch size 24 will use almost 20G GPU memory:
 ```
 python3 train.py --epochs 60 --img 1280 --data data/elenet/dataset.yaml --weights ./yolov5s.pt --batch-size 24
@@ -194,27 +200,16 @@ if you're not using board, then:
 python3 export.py --data=data/elenet/dataset.yaml --weights runs/train/exp3/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
 
-# Export and convert to `.rknn` based on the steps from `rknn_toolkit`
+# Export and convert to `.rknn` based on the steps by `rknn_toolkit`
 
-`git clone https://github.com/rockchip-linux/rknn-toolkit`
-Create your `rknn_toolkit` conda env.
-Activate the `rknn_toolkit` conda env.
-`pip3 install -r packages/requriements-gpu.txt`
-`pip3 install package/rknn_toolkit-1.7.1-cp35-cp35m-linux_x86_64.whl`
-`pip3 install onnx==1.6.0`
-
-you may need install `onnx` and `coremltools` for your conda:
-```
-pip install onnx==1.6.0
-pip install coremltools
-```
 
 ## Export to `.onnx`
 
-then go with `export.py`:
+you should still in python env for training, say: `rknntk_yolov5_train`, then go with `export.py`:
 ```
 python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 --opset 12
 ```
+
 should see `last.onnx` and `last.torchscript` are there under `runs/train/exp3/weights/`
 
 Optional for simplifier(I didn't do it)?
@@ -231,11 +226,11 @@ open the `.onnx` with Netron, find these nodes and it's OUTPUTS name:
 
 ![输入图片说明](../../images/open_onnx_with_netron_find_3_conv_outputs_name.png)
 
-and input into here for convert (to `.rknn`):
+and input those name into `test.py` which used for convert `.onnx` to `.rknn` later:
 
 ![输入图片说明](../../images/input_3_conv_name_into_testpy_for_rknn_model_convert.png)
 
-prepare `dataset.txt` for  **QUANTIZE** , you can create a folder under `rknn-toolkit/examples/onnx/yolov5` with name `images`, and put into 200-500 images files in it, and then compose the `dataset.txt` with content like:
+prepare a `dataset.txt` for  **QUANTIZE** , you can create a folder under `rknn-toolkit/examples/onnx/yolov5` with name `images`, and put into 200-500 images files in it, and then compose the `dataset.txt` with content like:
 
 
 > images/frame_000177.jpg
@@ -255,7 +250,28 @@ prepare `dataset.txt` for  **QUANTIZE** , you can create a folder under `rknn-to
 
 ## Convert to `.rknn`
 
+`git clone https://github.com/rockchip-linux/rknn-toolkit`
+
+Create your `rknn_toolkit` conda env.
+
+Activate the `rknn_toolkit` conda env.
+
+```
+pip3 install -r packages/requriements-gpu.txt`
+pip3 install package/rknn_toolkit-1.7.1-cp35-cp35m-linux_x86_64.whl`
+pip3 install onnx==1.6.0`
+```
+
+you may need install `onnx` and `coremltools` for your conda:
+
+```
+pip install onnx==1.6.0
+pip install coremltools
+```
+
 run for convert to `.rknn` model, the `infer` will take minutes to finish, but actually the `.rknn` has already generated:
 
-```(rknntk) shao@yaoming:~/rknn-toolkit/examples/onnx/yolov5$ python3 test.py ```
+```
+(rknntk) shao@yaoming:~/rknn-toolkit/examples/onnx/yolov5$ python3 test.py 
+```
 

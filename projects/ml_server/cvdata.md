@@ -41,7 +41,7 @@ cvdata_crop_objects_to_files --images_dir image_2 --annotations_dir label_2 --im
 ```
 
 #### Show statistic info for kitti dataset
-
+ONLY for **.JPG** images, and it's a file statistics, that means multiple lines of same class in single label file will be only count as 1.
 ```
 cvdata_analyze --images resized_image_2/ --annotations resized_label_2/ --format kitti
 ```

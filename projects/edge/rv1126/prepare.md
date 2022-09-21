@@ -435,11 +435,11 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
 * Resize
     in board Debian
     ```
-    cd /media/usb_drive
-    firefly@firefly:/media/usb_drive$ sudo /sbin/e2fsck -p -f Firefly_ext4_202206170232.img
+    cd /media/usb_drive/Firefly_Debian_GNU
+    firefly@firefly:/media/usb_drive/Firefly_Debian_GNU$ sudo /sbin/e2fsck -p -f Firefly_ext4_202206170232.img
     rootfs: 48731/172520 files (14.6% non-contiguous), 7706484/9290489 blocks
     
-    firefly@firefly:/media/usb_drive$ sudo /sbin/resize2fs -M Firefly_ext4_202206170232.img
+    firefly@firefly:/media/usb_drive/Firefly_Debian_GNU$ sudo /sbin/resize2fs -M Firefly_ext4_202206170232.img
     resize2fs 1.44.5 (15-Dec-2018)
     Resizing the filesystem on Firefly_ext4_202206170232.img to 7702411 (1k) blocks.
     The filesystem on Firefly_ext4_202206170232.img is now 7702411 (1k) blocks long.

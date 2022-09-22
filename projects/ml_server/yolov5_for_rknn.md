@@ -212,10 +212,14 @@ python3 export.py --weights runs/train/exp/weights/last.pt --img 1280 --batch 1 
 
 should see `last.onnx` and `last.torchscript` are there under `runs/train/exp3/weights/`
 
-Optional for simplifier(I didn't do it)?
+Optional for run simplifier(But I didn't do it)
 
 `simplifier` for rknn specified version, for the `.onnx` model as required by RKNN:
-pip3 install onnx-simplifier
+
+>pip3 install onnx-simplifier
+
+start sim:
+
 ```
 python3 -m onnxsim runs/train/exp/weights/last.onnx  runs/train/exp/weights/elenet_yolov5s.onnx
 ```
@@ -257,9 +261,9 @@ Create your `rknn_toolkit` conda env.
 Activate the `rknn_toolkit` conda env.
 
 ```
-pip3 install -r packages/requriements-gpu.txt`
-pip3 install package/rknn_toolkit-1.7.1-cp35-cp35m-linux_x86_64.whl`
-pip3 install onnx==1.6.0`
+pip3 install -r packages/requriements-gpu.txt
+pip3 install package/rknn_toolkit-1.7.1-cp35-cp35m-linux_x86_64.whl
+pip3 install onnx==1.6.0
 ```
 
 you may need install `onnx` and `coremltools` for your conda:

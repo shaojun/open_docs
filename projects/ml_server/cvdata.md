@@ -37,7 +37,7 @@ cvdata_rename --images_dir image_2 --annotations_dir label_2 --format kitti --pr
 #### Crop objects from kitti dataset, and group them into folders with class name and generate new image files under each folders.
 
 ```
-cvdata_crop_objects_to_files --images_dir image_2 --annotations_dir label_2 --image_ext png --output_dir classification
+cvdata_crop_objects_to_files --images_dir /home/shao/Downloads/project_labeling_door_closedsign_proj-2022_09_20_03_47_17-kitti\ 1.0/default/image_2 --annotations_dir /home/shao/Downloads/project_labeling_door_closedsign_proj-2022_09_20_03_47_17-kitti\ 1.0/default/label_2 --image_ext jpg --output_dir /home/shao/Downloads/project_labeling_door_closedsign_proj-2022_09_20_03_47_17-kitti\ 1.0/default/classification
 ```
 
 #### Show statistic info for kitti dataset

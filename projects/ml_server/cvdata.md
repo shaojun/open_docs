@@ -24,7 +24,7 @@ cvdata_convert --images_dir image_2/ --in_format png --out_format jpg
 
 
 ```
-cvdata_resize --input_images image_2/ --output_images resized_image_2 --input_annotations label_2/ --output_annotations resized_label_2 --width 960 --height 1280 --format kitti
+cvdata_resize --input_images image_2/ --output_images resized_image_2 --input_annotations label_2/ --output_annotations resized_label_2 --width 1280 --height 720 --format kitti
 ```
 
 

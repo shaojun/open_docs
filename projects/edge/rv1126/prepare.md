@@ -6,13 +6,18 @@ Install board Driver at your Windows PC from:
 打开 RKDevTool at your Windows PC from：
 > c:\xxxxx\RKDevTool\RKDevTool_Release_v2.86\RKDevTool.exe
 
-拔掉板子上的 Usb Otg线、网线、电源线，然后确保板子上所有灯（网口旁边的两个绿色LED灯）都熄灭了。
-再接入(请先不要接入电源线)Usb Otg线到板子的 **图示 USB TYPE A 接口** ，另一头到 PC:
+拔掉板子上的这些接线：
+* USB OTG线
+* 网线
+* 电源线
+
+确保板子上所有灯（网口旁边的两个绿色LED灯）**都熄灭**了。
+再接入 USB OTG 线到板子的 **图示 USB TYPE A 接口** ，另一头到 PC:
 
 ![输入图片说明](../../../images/rv1126_firefly_jd4_how_to_conn_usb_otg_cable.jpg)
 
 
-手按住板子上的 Recover 按钮, 保持住, 再接上电源线，等2秒钟，松 Recover 按钮，`RKDevTool`的主界面上将显示发现了 **LOADER设备**，如图：
+手按住板子上的 Recover 按钮, **保持住**, 再接上电源线，等待2秒钟，松开Recover 按钮，应可在`RKDevTool` 的主界面上显示发现了 **LOADER设备**，说明正常进入了刷机模式, 如图：
 
 ![输入图片说明](../../../images/rv1126_firefly_jd4_rkdevtool_found_loader_device.png)
 
@@ -38,15 +43,18 @@ Select each `.img` one by one:
 板子随后将 **自动重启并进入** 新系统, 你现在可以 Unplug the USB-OTG cable from board. 
 
 ## how to test
-确保主板上电, 请将一根`以太网网线`插入刚刷入完系统的板子的任意网口中。
->请确保此网线位于启用了`DHCP`的局域网中，以便板子可以自动获取到IP地址。
+确保主板上电, 请将能连接互联网的网线插入板子的**位于侧边**网口中。
 
->板子所获取的具体 IP 地址只能通过人工登陆路由器管理页面，并查看`所分配的客户端IP列表`页面来获取得知.
+>使用中间的网口将无法正常连入互联网
 
->可能因具体项目(如 Smart Lift)的要求，板子将使用预先在镜像中固定的 IP 地址: 192.168.177.2 所以此时`DHCP`将不再有作用
+>请确保接入网络启用了`DHCP`
 
-测试最直接的办法是在位于同一局域网中的 PC 上，对板子进行 `ssh` (Windows上则应使用 [putty](https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe)) 进行连接，看是否能连接成功。
-另外的测试方法是使用串口来ssh连入主板，参考: [How to putty to board by serial port](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#how-to-putty-to-board-by-serial-port)
+>板子的 IP 地址只能通过人工登陆路由器管理页面，并查看`所分配的客户端IP列表`以获取
+
+
+然后在位于与板子同一局域网中的 PC 上，对板子进行 `ssh` (Windows上则应使用 [putty](https://the.earth.li/~sgtatham/putty/latest/w64/putty.exe)) 进行连接，看是否能连接成功和登陆。
+
+另外更简单的测试方法是使用串口来`ssh`连入主板，参考: [How to putty to board by serial port](https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#how-to-putty-to-board-by-serial-port)
 
 # Setup from official Debian 10
 

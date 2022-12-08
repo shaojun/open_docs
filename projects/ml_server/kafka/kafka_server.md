@@ -4,7 +4,7 @@ Kafka is a distributed streaming platform that is used to publish and subscribe 
 
 - Step 1: Start Kafka broker on Host machine
 Make sure you have docker and docker-compose installed on your host machine.
-create a file namely docker-compose.yml and put below content.
+create a file namely docker-compose.yml and put below content(my default is under this path: `root@iot-message-2001:~/kafka_server`)
 
  **_replace the `<ADD-YOUR-HOST-IP-HERE>` with your condition, url domain name or Ip are all acceptable._** 
 
@@ -36,6 +36,9 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      # will set message with a timestamp of broker server's, rather than the default of producer's.
+      KAFKA_LOG_MESSAGE_TIMESTAMP_TYPE: LogAppendTime
+
 ```
 
 

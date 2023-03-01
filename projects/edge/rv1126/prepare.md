@@ -402,10 +402,10 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
     ```
     that `sda1` with size 58.7G is your USB Drive.
 * Create a folder in board Debian for mount Usb Drive
-`mkdir /media/usb_drive`
+    ```mkdir /media/usb_drive```
 
 * Mount Usb Drive in board Debian
-    `sudo mount /dev/sda1 /media/usb_drive`
+    ```sudo mount /dev/sda1 /media/usb_drive```
     should see:
     >[   93.190391] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
 
@@ -419,7 +419,7 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
    
     >Could not open /media/usb_drive/Firefly_Debian_GNU/Linux_10_(buster)_ext4_202209090708.img: No such file or directory
 
-    then create the folder with: `mkdir /media/usb_drive/Firefly_Debian_GNU/`
+    then create the folder with: ```mkdir /media/usb_drive/Firefly_Debian_GNU/```
 
     if everything is good, you should see below, and finally the file will be created, the whole process should be done in 10m:
     ```
@@ -439,6 +439,7 @@ De-compress it by: `tar -xzvf ff_export_rootfs_buildroot.tar`
 
     
     see the export file sample:
+
     ![输入图片说明](../../../images/rootfs_export_to_img_file_under_usb_drive_mount_folder.png)
 * Resize
     in board Debian
@@ -471,11 +472,17 @@ COPY the new packed and resized `.img` file (like above resized one: _Firefly_ex
     Press any key to quit:
     ```
 
+* Transfer the `*.img*` file to Windows PC
+use WinSCP to transfer
+
 * Prepare the `parameter.txt` file
 here take an export file: `Firefly_ext4_202206240234.img` as example (not the one in above sample, but the theory should be the same).
 Copy the exported file `Firefly_ext4_202206240234.img` from board to Your Windows PC:
-![输入图片说明](../../../images/copy_rv1126_export_rootfs_to_windows_pc.png)
+
+    ![输入图片说明](../../../images/copy_rv1126_export_rootfs_to_windows_pc.png)
+
 Can see its size is 5.84GB.
+
 `parameter.txt` is used in firmware flashing for locating each partition (you can see several `*.img` files are used in flashing), here is the sample of the `parameter.txt` from firefly official Debian 10 firmware packages:
 
     >FIRMWARE_VER: 8.1

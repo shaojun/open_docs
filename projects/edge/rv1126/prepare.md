@@ -481,36 +481,41 @@ Copy the exported file `Firefly_ext4_202206240234.img` from board to Your Window
 
     ![输入图片说明](../../../images/copy_rv1126_export_rootfs_to_windows_pc.png)
 
-Can see its size is 5.84GB.
+    Can see its size is 5.84GB.
 
-`parameter.txt` is used in firmware flashing for locating each partition (you can see several `*.img` files are used in flashing), here is the sample of the `parameter.txt` from firefly official Debian 10 firmware packages:
-
-    >FIRMWARE_VER: 8.1
-MACHINE_MODEL: RV1126
-MACHINE_ID: 007
-MANUFACTURER: RV1126
-MAGIC: 0x5041524B
-ATAG: 0x00200800
-MACHINE: 0xffffffff
-CHECK_MASK: 0x80
-PWR_HLD: 0,0,A,0,1
-TYPE: GPT
-CMDLINE: mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(misc),0x00010000@0x00008000(boot),0x00010000@0x00018000(recovery),0x00010000@0x00028000(backup),0x00C00000@0x00038000(rootfs),0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
-uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
-
-    As you're packing your own fireware, then only 2 Partition info need to be updated correspondingly with your new exported file(size), they are in the: 
+    `parameter.txt` is used in firmware flashing for locating each partition (you can see several `*.img` files are used in flashing), here is the sample of the `parameter.txt` from firefly official Debian 10 firmware packages:
+    
+    > FIRMWARE_VER: 8.1
+    > MACHINE_MODEL: RV1126
+    > MACHINE_ID: 007
+    > MANUFACTURER: RV1126
+    > MAGIC: 0x5041524B
+    > ATAG: 0x00200800
+    > MACHINE: 0xffffffff
+    > CHECK_MASK: 0x80
+    > PWR_HLD: 0,0,A,0,1
+    > TYPE: GPT
+    > CMDLINE: 
+    mtdparts=rk29xxnand:0x00002000@0x00004000(uboot),0x00002000@0x00006000(misc),0x00010000@0x00008000(boot),0x00010000@0x00018000(recovery),0x00010000@0x00028000(backup),0x00C00000@0x00038000(rootfs),0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
+    > uuid:rootfs=614e0000-0000-4b53-8000-1d28000054a9
+    
+    As you're packing your own firmware, then only 2 Partition info need to be updated correspondingly with your new exported file(size), they are in the: 
+    
     >0x00C00000@0x00038000(rootfs),0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
-
+    
     understand as: **Partition_Size@Partition_Start_Address**
-
-    * Partition `rootfs`
+    
+    Partition `rootfs`:
+    
     the exported file is actually a new `rootfs` that is supposed to replacing the old (official) one, once replaced, the partition size and follwed partitions StartAddress are needed to adjust as well.
+
     `0x00C00000` is `rootfs` partition size, it must greater than the file `rootfs.img` size, the requried `rootfs` partition size's caculation can be understood with: `0x00C00000  块 * 512 字节每块 / 1024 / 1024 = 6144 MByte`, obvious the `6144` is greater(**and must**) than actual `rootfs.img` file size(5.84GB), it's a proper value here, it also means you can set higher value.
-
-    * Partition `oem`:
-        >0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
-
-        because these 2 partitions are following `rootfs` partition, so with the adjustment of `rootfs` partition, we need to update above 2 partitions' start address as well with rule: `分区大小 + 所在地址 = 下一个分区的所在地址` which is `0x00C00000 + 0x00038000 = 0x00C38000`
+    
+    Partition `oem`:
+    
+    >0x00060000@0x00C38000(oem),-@0x00C98000(userdata:grow)
+        
+    because these 2 partitions are following `rootfs` partition, so with the adjustment of `rootfs` partition, we need to update above 2 partitions' start address as well with rule: `分区大小 + 所在地址 = 下一个分区的所在地址` which is `0x00C00000 + 0x00038000 = 0x00C38000`
 
 * Flashing `*.img` files to board
 for your own fireware pack, replace that 2 files with yours, others still use the firefly official ones.

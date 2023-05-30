@@ -1,4 +1,4 @@
-**LiteFccCore**
+# LiteFccCore 简介
 
 `FCC` 是加油站行业中的一类软件程序的统称, 它并没有严格的功能定义, 一般指加油站中拥有直接连接和控制设备的软件程序.
 `LiteFccCore` 即是上述概念的一个具体实现.
@@ -9,21 +9,23 @@
 
 ![输入图片说明](../images/litefcccore_overall_structure.png)
 
-**Universal API**
+# Universal API 简介
 
-`LiteFccCore` 是作为平台目的设计的, 所以它的业务功能是尽量弱化的, 而通过开放硬件的功能接口给外部, 以便于外部应用程序可以访问这些接口,以快捷实现的对硬件的控制,并形成业务功能.
+`LiteFccCore` 连接设备后, 本身会内置一些业务功能, 同时也将通过开放接口的方式, 以便外部应用程序访问,从而实现的对硬件的简单快捷控制,并形成更丰富的业务功能。
 
-这类开放的接口称为 Universal API, 以下简称 API.
+像常见的关于油机的一些API：授权油机，获取油机状态，获取加油交易数据等等，都通过符合一定技术规范的API以供外部调用，这类开放的接口称为 Universal API, 以下简称 API.
 
+API 可以在站点的局域网内，或者公网上进行调用。
 
+![输入图片说明](../images/litefcccore_universal_api_arch.png)
 
-> API 支持外部通过**HTTP(webapi),WebSocket,MQTT**三种方式调用.
+API 的底层协议支持通过**HTTP(webapi),WebSocket,MQTT**三种方式调用,但对于通过公网调用的接口，仅支持MQTT协议。
 
----
+# 使用 Universal API
 
-## 发现API
+## 动态获取站点FCC所提供的API列表
 
-依 LiteFccCore 的具体配置(如连接了什么设备,开启了哪些功能),它所提供的**API集**将是不同的;同时,哪怕同一个 API,也因技术原因,在 LiteFccCore 每次重启后,它的调用路径也可能发生改变.
+依每个站里的 LiteFccCore 的具体配置(如连接了什么设备,开启了哪些功能),它所提供的**API集**将是不同的;同时,哪怕同一个 API,也因技术原因,在 LiteFccCore 每次重启后,它的调用路径也可能发生改变.
 
 所以,外部应用程序应将API作为一种**动态资源**来对待,即在每次与 LiteFccCore 重新建立连接后,都应该重新进行API发现,以获得有效的 API 调用入口和方式列表.
 
@@ -33,7 +35,7 @@
 
 同时也提供一个供程序获取的版本,以下做介绍:
 
-* 使用HTTP POST进行API服务发现
+### 使用HTTP POST进行API服务发现
 
 以下示例将返回 webapi 格式的所有API信息
 ```
@@ -56,7 +58,7 @@ Content-Type: application/json
 Content: ["localmqtt",["Pump"]] 
 ```
 
-* 使用MQTT进行API服务发现
+### 使用MQTT进行API服务发现
 
  **mqtt server url and port:  mqtt://127.0.0.1:8388**, 因暂不对用户名和密码进行验证, 所以填写任意值均可。
 
@@ -133,7 +135,7 @@ Topic: /sys/Edge.Core.Processor.Dispatcher.DefaultDispatcher/ProcessorsDispatche
 
 
 
-## 使用API
+## 调用具体的API
 
 * 与开发者联系,咨询所要访问的API的`tag`,`providerType`,`apiName`
 * 通过 `showmeapi` API进行服务发现, 基于第一步中的信息,确定自己要调用的API,并通过发现结果以获取调用技术细节

@@ -41,6 +41,7 @@
     ![输入图片说明](../../images/eb_with_hand_shield.png)
   
   * 明显的横向视野的小尺寸轮子
+    轮子直径小于膝盖高度
 
   * 宽中梁脚休息区
 
@@ -53,7 +54,7 @@
   * 宽大后座(可至少乘坐第二人)
 
     ![输入图片说明](../../images/eb_with_big_back_seat.png)
-  
+      
   * 后储物箱（位于座位上,球形或者扁球形）
 
     ![输入图片说明](../../images/eb_with_back_box.png)

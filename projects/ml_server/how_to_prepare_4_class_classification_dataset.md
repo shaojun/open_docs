@@ -32,8 +32,7 @@
   ### 车头特征
   1. 有灯
 
-        ![输入图片说明](../../images/eb_with_front_light.png)
-  
+        ![输入图片说明](../../images/eb_with_front_light.png)  
         ![输入图片说明](../../images/eb_with_front_light2.png)
   2. 仪表盘区
 
@@ -41,7 +40,6 @@
   3. 有大前挡区
 
         ![输入图片说明](../../images/eb_with_front_big_shield.png)
-
         ![输入图片说明](../../images/eb_with_front_big_field2.png)
   4. 反光镜
         
@@ -58,7 +56,6 @@
   ### 宽中梁脚休息区
 
   ![输入图片说明](../../images/eb_with_middle_big_foot_step.png)
-
   ![输入图片说明](../../images/eb_with_middle_big_foot_step2.png)
   ### 主座位下的电池腔体
 
@@ -74,7 +71,6 @@
   位于后座位区,球形或者扁球形
 
   ![输入图片说明](../../images/eb_with_back_box.png)
-
   ![输入图片说明](../../images/eb_with_back_box2.png)
   ### 后宽软橡胶片泥档
 

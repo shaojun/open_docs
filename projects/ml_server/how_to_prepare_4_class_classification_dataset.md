@@ -42,6 +42,11 @@
         ![输入图片说明](../../images/eb_with_front_big_shield.png)
         ![输入图片说明](../../images/eb_with_front_big_field2.png)
   4. 反光镜
+
+  5. 经典三角形车头
+
+        有此一项, 可判定为电车
+        ![输入图片说明](../../images/eb_classic_triangle_header_area0.png)
         
 
   ### 有横向展开的雨披或者固定于车上的护手套

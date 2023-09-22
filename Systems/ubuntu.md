@@ -17,3 +17,7 @@ cat /proc/{pid_of_process}/limits
 prlimit -n4096 -p pid_of_process
 ```
 
+查看当前文件夹下的的最大size的10个文件夹, 并同时指定不搜索某个子文件夹 `./data`:
+```
+du -aBM --exclude=./data 2>/dev/null | sort -nr | head -n 10
+```

@@ -13,8 +13,8 @@ sudo netstat -tulp | grep frps | wc -l
 ```
 #查看
 cat /proc/{pid_of_process}/limits
-#更改某个线程的 nofile 限制上限到 4096:
-prlimit -n4096 -p pid_of_process
+#更改某个线程的 nofile(Max open files) 限制上限到 8096:
+prlimit -n8096 -p pid_of_process
 ```
 
 查看当前文件夹下的的最大size的10个文件夹, 并同时指定不搜索某个子文件夹 `./data`:

@@ -21,3 +21,14 @@ prlimit -n4096 -p pid_of_process
 ```
 du -aBM --exclude=./data 2>/dev/null | sort -nr | head -n 10
 ```
+
+修改docker的默认存储路径:
+```
+sudo nano /lib/systemd/system/docker.service
+#see the line of below, update that /data1/docker to your situation:
+ExecStart=/usr/bin/dockerd --data-root /data1/docker -H fd:// --containerd=/run/containerd/containerd.sock
+#then restart the docker service
+sudo service docker restart
+#after docker running a while, should see the disk usage under /data1/docker/ via
+df -h
+```

@@ -16,8 +16,8 @@ sudo netstat -tulp | grep frps | wc -l
 (base) shao@ecs-01796520-002:~$ top | grep frp
 3940392 root      20   0 1062492 101380   6372 S   6.2   0.6   1:03.00 frps
 #可见为进程号, 即process id为`3940392`
-#然后更改这个进程的 nofile(Max open files) 限制上限到 38096, 这也是经常导致所有边缘frp client连接到server 失败的原因:
-prlimit -n38096 -p 3940392
+#然后更改这个进程的 nofile(Max open files) 限制上限到 66666, 这也是经常导致所有边缘frp client连接到server 失败的原因:
+prlimit -n66666 -p 3940392
 
 #用于查看某个进程的资源允许上限,应该可见这样的 Max open files            8096                 8096                 files
 cat /proc/{pid_of_process}/limits

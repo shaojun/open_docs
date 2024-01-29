@@ -105,6 +105,7 @@ Device     Boot Start        End    Sectors  Size Id Type
 /dev/sdb1        2048 2097151999 2097149952 1000G 83 Linux
 ```
 可见 `Disk`: `/dev/sda` (它被挂载到路径 `/dev/sda1`) 的容量已经变成了  `150 GiB` (之前此磁盘是`40G`).
+
 接下来对`磁盘`: `/dev/sda`进行分区信息查看和更新:
 
 ```
@@ -130,6 +131,7 @@ Number  Start   End     Size    Type     File system  Flags
         42.9GB  161GB   118GB            Free Space
 ```
 可见此磁盘仅有一个分区(仅`Number 1`), 也可看到有`118GB`是`Free Space`, 我们的工作就是让这块空闲空间`分配和并入`到`42.9GB`这个之前的`老分区`中去.
+
 分区是由起始和结束扇区位置来定义的, 所以`分配和并入`空间就是更新之间`老分区`的起始和结束扇区即可, 先改变一下扇区位置的单位显示:
 ```
 (parted) unit s
@@ -147,6 +149,7 @@ Number  Start      End         Size        Type     File system  Flags
 
 ```
 可见单位变了(更精准).
+
 然后开始更新扇区位置, 因此磁盘就1个分区,所以以下输入`1`:
 ```
 (parted) resizepart 1

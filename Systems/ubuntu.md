@@ -1,15 +1,15 @@
-查看某个时间段之后的`frps`的日志:
+## 查看某个时间段之后的`frps`的日志:
  ```
  journalctl -u frps.service --since=13:15  
  ```
-某个`frps`进程所连接的TCP长连接数量:
+## 某个`frps`进程所连接的TCP长连接数量:
  ```
  #每行仅匹配一次
  sudo netstat -tulp | grep frps -c
  #每行可匹配任意次
 sudo netstat -tulp | grep frps | wc -l  
  ```
-查看和临时(进程重启后作用将消失)更改某进程被设定的资源上限:
+## 查看和临时(进程重启后作用将消失)更改某进程被设定的资源上限:
 ```
 #以frp server的进程为例
 #首先查看frp server的进程号:
@@ -19,16 +19,16 @@ sudo netstat -tulp | grep frps | wc -l
 #然后更改这个进程的 nofile(Max open files) 限制上限到 66666, 这也是经常导致所有边缘frp client连接到server 失败的原因:
 prlimit -n66666 -p 3940392
 
-#用于查看某个进程的资源允许上限,应该可见这样的 Max open files            8096                 8096                 files
+## 用于查看某个进程的资源允许上限,应该可见这样的 Max open files            8096                 8096                 files
 cat /proc/{pid_of_process}/limits
 ```
 
-查看当前文件夹下的的最大size的10个文件夹, 并同时指定不搜索某个子文件夹 `./data`:
+## 查看当前文件夹下的的最大size的10个文件夹, 并同时指定不搜索某个子文件夹 `./data`:
 ```
 du -aBM --exclude=./data 2>/dev/null | sort -nr | head -n 10
 ```
 
-修改docker的默认存储路径:
+## 修改docker的默认存储路径:
 ```
 sudo nano /lib/systemd/system/docker.service
 #see the line of below, update that /data1/docker to your situation:
@@ -61,3 +61,146 @@ df -h
 #shm              64M     0   64M   0% /data1/docker/containers/1997b564ab1d106129dfcfc9ae4c7b89b6f1bccf9b07c4796c27ceb675eb4f46/mounts/shm
 
 ```
+
+## 云主机系统盘扩容
+这是未扩容前的磁盘使用量, 系统盘只有40G, 而且已经使用了 **97%**:
+```
+(base) shao@ecs-01796520-002:~$ df -m
+Filesystem     1M-blocks   Used Available Use% Mounted on
+udev                7961      0      7961   0% /dev
+tmpfs               1601    178      1424  12% /run
+/dev/sda1          40253  37152      1345  97% /
+tmpfs               8005      1      8005   1% /dev/shm
+tmpfs                  5      0         5   0% /run/lock
+tmpfs               8005      0      8005   0% /sys/fs/cgroup
+/dev/sdb1        1006904 120130    835558  13% /data1
+tmpfs               1601      0      1601   0% /run/user/1001
+```
+请在云主机管理后台对系统盘扩容, 以下示例是在后台**新增加了110G**,即**总**的系统磁盘的容量是**150G**.
+因为新增加的空间还未更新至到`ubuntu 磁盘分区`信息中, 系统还无法直接使用此空间,但已经可能在ubuntu中对磁盘进行查看, 可以看到一个**更大的磁盘**:
+```
+(base) shao@ecs-01796520-002:~$ sudo fdisk -l
+Disk /dev/sda: 150 GiB, 161061273600 bytes, 314572800 sectors
+Disk model: QEMU HARDDISK
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xee566d79
+
+Device     Boot Start      End  Sectors Size Id Type
+/dev/sda1  *     2048 83886046 83883999  40G 83 Linux
+
+
+Disk /dev/sdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors
+Disk model: QEMU HARDDISK
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x5bd527a5
+
+Device     Boot Start        End    Sectors  Size Id Type
+/dev/sdb1        2048 2097151999 2097149952 1000G 83 Linux
+```
+可见 `Disk`: `/dev/sda` (它被挂载到路径 `/dev/sda1`) 的容量已经变成了  `150 GiB` (之前此磁盘是`40G`).
+接下来对`磁盘`: `/dev/sda`进行分区信息查看和更新:
+
+```
+(base) shao@ecs-01796520-002:~$ sudo parted /dev/sda
+GNU Parted 3.3
+Using /dev/sda
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+
+
+```
+`p free`用于查看当前目标磁盘上的分区信息:
+```
+(parted) p free
+Model: QEMU QEMU HARDDISK (scsi)
+Disk /dev/sda: 161GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start   End     Size    Type     File system  Flags
+        1024B   1049kB  1048kB           Free Space
+ 1      1049kB  42.9GB  42.9GB  primary  ext4         boot
+        42.9GB  161GB   118GB            Free Space
+```
+可见此磁盘仅有一个分区(仅`Number 1`), 也可看到有`118GB`是`Free Space`, 我们的工作就是让这块空闲空间`分配和并入`到`42.9GB`这个之前的`老分区`中去.
+分区是由起始和结束扇区位置来定义的, 所以`分配和并入`空间就是更新之间`老分区`的起始和结束扇区即可, 先改变一下扇区位置的单位显示:
+```
+(parted) unit s
+(parted) p free
+Model: QEMU QEMU HARDDISK (scsi)
+Disk /dev/sda: 314572800s
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start      End         Size        Type     File system  Flags
+        2s         2047s       2046s                Free Space
+ 1      2048s      83886046s   83883999s   primary  ext4         boot
+        83886047s  314572799s  230686753s           Free Space
+
+```
+可见单位变了(更精准).
+然后开始更新扇区位置, 因此磁盘就1个分区,所以以下输入`1`:
+```
+(parted) resizepart 1
+```
+输入要并入的新容易的尾扇区号(可见默认的数值`83886046s`是之前40G容量的尾扇区位置):
+```
+Warning: Partition /dev/sda1 is being used. Are you sure you want to continue?
+Yes/No? yes
+End?  [83886046s]? 314572799s
+
+```
+
+再次查询分区信息,可见分区的尾扇区位置已经更新了:
+
+```
+(parted) p free
+Model: QEMU QEMU HARDDISK (scsi)
+Disk /dev/sda: 314572800s
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+Disk Flags:
+
+Number  Start  End         Size        Type     File system  Flags
+        2s     2047s       2046s                Free Space
+ 1      2048s  314572799s  314570752s  primary  ext4         boot
+
+
+
+```
+按`q`退出:
+```
+(parted) q
+```
+此时用`df -m`仍然看不到最新的磁盘空间信息,还需要进行一次刷新:
+```
+(base) shao@ecs-01796520-002:~$ sudo resize2fs /dev/sda1
+resize2fs 1.45.5 (07-Jan-2020)
+Filesystem at /dev/sda1 is mounted on /; on-line resizing required
+old_desc_blocks = 5, new_desc_blocks = 19
+The filesystem on /dev/sda1 is now 39321344 (4k) blocks long.
+
+```
+最后确认:
+
+```
+(base) shao@ecs-01796520-002:~$ df -mh
+Filesystem      Size  Used Avail Use% Mounted on
+udev            7.8G     0  7.8G   0% /dev
+tmpfs           1.6G  178M  1.4G  12% /run
+/dev/sda1       148G   37G  106G  26% /
+tmpfs           7.9G  544K  7.9G   1% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs           7.9G     0  7.9G   0% /sys/fs/cgroup
+/dev/sdb1       984G  118G  816G  13% /data1
+tmpfs           1.6G     0  1.6G   0% /run/user/1001
+
+```
+可见 `/`已经扩容到`148G`.

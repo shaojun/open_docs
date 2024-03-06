@@ -23,7 +23,13 @@ prlimit -n66666 -p 3940392
 cat /proc/{pid_of_process}/limits
 ```
 
-## 查看当前文件夹下的的最大size的10个文件夹, 并同时指定不搜索某个子文件夹 `./data`:
+## 查看当前文件目录下的的最大size的文件夹: 
+查看size最大的10个文件夹
+```
+du -aBM | sort -nr | head -n 10
+```
+
+查看size最大的10个文件夹, 并同时指定不搜索某个子文件夹 `./data`
 ```
 du -aBM --exclude=./data 2>/dev/null | sort -nr | head -n 10
 ```

@@ -205,8 +205,8 @@ tmpfs           1.6G     0  1.6G   0% /run/user/1001
 
 ```
 可见 `/`已经扩容到`148G`.
-## 挂载额外的数据盘到系统
-1.查看所有硬盘信息
+## 挂载额外的数据盘到系统 
+1. 查看所有硬盘信息 
 `fdisk -l` 查看所有硬盘
 ```
 (base) shao@ecs-01796520-002:~$ sudo fdisk -l
@@ -237,18 +237,18 @@ Device     Boot Start        End    Sectors  Size Id Type
 ```
 可见一个1000G容量的`Disk /dev/sdb` with 路径 `/dev/sdb1` 了.
 
-2.创建挂载目录
+2. 创建挂载目录 
 按你自己的情况都行,比如:
 ```
 mkdir /data
 ```
 
-3. 直接挂载
+3. 直接挂载 
 ```
 mount /dev/sdb1 /data
 ```
 
-4. 下次启动系统时自动挂载 
+4. 下次启动系统时自动挂载  
 如果不加这步,下次重启系统后,挂载会消失(尽量新硬盘上的数据不会消失)
 查看持载分区的UUID by `blkid /dev/sdb1`:
 ```

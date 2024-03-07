@@ -69,7 +69,7 @@ df -h
 ```
 
 ## 云主机系统盘扩容
-这是未扩容前的磁盘使用量, 系统盘只有40G, 而且已经使用了 **97%**:
+这是未扩容前的系统盘磁盘`/dev/sda1`使用量, 可见其总容量只有40G, 而且已经使用了 **97%**:
 ```
 (base) shao@ecs-01796520-002:~$ df -m
 Filesystem     1M-blocks   Used Available Use% Mounted on
@@ -82,9 +82,9 @@ tmpfs               8005      0      8005   0% /sys/fs/cgroup
 /dev/sdb1        1006904 120130    835558  13% /data1
 tmpfs               1601      0      1601   0% /run/user/1001
 ```
-请在云主机管理后台对系统盘扩容, 以下示例是在后台**新增加了110G**,即**总**的系统磁盘的容量是**150G**.
+请在云主机管理后台对系统盘扩容付费和申请, 以下示例是在后台申请**新增加了110G**,即**总**的系统磁盘的容量是**150G**.
 
-因为新增加的空间还未更新至到`ubuntu 磁盘分区`信息中, 系统还无法直接使用此空间,但已经可能在ubuntu中对磁盘进行查看, 可以看到一个**更大的磁盘**:
+但因为新增加的空间还未更新至到`ubuntu 磁盘分区`信息中, 系统还无法直接使用此空间,但已经可以看到一个**更大的磁盘**:
 ```
 (base) shao@ecs-01796520-002:~$ sudo fdisk -l
 Disk /dev/sda: 150 GiB, 161061273600 bytes, 314572800 sectors
@@ -99,18 +99,9 @@ Device     Boot Start      End  Sectors Size Id Type
 /dev/sda1  *     2048 83886046 83883999  40G 83 Linux
 
 
-Disk /dev/sdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors
-Disk model: QEMU HARDDISK
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: dos
-Disk identifier: 0x5bd527a5
-
-Device     Boot Start        End    Sectors  Size Id Type
-/dev/sdb1        2048 2097151999 2097149952 1000G 83 Linux
+....you may have other disks and will show below, omit in this tutorial....
 ```
-可见 `Disk`: `/dev/sda` (它被挂载到路径 `/dev/sda1`) 的容量已经变成了  `150 GiB` (之前此磁盘是`40G`).
+可见 `Disk`: `/dev/sda` 的容量已经变成了  `150 GiB` (之前此磁盘是`40G`).
 
 接下来对`磁盘`: `/dev/sda`进行分区信息查看和更新:
 
@@ -214,3 +205,66 @@ tmpfs           1.6G     0  1.6G   0% /run/user/1001
 
 ```
 可见 `/`已经扩容到`148G`.
+## 挂载额外的数据盘到系统
+1.查看所有硬盘信息
+`fdisk -l` 查看所有硬盘
+```
+(base) shao@ecs-01796520-002:~$ sudo fdisk -l
+[sudo] password for shao:
+Disk /dev/sda: 150 GiB, 161061273600 bytes, 314572800 sectors
+Disk model: QEMU HARDDISK
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xee566d79
+
+Device     Boot Start       End   Sectors  Size Id Type
+/dev/sda1  *     2048 314572799 314570752  150G 83 Linux
+
+
+Disk /dev/sdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors
+Disk model: QEMU HARDDISK
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0x5bd527a5
+
+Device     Boot Start        End    Sectors  Size Id Type
+/dev/sdb1        2048 2097151999 2097149952 1000G 83 Linux
+
+```
+可见一个1000G容量的`Disk /dev/sdb` with 路径 `/dev/sdb1` 了.
+
+2.创建挂载目录
+按你自己的情况都行,比如:
+```
+mkdir /data
+```
+
+3. 直接挂载
+```
+mount /dev/sdb1 /data
+```
+
+4. 下次启动系统时自动挂载 
+如果不加这步,下次重启系统后,挂载会消失(尽量新硬盘上的数据不会消失)
+查看持载分区的UUID by `blkid /dev/sdb1`:
+```
+(base) shao@ecs-01796520-002:~$ blkid /dev/sdb1
+/dev/sdb1: UUID="cbddb781-df6c-4c09-afb6-3730125be486" TYPE="ext4" PARTUUID="5bd527a5-01"
+```
+修改开机挂载文件:
+```
+nano /etc/fstab
+#修改成类似内容
+
+#shao pasted below for the 1000G disk of /dev/sdb1
+#UUID="cbddb781-df6c-4c09-afb6-3730125be486" TYPE="ext4" PARTUUID="5bd527a5-01"
+UUID=cbddb781-df6c-4c09-afb6-3730125be486 /data1 ext4 defautls 0 0
+#shao done
+
+
+```
+

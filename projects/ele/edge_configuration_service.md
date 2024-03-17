@@ -21,7 +21,10 @@
 否则生成frp client新配置，再启动frp client service, 同时回复kafka消息以告知云端状态。
 如果边缘后续收到关闭frp client service的消息则马上关闭服务，同时回复云端，否则过n分钟后（由下载配置信息中指定，可以默认120分钟），自动关闭。
 
-> 应注意, 因为考虑到未来的通用参数下载,所以消息体请进行考虑和设计,而不仅仅是用于frp此场景.
+> 应注意, 因为考虑到未来的通用参数下载和获取,所以消息体请进行考虑和设计,而不仅仅是用于frp此场景.
 > 例如:
-> {"sender":"web_backend", "receiver":"edge_watchdog", "timestamp":"2024-4-1 9:01:01", "description":"setup and start frp",
-> "parameters":[{"edge_ssh_remote_port":3998, "camera_admin_web_page_remote_port":3999}]}
+> {"sender":"web_backend", "receiver":"edge_watchdog", "type":"download_to_edge" "timestamp":"2024-4-1 9:01:01", "description":"setup and start frp",
+> "parameters":[{"edge_ssh_remote_port":3997,"edge_fcc_web_config_page_remote_port":3998 "camera_admin_web_page_remote_port":3999,
+> "auto_stop_service_in":3600}],
+> "actions":[{"name":"start_frp_client_service"}]}
+

@@ -62,9 +62,16 @@
 
 以下为Request中的body示例:
 ```
-"body":[{"edge_ssh_remote_port":3997,"edge_fcc_web_config_page_remote_port":3998 "camera_admin_web_page_remote_port":3999,
-"auto_stop_service_in":3600}],
-"actions":[{"name":"start_frp_client_service"}]}
+{"request":{"id":111,"sender":"web_backend","timestamp":"","description":"setup and start frp", type="change_frp_client_config",
+  "body":{
+    "ports":[
+      {"value":3997, "description": "edge_ssh_remote_port"},
+      {"value":3998, "description": "edge_fcc_web_config_page_remote_port"},
+      {"value":3999, "description": "camera_admin_web_page_remote_port"}
+    ],
+    "actions":[{"name":"auto_stop_service_in","value"=3600}]
+  }
+}}}
 ```
 
 ### 获取边缘CPU使用量

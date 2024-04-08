@@ -1,3 +1,51 @@
+## Windows WSL 2 （Ubuntu) 直接使用 Windows Host 的 clash 服务    
+### 开启 `Clash for Windows`程序中的 `Allow LAN`:    
+![image](https://github.com/shaojun/open_docs/assets/3241829/0a28af94-50b8-42ce-9f47-8c0fcbcbb664)
+
+> 注意, 整个过程不需要动任何默认windows 防火墙的配置：    
+> ![image](https://github.com/shaojun/open_docs/assets/3241829/0a92a96b-02ab-4b40-ae20-78797edc899f)
+
+
+
+### 在windows中安装Ubuntu:
+通过打开 `PowerShell`运行命令安装:
+```
+wsl --install -d Ubuntu
+```
+### Ubuntu中开启代理
+在Ubuntu shell 中输入：
+```
+export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
+export https_proxy="http://${hostip}:7890"
+export http_proxy="http://${hostip}:7890"
+```
+再测试：
+```
+shao@shaothinkbook:~$ export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
+shao@shaothinkbook:~$ export https_proxy="http://${hostip}:7890"
+shao@shaothinkbook:~$ export http_proxy="http://${hostip}:7890"
+shao@shaothinkbook:~$ wget google.com
+--2024-04-08 18:49:01--  http://google.com/
+Connecting to 172.22.208.1:7890... connected.
+Proxy request sent, awaiting response... 301 Moved Permanently
+Location: http://www.google.com/ [following]
+--2024-04-08 18:49:01--  http://www.google.com/
+Reusing existing connection to 172.22.208.1:7890.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘index.html’
+
+index.html                       [ <=>                                         ]  19.77K  --.-KB/s    in 0.05s
+
+2024-04-08 18:49:02 (398 KB/s) - ‘index.html’ saved [20247]
+
+```
+但以上`export`会在重启ubuntu系统后丢失，所以可以用以下加入自动启动：  
+```
+shao@shaothinkbook:~$ nano ~/.bashrc
+```
+![image](https://github.com/shaojun/open_docs/assets/3241829/391a3b47-5de3-4a29-b6b3-40359fc9e412)
+
 ## 查看某个时间段之后的`frps`的日志:
  ```
  journalctl -u frps.service --since=13:15  

@@ -10,9 +10,11 @@ filebeat.inputs:
   enabled: true
   paths:
     - /home/shao/tao-toolkit-triton-apps/tao_triton/python/device_hub/log/global_statistics.log
-    # does not work??- /home/shao/tao-toolkit-triton-apps/tao_triton/python/device_hub/log/*/electric>processors:
+    # does not work??- /home/shao/tao-toolkit-triton-apps/tao_triton/python/device_hub/log/*/electricBicycleEnteringEventDetector.log
+processors:
   - dissect:
-      tokenizer: '%{service.event_date} %{service.event_time}-[%{service.loglevel}]%{service.board_id>      field: "message"
+      tokenizer: '%{service.event_date} %{service.event_time}-[%{service.loglevel}]%{service.board_id} | %{service.event_type} | %{service.event_data}'
+      field: "message"
       target_prefix: "dissect"
 
   #- decode_json_fields:

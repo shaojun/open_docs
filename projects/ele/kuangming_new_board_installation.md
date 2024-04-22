@@ -1,4 +1,6 @@
-# python
+# python pip
+if the board doesn't have `pip` installed, then try:
+
 ```
 apt-get install wget
 wget https://bootstrap.pypa.io/pip/pip.pyz

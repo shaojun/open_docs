@@ -1,7 +1,7 @@
 # filebeat for uploading device hub statistics log to aliyun log service    
 create the filebeat config file:
 ```
-sudo nano /etc/filebeat/devicehub_eb_watch.yml
+sudo nano /etc/filebeat/filebeat.yml
 ```
 input below content:
 ```
@@ -37,7 +37,11 @@ output.kafka:
   partition.hash:
     reachable_only: false
 ```
-run the filebeat with the config file:
+**direct run** the filebeat with the config file:
 ```
-sudo filebeat run -c /etc/filebeat/devicehub_eb_watch.yml -e
+sudo filebeat run -c /etc/filebeat/filebeat.yml -e
+```
+or **run as service**:
+```
+sudo service filebeat start
 ```

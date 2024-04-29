@@ -60,9 +60,9 @@
 否则生成frp client新配置，再启动frp client service, 同时回复kafka消息以告知云端状态。
 如果边缘后续收到关闭frp client service的消息则马上关闭服务，同时回复云端，否则过n分钟后（由下载配置信息中指定，可以默认120分钟），自动关闭。
 
-以下为Request中的body示例:
+以下为`Request`为示例:
 ```
-{"request":{"id":111,"sender":"web_backend","timestamp":"","description":"setup and start frp", type="change_frp_client_config",
+{"request":{"id":111,"sender":"web_backend","target":"edge_board_watchdog_service","timestamp":"","description":"setup and start frp", type="change_frp_client_config",
   "body":{
     "ports":[
       {"value":3997, "description": "edge_ssh_remote_port"},
@@ -73,6 +73,13 @@
   }
 }}}
 ```
+其中的 `sender`是指此请求的发送方。
+`target`是指此请求的接收模块。
+`type`是指些请求的命令内容，以方便接收方甄别处理。
+
+接收方在收到后，会保证回复`Response`.
+
+`Event`的发送不需要有回复。
 
 ### 获取边缘CPU使用量
 ...

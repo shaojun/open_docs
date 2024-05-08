@@ -53,7 +53,14 @@ edit the `startQuaAI.sh` to use `run_ele_qua.py`
 edit the `stopQuaAI.sh` to use `run_ele_qua.py`
 
 # install the litefcccore application
-ask developer to provide the latest `litefcccore` files.  
-
+ask developer to provide kafka related file.  
+copy kafka related file to path: `/lib/arm-linux-gnueabihf/`    
+ask developer to provide the latest `litefcccore` files.      
+ask developer to provider file 'LiteFccCore.service'      
+copy 'LiteFccCore.service' to path: `/etc/systemd/system`      
+  ```
+  sudo systemctl enable liteFccCore.service
+  sudo systemctl start LiteFccCore.service
+```
 # install the watchdog service
-ask developer to provide the latest `litefcccore` files.  
+ask developer to provide the latest `watchdog` files.  

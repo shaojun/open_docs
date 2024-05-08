@@ -1,14 +1,5 @@
-# python pip
-if the board doesn't have `pip` installed, then try:
-
-```
-apt-get install wget
-wget https://bootstrap.pypa.io/pip/pip.pyz
-sudo apt install python3.7-distutils
-python -m pip.pyz --help
-```
 # .net core
-* download 3.1 sdk
+## download and install 3.1 sdk
   https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.426-linux-arm32-binaries
 ```
   mkdir -p $HOME/dotnet && tar zxf dotnet-sdk-3.1.426-linux-arm.tar.gz -C $HOME/dotnet
@@ -28,3 +19,41 @@ disable the globalization:
 ```
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ```
+## how to test
+close current shell, and open a new shell, input:
+```
+dotnet --info
+```
+should see meaningful messages.
+# ntp service
+## install
+```
+ apt install ntp
+```
+## how to test
+```
+sudo systemctl status ntp
+```
+should see meaningful messages, and status is: `active (running)` 
+
+# create board id file 
+```
+mkdir -p  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
+nano /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/config_elenet.txt
+```
+in `nano` input below default content:
+```
+[custom-uploader]
+whoami=qua_board_default_board_id
+```
+# install object detection application
+ask developer to provide the latest `run_ele_qua.py` file.    
+copy the file to path: `:/package/app/QuaAIDemo`    
+edit the `startQuaAI.sh` to use `run_ele_qua.py`    
+edit the `stopQuaAI.sh` to use `run_ele_qua.py`
+
+# install the litefcccore application
+ask developer to provide the latest `litefcccore` files.  
+
+# install the watchdog service
+ask developer to provide the latest `litefcccore` files.  

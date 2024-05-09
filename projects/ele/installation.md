@@ -10,9 +10,13 @@ filebeat.inputs:
 - type: log
   enabled: true
   paths:
-    - /home/shao/tao-toolkit-triton-apps/tao_triton/python/device_hub/log/global_statistics.log
+    - /home/shao/tao-toolkit-triton-apps/tao_triton/python/device_hub/log/*/statistics.log
     # does not work??- /home/shao/tao-toolkit-triton-apps/tao_triton/python/device_hub/log/*/electricBicycleEnteringEventDetector.log
 processors:
+  - add_fields:
+      fields:
+        name: 'iam created by shao'
+        id: '119119'
   - dissect:
       tokenizer: '%{service.event_date} %{service.event_time}-[%{service.loglevel}]%{service.board_id} | %{service.event_type} | %{service.event_data}'
       field: "message"

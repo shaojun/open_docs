@@ -1,4 +1,5 @@
 # filebeat for uploading device hub statistics log to aliyun log service    
+https://help.aliyun.com/zh/sls/user-guide/use-the-kafka-protocol-to-upload-logs?spm=5176.2020520112.0.0.55413efd5MWjXH    
 create the filebeat config file:
 ```
 sudo nano /etc/filebeat/filebeat.yml

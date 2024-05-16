@@ -1,4 +1,8 @@
-# .net core
+# frp client    
+follow:
+https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#install-frp-client
+
+# .NET CORE
 ## download and install 3.1 sdk    
 manually open the link:    
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.426-linux-arm32-binaries    
@@ -9,9 +13,9 @@ wget https://download.visualstudio.microsoft.com/download/pr/2043e641-977d-43ac-
 ```
 unzip and set environment varibles:
 ```
-  mkdir -p $HOME/dotnet && tar zxf dotnet-sdk-3.1.426-linux-arm.tar.gz -C $HOME/dotnet
-  export DOTNET_ROOT=$HOME/dotnet
-  export PATH=$PATH:$HOME/dotnet
+mkdir -p $HOME/dotnet && tar zxf dotnet-sdk-3.1.426-linux-arm.tar.gz -C $HOME/dotnet
+export DOTNET_ROOT=$HOME/dotnet
+export PATH=$PATH:$HOME/dotnet
 ```
 the environment varibles will lose when did a logoff or reboot, below will add them to automatically set when logon:
 ```
@@ -21,7 +25,6 @@ paste that 2 line into the most below:
 ```
 export DOTNET_ROOT=$HOME/dotnet
 export PATH=$PATH:$HOME/dotnet
-
 ```
 disable the globalization:
 ```
@@ -34,6 +37,11 @@ dotnet --info
 ```
 should see meaningful messages.
 # ntp service
+not mandatory if the local `ntp.service` already running good by checking:
+```
+systemctl status ntp.service
+```
+make sure it's `active (running)`
 ## install
 ```
  apt install ntp
@@ -60,15 +68,31 @@ copy the file to path: `:/package/app/QuaAIDemo`
 edit the `startQuaAI.sh` to use `run_ele_qua.py`    
 edit the `stopQuaAI.sh` to use `run_ele_qua.py`
 
+restart the service:
+```
+systemctl restart quaai.service
+```
+
 # install the litefcccore application
-ask developer to provide kafka related file.  
-copy kafka related file to path: `/lib/arm-linux-gnueabihf/`    
+ask developer to provide kafka related file:    
+
+![image](https://github.com/shaojun/open_docs/assets/3241829/c4872612-d480-40d1-bae1-5cf9f1251c8b)
+
+copy above kafka related files to path: 
+```
+/lib/arm-linux-gnueabihf/
+```    
 ask developer to provide the latest `litefcccore` files.      
 ask developer to provider file 'LiteFccCore.service'      
-copy 'LiteFccCore.service' to path: `/etc/systemd/system`      
-  ```
-  sudo systemctl enable liteFccCore.service
-  sudo systemctl start LiteFccCore.service
+copy 'LiteFccCore.service' to path: `/etc/systemd/system`   
+figure out the `dotnet` command path via:
+```
+which dotnet
+```
+and updated the path in `LiteFccCore.service`
+```
+sudo systemctl enable LiteFccCore.service
+sudo systemctl start LiteFccCore.service
 ```
 # install the watchdog service
 ask developer to provide the latest `watchdog` files.  

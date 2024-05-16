@@ -1,6 +1,13 @@
 # .net core
-## download and install 3.1 sdk
-  https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.426-linux-arm32-binaries
+## download and install 3.1 sdk    
+manually open the link:    
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.426-linux-arm32-binaries    
+and copy the `direct link`, and
+```
+, and copy the `direct link`, and then input to shell like:
+```
+cd /home/yunzao/Download
+wget https://download.visualstudio.microsoft.com/download/pr/2043e641-977d-43ac-b42a-f47fd9ee79ba/5b10d12a0626adaed720358ab8ad0b7e/dotnet-sdk-3.1.426-linux-arm.tar.gz
 ```
   mkdir -p $HOME/dotnet && tar zxf dotnet-sdk-3.1.426-linux-arm.tar.gz -C $HOME/dotnet
   export DOTNET_ROOT=$HOME/dotnet

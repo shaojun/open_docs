@@ -83,13 +83,22 @@ du -aBM --exclude=./data 2>/dev/null | sort -nr | head -n 10
 ```
 
 ## 修改docker的默认存储路径:
+先确保系统已经安装好了dokcer, 然后打开并编辑docker的服务文件
 ```
 sudo nano /lib/systemd/system/docker.service
-#see the line of below, update that /data1/docker to your situation:
+```
+请找到`ExecStart`这一行,将参数`--data-root`加入,以下示例将默认存储路径指向了 `/data1/docker`:
+```
+# update that /data1/docker to your situation:
 ExecStart=/usr/bin/dockerd --data-root /data1/docker -H fd:// --containerd=/run/containerd/containerd.sock
-#then restart the docker service
+```
+Then restart the docker service
+```
+sudo systemctl daemon-reload
 sudo service docker restart
-#after docker running a while, should see the disk usage under /data1/docker/ via
+```
+after docker running a while, should see the disk usage under `/data1/docker/` via:
+```
 df -h
 #root@ecs-01796520-002:~# df -h
 #Filesystem      Size  Used Avail Use% Mounted on

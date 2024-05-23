@@ -285,8 +285,9 @@ Device     Boot Start        End    Sectors  Size Id Type
 /dev/sdb1        2048 2097151999 2097149952 1000G 83 Linux
 
 ```
-可见一个1000G容量的`Disk /dev/sdb` with 路径 `/dev/sdb1` 了.
-注意: 你有可能是只能看到 `Disk /dev/sdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors` 而没有上述示例中的在它下方出现的`Device`信息,
+可见一个1000G容量的`Disk /dev/sdb` with 路径 `/dev/sdb1` 了.    
+**注意**: 你有可能是只能看到 `Disk /dev/sdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors` 而没有上述示例中的在它下方出现的`Device`信息,
+那你需要看以下部分.    
 比如,这是我遇到过的一个示例
 ```
 root@iot-message-2002:~# fdisk -l

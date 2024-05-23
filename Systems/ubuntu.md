@@ -253,7 +253,9 @@ tmpfs           1.6G     0  1.6G   0% /run/user/1001
 
 ```
 可见 `/`已经扩容到`148G`.
-## 挂载额外的数据盘到系统 
+## 挂载额外的数据盘到系统中
+比如后来又购买了一块大容量的云盘,希望把它作为一个文件夹挂载到当前系统中来.
+
 1. 查看所有硬盘信息 
 `fdisk -l` 查看所有硬盘
 ```
@@ -284,6 +286,104 @@ Device     Boot Start        End    Sectors  Size Id Type
 
 ```
 可见一个1000G容量的`Disk /dev/sdb` with 路径 `/dev/sdb1` 了.
+注意: 你有可能是只能看到 `Disk /dev/sdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors` 而没有上述示例中的在它下方出现的`Device`信息,
+比如,这是我遇到过的一个示例
+```
+root@iot-message-2002:~# fdisk -l
+Disk /dev/vda: 40 GiB, 42949672960 bytes, 83886080 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xab5362d5
+
+Device     Boot Start      End  Sectors Size Id Type
+/dev/vda1  *     2048 83886079 83884032  40G 83 Linux
+
+
+Disk /dev/vdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+
+```
+信息, 这说明这块新的大容量硬盘还未进行分区和格式化,那你需要:
+```
+sudo parted -l | grep Error
+```
+应该看到类似这样的:
+```
+Error: /dev/vdb: unrecognised disk label
+```
+同样也可以用`lsblk`可见vdb并无下层级,即分区parition信息:
+```
+root@iot-message-2002:~# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+vda    252:0    0   40G  0 disk
+└─vda1 252:1    0   40G  0 part /
+vdb    252:16   0 1000G  0 disk
+```
+接下来进行分区规格指定,一般就是gpt:
+```
+root@iot-message-2002:~# sudo parted /dev/vdb mklabel gpt
+Information: You may need to update /etc/fstab.
+```
+那行Info忽略.
+接下来正式创建分区:
+```
+root@iot-message-2002:~# sudo parted -a opt /dev/vdb mkpart primary ext4 0% 100%
+Information: You may need to update /etc/fstab.
+```
+马上可以查询,可见分区`vdb1`已经创建成功:
+```
+root@iot-message-2002:~# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+vda    252:0    0   40G  0 disk
+└─vda1 252:1    0   40G  0 part /
+vdb    252:16   0 1000G  0 disk
+└─vdb1 252:17   0 1000G  0 part
+```
+接下来对分区进行文件系统的创建:
+```
+root@iot-message-2002:~# sudo mkfs.ext4 -L datapartition /dev/vdb1
+mke2fs 1.45.5 (07-Jan-2020)
+Creating filesystem with 262143488 4k blocks and 65536000 inodes
+Filesystem UUID: 2c7f4051-d4e3-42ef-8a4a-cdb41274025f
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+        4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+        102400000, 214990848
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (262144 blocks): done
+Writing superblocks and filesystem accounting information: done
+```
+再用`fdisk -l`检查一下所有磁盘信息:
+```
+root@iot-message-2002:~# fdisk -l
+Disk /dev/vda: 40 GiB, 42949672960 bytes, 83886080 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: dos
+Disk identifier: 0xab5362d5
+
+Device     Boot Start      End  Sectors Size Id Type
+/dev/vda1  *     2048 83886079 83884032  40G 83 Linux
+
+
+Disk /dev/vdb: 1000 GiB, 1073741824000 bytes, 2097152000 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: D507928E-3388-4886-A280-C11EFD983D6B
+
+Device     Start        End    Sectors  Size Type
+/dev/vdb1   2048 2097149951 2097147904 1000G Linux filesystem
+```
+可以看到 `Device`信息已经出现于新磁盘下方了.
 
 2. 创建挂载目录 
 按你自己的情况都行,比如:

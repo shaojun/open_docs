@@ -138,3 +138,13 @@ ping 192.168.177.1
 
 # Watchdog service
 ask developer to provide the latest `watchdog` files.  
+in **board shell**:
+```
+mkdir -p /package/app/watch_dog/
+```
+**in your PC**, unzip `watch_dog.zip`, and upload the unzipped files into board under path `/package/app/watch_dog/`.  
+in **board shell**:
+```
+cd /package/app/watch_dog
+pip3 install requests
+```

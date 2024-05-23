@@ -1,17 +1,19 @@
-# frp client    
-follow:
-https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#install-frp-client
+# Frp client    
+follow:    
+https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#install-frp-client    
+to install.
 
-# .NET CORE
-## download and install 3.1 sdk    
-manually open the link:    
+# .NET CORE SDK
+## download and install .NET CORE 3.1 SDK    
+**In your PC**, manually open the link:    
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.426-linux-arm32-binaries    
-and copy the `direct link`, then input to shell like:
+and copy the `direct link`, then input to **board shell** like:
 ```
+mkdir -p /home/yunzao/Download
 cd /home/yunzao/Download
 wget https://download.visualstudio.microsoft.com/download/pr/2043e641-977d-43ac-b42a-f47fd9ee79ba/5b10d12a0626adaed720358ab8ad0b7e/dotnet-sdk-3.1.426-linux-arm.tar.gz
 ```
-unzip and set environment varibles:
+`unzip` and `set environment variables`:
 ```
 mkdir -p $HOME/dotnet && tar zxf dotnet-sdk-3.1.426-linux-arm.tar.gz -C $HOME/dotnet
 export DOTNET_ROOT=$HOME/dotnet
@@ -21,59 +23,72 @@ the environment varibles will lose when did a logoff or reboot, below will add t
 ```
 root@ebox:/home/yunzao/publish# nano ~/.bashrc
 ```
-paste that 2 line into the most below:
+paste that 3 line into the **most below**:
 ```
 export DOTNET_ROOT=$HOME/dotnet
 export PATH=$PATH:$HOME/dotnet
-```
-disable the globalization:
-```
 export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 ```
+then `ctrl+o` for save, and `ctrl+x` for quit.
+
 ## how to test
-close current shell, and open a new shell, input:
+close current board shell, and open a new shell, input:
 ```
 dotnet --info
 ```
 should see meaningful messages.
-# ntp service
-not mandatory if the local `ntp.service` already running good by checking:
-```
-systemctl status ntp.service
-```
-make sure it's `active (running)`
-## install
-```
- apt install ntp
-```
-## how to test
-```
-sudo systemctl status ntp
-```
-should see meaningful messages, and status is: `active (running)` 
 
-# create board id file 
+# Board id file 
+in **board shell**:
 ```
 mkdir -p  /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/
 nano /opt/nvidia/deepstream/deepstream-6.0/samples/configs/deepstream-app/config_elenet.txt
 ```
-in `nano` input below default content:
+in `nano` editing screen, input below default content:
 ```
 [custom-uploader]
 whoami=qua_board_default_board_id
 ```
-# install object detection application
-ask developer to provide the latest `run_ele_qua.py` file.    
-copy the file to path: `:/package/app/QuaAIDemo`    
-edit the `startQuaAI.sh` to use `run_ele_qua.py`    
-edit the `stopQuaAI.sh` to use `run_ele_qua.py`
+then `ctrl+o` for save, and `ctrl+x` for quit.
+
+# Object detection Application
+ask developer to provide the application files, and then put into `/package/app/QuaAIDemo`:    
+![image](https://github.com/shaojun/open_docs/assets/3241829/95589bd8-fa21-490c-9b6a-c729de2539fb)
 
 restart the service:
 ```
 systemctl restart quaai.service
 ```
+## how to test
+### by view log    
+in **board shell**:
+```
+root@ebox:/package/app/QuaAIDemo# tail -30 log.txt
+```
+as you just restarted the service, should the last line of logs has the **recent time** and **content with success**.    
+![image](https://github.com/shaojun/open_docs/assets/3241829/3fb2c363-5b8d-40cb-a20f-f68846c38da5)
 
-# install the litefcccore application
+### by view detection output    
+in **board shell**:
+```
+root@ebox:/package/app/QuaAIDemo# python3 test_udp_heartbeat.py --events uploaded
+```
+this is for real time monitoring the detected objects upload to remote server, you should see **endless continues content** like:
+
+![image](https://github.com/shaojun/open_docs/assets/3241829/acdd4688-4263-4d5c-b1bd-23a9cb19a56f)
+
+each line indicates several `door_sign` objects were detected and get uploaded.
+# LiteFccCore Application
+## basic application files copy
+in **board shell**:
+```
+mkdir -p /package/app/LiteFccCore/
+```
+**in your PC**, unzip `LiteFccCore.zip`, and upload the unzipped files into board under path `/package/app/LiteFccCore/`.    
+the final should like:    
+![image](https://github.com/shaojun/open_docs/assets/3241829/f43bf257-f736-4669-a45e-b3a697ec3256)
+
+## kafka .so files copy
 ask developer to provide kafka related file:    
 
 ![image](https://github.com/shaojun/open_docs/assets/3241829/c4872612-d480-40d1-bae1-5cf9f1251c8b)
@@ -81,18 +96,45 @@ ask developer to provide kafka related file:
 copy above kafka related files to path: 
 ```
 /lib/arm-linux-gnueabihf/
-```    
-ask developer to provide the latest `litefcccore` files.      
-ask developer to provider file 'LiteFccCore.service'      
-copy 'LiteFccCore.service' to path: `/etc/systemd/system`   
-figure out the `dotnet` command path via:
 ```
-which dotnet
+## create service
+**in board shell** create the service file:
 ```
-and updated the path in `LiteFccCore.service`
+root@ebox:/package/app/LiteFccCore# nano /etc/systemd/system/LiteFccCore.service
+```
+input below content:
+```
+[Unit]
+Description=LiteFccCore for controlling devices
+Wants=network.target
+After=nerwork.target
+[Service]
+WorkingDirectory=/package/app/LiteFccCore
+# every start of the service, include restart, will block 5 seconds
+ExecStartPre=/bin/sleep 5
+
+ExecStart=/root/dotnet/dotnet LiteFccCore.dll
+Restart=always
+# Restart service after 10 seconds if this service crashes:
+RestartSec=10
+SyslogIdentifier=LiteFccCore
+
+[Install]
+WantedBy=multi-user.target
+
+```
+then `ctrl+o` for save, and `ctrl+x` for quit.
+Enable the service:
 ```
 sudo systemctl enable LiteFccCore.service
 sudo systemctl start LiteFccCore.service
 ```
-# install the watchdog service
+## how to test
+**in your PC**, make sure can LAN access to board by test `ping` in your PC terminal:
+```
+ping 192.168.177.1
+```
+**in your PC**, open browser with url: `http://192.168.177.1:8384/home/sensor`, should see web page.
+
+# Watchdog service
 ask developer to provide the latest `watchdog` files.  

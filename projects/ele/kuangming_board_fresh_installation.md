@@ -148,3 +148,35 @@ in **board shell**:
 cd /package/app/watch_dog
 pip3 install requests
 ```
+## create service
+**in board shell** create the service file:
+```
+root@ebox:/package/app/watch_dog# nano /etc/systemd/system/watchdog.service
+```
+input below content:
+```
+[Unit]
+Description=watch dog
+Wants=network.target
+After=network.target
+[Service]
+WorkingDirectory=/package/app/watch_dog/
+# every start of the service, include restart, will block 5 seconds
+# ExecStartPre=/bin/sleep 5
+
+ExecStart=/usr/bin/python3 /package/app/watch_dog/watch_dog.py
+Restart=always
+# Restart service after 10 seconds if this service crashes:
+RestartSec=10
+SyslogIdentifier=watch_dog
+
+[Install]
+WantedBy=multi-user.target
+
+```
+then `ctrl+o` for save, and `ctrl+x` for quit.
+Enable the service:
+```
+sudo systemctl enable watchdog.service
+sudo systemctl start watchdog.service
+```

@@ -107,7 +107,7 @@ input below content:
 [Unit]
 Description=LiteFccCore for controlling devices
 Wants=network.target
-After=nerwork.target
+After=nerwork.target ntp.service
 [Service]
 WorkingDirectory=/package/app/LiteFccCore
 # every start of the service, include restart, will block 5 seconds

@@ -176,11 +176,11 @@ input below content:
 [Unit]
 Description=watch dog
 Wants=network.target
-After=network.target
+After=network.target ntp.service
 [Service]
 WorkingDirectory=/package/app/watch_dog/
 # every start of the service, include restart, will block 5 seconds
-# ExecStartPre=/bin/sleep 5
+ExecStartPre=/bin/sleep 5
 
 ExecStart=/usr/bin/python3 /package/app/watch_dog/watch_dog.py
 Restart=always

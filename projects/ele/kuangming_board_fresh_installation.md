@@ -55,8 +55,26 @@ then `ctrl+o` for save, and `ctrl+x` for quit.
 ask developer to provide the application files, and then put into `/package/app/QuaAIDemo`:    
 ![image](https://github.com/shaojun/open_docs/assets/3241829/95589bd8-fa21-490c-9b6a-c729de2539fb)
 
+update the service file:
+```
+[Unit]
+Description=QuaAI service start
+After=network.target ntp.service
+
+[Service]
+ExecStart=/bin/QuaAI_srv
+ExecStop=/bin/QuaAI_stop
+# every start of the service, include restart, will block 5 seconds
+ExecStartPre=/bin/sleep 5
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
+
+```
 restart the service:
 ```
+systemctl daemon-reload
 systemctl restart quaai.service
 ```
 ## how to test

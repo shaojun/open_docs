@@ -1,8 +1,42 @@
-# Frp client    
-follow:    
-https://gitee.com/bugslife/open_docs/blob/master/projects/edge/rv1126/prepare.md#install-frp-client    
-to install.
+# Frp client
+```
+mkdir -p /home/yunzao/Download
+```
+and put `frp_0.43.0_linux_arm` folder under it:   
+![image](https://github.com/shaojun/open_docs/assets/3241829/da4c3ed8-3f81-4345-bf73-0c81519ec410)
 
+create service file:
+```
+sudo nano /etc/systemd/system/frpc.service 
+```
+input below content:
+```
+[Unit]
+Description=Frp client
+Wants=network.target
+After=network.target ntp.service
+[Service]
+Environment="FRP_USER=kua_board_default_board_id"
+Environment="FRP_SSH_PORT=9551"
+Environment="FRP_CAMERA_PORT=9552"
+Environment="LITEFCCCORE_WEBCONFIG_PORT=9553"
+#before start the service, always sleep 5 second, for wait the system ready?
+ExecStartPre=/bin/sleep 5
+WorkingDirectory=/home/yunzao/Download/frp_0.43.0_linux_arm/
+ExecStart=/home/yunzao/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
+Restart=always
+#Restart service after 10 seconds if this service crashes:
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
+```
+enable and start the service:
+```
+sudo systemctl enable frpc.service
+sudo systemctl start frpc.service
+# sudo systemctl status frpc.service
+# sudo systemctl daemon-reload
+```
 # .NET CORE SDK
 ## download and install .NET CORE 3.1 SDK    
 **In your PC**, manually open the link:    

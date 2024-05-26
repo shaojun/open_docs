@@ -39,6 +39,9 @@ sudo systemctl start frpc.service
 ```
 # .NET CORE SDK
 ## download and install .NET CORE 3.1 SDK    
+```
+apt install wget
+```
 **In your PC**, manually open the link:    
 https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-3.1.426-linux-arm32-binaries    
 and copy the `direct link`, then input to **board shell** like:
@@ -87,9 +90,15 @@ then `ctrl+o` for save, and `ctrl+x` for quit.
 
 # Object detection Application
 ask developer to provide the application files, and then put into `/package/app/QuaAIDemo`:    
-![image](https://github.com/shaojun/open_docs/assets/3241829/95589bd8-fa21-490c-9b6a-c729de2539fb)
 
-update the service file:
+![image](https://github.com/shaojun/open_docs/assets/3241829/7bb811af-91cb-47a5-92e0-28b05f34a763)
+
+
+update the service file as it's already in board:
+```
+ nano /etc/systemd/system/quaai.service
+```
+updated to below content:
 ```
 [Unit]
 Description=QuaAI service start
@@ -106,6 +115,9 @@ Type=simple
 WantedBy=multi-user.target
 
 ```
+
+update the npu bin file (if provided), the file is like `qua_640x352_npu.bin`, and put it under `/vendor/qua/model`.    
+
 restart the service:
 ```
 systemctl daemon-reload
@@ -141,14 +153,12 @@ the final should like:
 ![image](https://github.com/shaojun/open_docs/assets/3241829/f43bf257-f736-4669-a45e-b3a697ec3256)
 
 ## kafka .so files copy
-ask developer to provide kafka related file:    
-
-![image](https://github.com/shaojun/open_docs/assets/3241829/c4872612-d480-40d1-bae1-5cf9f1251c8b)
-
-copy above kafka related files to path: 
+ask developer to provide kafka related file, and copy above kafka related files to path: 
 ```
 /lib/arm-linux-gnueabihf/
 ```
+![image](https://github.com/shaojun/open_docs/assets/3241829/dd6c227f-211f-4a55-800f-e5b16f692b27)
+
 ## create service
 **in board shell** create the service file:
 ```

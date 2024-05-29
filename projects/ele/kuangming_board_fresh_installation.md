@@ -21,7 +21,7 @@ Environment="FRP_SSH_PORT=9551"
 Environment="FRP_CAMERA_PORT=9552"
 Environment="LITEFCCCORE_WEBCONFIG_PORT=9553"
 #before start the service, always sleep 5 second, for wait the system ready?
-ExecStartPre=/bin/sleep 5
+#ExecStartPre=/bin/sleep 5
 WorkingDirectory=/home/yunzao/Download/frp_0.43.0_linux_arm/
 ExecStart=/home/yunzao/Download/frp_0.43.0_linux_arm/frpc -c 'frpc.ini'
 Restart=always

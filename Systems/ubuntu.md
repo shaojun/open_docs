@@ -420,7 +420,7 @@ nano /etc/fstab
 
 #shao pasted below for the 1000G disk of /dev/sdb1
 #UUID="cbddb781-df6c-4c09-afb6-3730125be486" TYPE="ext4" PARTUUID="5bd527a5-01"
-UUID=cbddb781-df6c-4c09-afb6-3730125be486 /data1 ext4 defautls 0 0
+UUID=cbddb781-df6c-4c09-afb6-3730125be486 /data1 ext4 defaults 0 0
 #shao done
 
 

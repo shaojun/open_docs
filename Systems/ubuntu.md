@@ -46,13 +46,23 @@ shao@shaothinkbook:~$ nano ~/.bashrc
 ```
 ![image](https://github.com/shaojun/open_docs/assets/3241829/391a3b47-5de3-4a29-b6b3-40359fc9e412)
 
-## Increase system's ipv4 tcp_mem
-check the system's current settings:
+## Check system's overall tcp status, and increase system's ipv4 tcp_mem
+check the system's `current usage of sockets`, below is a **healthy** server with running for 1K elevators and 2K frp connection:
+```
+root@ecs-01796520-002:~# cat /proc/net/sockstat
+sockets: used 3220
+TCP: inuse 13 orphan 7 tw 8 alloc 7388 mem 1158
+UDP: inuse 1 mem 16
+UDPLITE: inuse 0
+RAW: inuse 0
+FRAG: inuse 0 memory 0
+```
+check the system's `current settings for tcp_mem`:
 ```
 root@ecs-01796520-002:~# cat /proc/sys/net/ipv4/tcp_mem
 189867  253158  379734
 ```
-increase it by editing the `sysctl.conf` and add a row in the last:
+increase the `tcp_mem` by editing the `sysctl.conf` and add a row in the last:
 ```
 root@ecs-01796520-002:~# nano /etc/sysctl.conf
 # add below line to the last

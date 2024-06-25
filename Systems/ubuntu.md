@@ -46,6 +46,19 @@ shao@shaothinkbook:~$ nano ~/.bashrc
 ```
 ![image](https://github.com/shaojun/open_docs/assets/3241829/391a3b47-5de3-4a29-b6b3-40359fc9e412)
 
+## Increase system's ipv4 tcp_mem
+check the system's current settings:
+```
+root@ecs-01796520-002:~# cat /proc/sys/net/ipv4/tcp_mem
+189867  253158  379734
+```
+increase it by editing the `sysctl.conf` and add a row in the last:
+```
+root@ecs-01796520-002:~# nano /etc/sysctl.conf
+# add below line to the last
+net.ipv4.tcp_mem = 189867  553158  679734
+```
+
 ## 查看某个时间段之后的`frps`的日志:
  ```
  journalctl -u frps.service --since=13:15  

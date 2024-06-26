@@ -81,21 +81,43 @@ net.ipv4.tcp_mem = 189867  553158  679734
 sudo netstat -tulp | grep frps | wc -l  
  ```
 ## 查看和临时(进程重启后作用将消失)更改某进程被设定的资源上限:
+以frp server的进程为例.    
+首先查看frp server的进程号:
 ```
-#以frp server的进程为例
-#首先查看frp server的进程号:
 (base) shao@ecs-01796520-002:~$ top | grep frp
 3940392 root      20   0 1062492 101380   6372 S   6.2   0.6   1:03.00 frps
-#可见为进程号, 即process id为`3940392`
-#然后更改这个进程的 nofile(Max open files) 限制上限到 66666, 这也是经常导致所有边缘frp client连接到server 失败的原因:
+```
+可见为进程号, 即process id为`3940392`    
+然后更改这个进程的 `nofile(Max open files)` 限制上限到 66666, 这也是经常导致所有边缘frp client连接到server 失败的原因:
+```
 prlimit -n66666 -p 3940392
-# or prlimit -n66666 -p $(pidof frps)
-
-## 用于查看某个进程的资源允许上限,应该可见这样的 Max open files            8096                 8096                 files
+# or simply: prlimit -n66666 -p $(pidof frps)
+```
+查看某个进程的资源允许上限    
+```
 cat /proc/{pid_of_process}/limits
-# or cat /proc/$(pidof frps)/limits
+# or simply: cat /proc/$(pidof frps)/limits
 ```
 
+## Timely restart the frp server service and set its nofile limit to higher value
+create a bash file for later execution:
+```
+root@ecs-01796520-002:/home/shao/Downloads# nano restart_frps_service_and_set_no_of_files_limit.sh
+```
+content:
+```
+systemctl restart frps.service
+sleep 5
+prlimit -n66666 -p $(pidof frps)
+```
+enable it in timer task:
+```
+crontab -e
+```
+input content of every 6 hours to execute the bash file:
+```
+0 */6 * * * /bin/bash /home/shao/Downloads/restart_frps_service_and_set_no_of_files_limit.sh
+```
 ## 查看当前文件目录下的的最大size的文件夹: 
 查看size最大的10个文件夹
 ```

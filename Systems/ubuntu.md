@@ -89,9 +89,11 @@ sudo netstat -tulp | grep frps | wc -l
 #可见为进程号, 即process id为`3940392`
 #然后更改这个进程的 nofile(Max open files) 限制上限到 66666, 这也是经常导致所有边缘frp client连接到server 失败的原因:
 prlimit -n66666 -p 3940392
+# or prlimit -n66666 -p $(pidof frps)
 
 ## 用于查看某个进程的资源允许上限,应该可见这样的 Max open files            8096                 8096                 files
 cat /proc/{pid_of_process}/limits
+# or cat /proc/$(pidof frps)/limits
 ```
 
 ## 查看当前文件目录下的的最大size的文件夹: 

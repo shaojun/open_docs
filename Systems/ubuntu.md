@@ -19,6 +19,9 @@ export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
 export https_proxy="http://${hostip}:7890"
 export http_proxy="http://${hostip}:7890"
 ```
+> 但是有遇到过获取到nameserver的ip, 即指向host机器的IP貌似有的时候不对.
+> 表现为无法通过此ip从ubuntu中telnet回host的某个已经开放的Port.    
+> 后来通过 ip route list default 来获取到了正确的host ip, 所以在这种情况下, 你得把nameserver手动更新一下?
 再测试：
 ```
 shao@shaothinkbook:~$ export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')

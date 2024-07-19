@@ -1,4 +1,5 @@
 ## how to make docker pull works
+两种方法, 二选一    
 ### 通过阿里云镜像加速器
 登陆阿里云后, 访问 https://cr.console.aliyun.com/cn-shanghai/instances/mirrors    
 你会得到一个与你帐号相关的加速地址,然后把这个地址写入 docker engine 的配置文件中:
@@ -15,6 +16,17 @@ sudo systemctl restart docker
 > 应该注意的是, 此方案可能会有限流或者拉不到`latest`:
 > ![image](https://github.com/user-attachments/assets/3999bdb4-07a8-43ea-aec5-2d1d73f7dae7)
 
+检查确认设置是否成功, 应可见 `registry mirrors` 已经被设置了:    
+```
+docker info
+
+...
+...
+ Registry Mirrors:
+  https://inra6w4u.mirror.aliyuncs.com/
+...
+...
+```
 ### 通过自建的梯子
 #### 方法一: 添加proxy到配置文件
 默认安装docker engine后并没有`/etc/docker/daemon.json`被创建,所以这里创建:
@@ -37,6 +49,16 @@ sudo nano /etc/docker/daemon.json
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
+检查确认设置是否成功:    
+```
+docker info
+
+...
+...
+proxy http://localhost:7890
+... 
+...
+```
 #### 方法二: 添加proxy到另外一个配置文件中(本人验证过有效)
 ```
 nano /lib/systemd/system/docker.service
@@ -56,6 +78,7 @@ Environment="HTTPS_PROXY=http://127.0.0.1:7890"
 sudo systemctl daemon-reload
 sudo systemctl restart docker
 ```
+检查确认设置是否成功的方法同上.
 ## Check system's overall tcp status, and increase system's ipv4 tcp_mem
 check the system's `current usage of sockets`, below is a **healthy** server with running for 1K elevators and 2K frp connection:
 ```

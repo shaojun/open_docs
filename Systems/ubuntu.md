@@ -1,54 +1,61 @@
-## Windows WSL 2 （Ubuntu) 直接使用 Windows Host 的 clash 服务    
-### 开启 `Clash for Windows`程序中的 `Allow LAN`:    
-![image](https://github.com/shaojun/open_docs/assets/3241829/0a28af94-50b8-42ce-9f47-8c0fcbcbb664)
-
-> 注意, 整个过程不需要动任何默认windows 防火墙的配置：    
-> ![image](https://github.com/shaojun/open_docs/assets/3241829/0a92a96b-02ab-4b40-ae20-78797edc899f)
-
-
-
-### 在windows中安装Ubuntu:
-通过打开 `PowerShell`运行命令安装:
+## how to make docker pull works
+### 通过阿里云镜像加速器
+登陆阿里云后, 访问 https://cr.console.aliyun.com/cn-shanghai/instances/mirrors    
+你会得到一个与你帐号相关的加速地址,然后把这个地址写入 docker engine 的配置文件中:
 ```
-wsl --install -d Ubuntu
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://inra6w4u.mirror.aliyuncs.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
 ```
-### Ubuntu中开启代理
-在Ubuntu shell 中输入：
-```
-export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
-export https_proxy="http://${hostip}:7890"
-export http_proxy="http://${hostip}:7890"
-```
-> 但是有遇到过获取到nameserver的ip, 即指向host机器的IP貌似有的时候不对.
-> 表现为无法通过此ip从ubuntu中telnet回host的某个已经开放的Port.    
-> 后来通过 ip route list default 来获取到了正确的host ip, 所以在这种情况下, 你得把nameserver手动更新一下?
-再测试：
-```
-shao@shaothinkbook:~$ export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
-shao@shaothinkbook:~$ export https_proxy="http://${hostip}:7890"
-shao@shaothinkbook:~$ export http_proxy="http://${hostip}:7890"
-shao@shaothinkbook:~$ wget google.com
---2024-04-08 18:49:01--  http://google.com/
-Connecting to 172.22.208.1:7890... connected.
-Proxy request sent, awaiting response... 301 Moved Permanently
-Location: http://www.google.com/ [following]
---2024-04-08 18:49:01--  http://www.google.com/
-Reusing existing connection to 172.22.208.1:7890.
-Proxy request sent, awaiting response... 200 OK
-Length: unspecified [text/html]
-Saving to: ‘index.html’
+> 应该注意的是, 此方案可能会有限流或者拉不到`latest`:
+> ![image](https://github.com/user-attachments/assets/3999bdb4-07a8-43ea-aec5-2d1d73f7dae7)
 
-index.html                       [ <=>                                         ]  19.77K  --.-KB/s    in 0.05s
-
-2024-04-08 18:49:02 (398 KB/s) - ‘index.html’ saved [20247]
-
+### 通过自建的梯子
+#### 方法一: 添加proxy到配置文件
+默认安装docker engine后并没有`/etc/docker/daemon.json`被创建,所以这里创建:
 ```
-但以上`export`会在重启ubuntu系统后丢失，所以可以用以下加入自动启动：  
+sudo mkdir -p /etc/docker
+sudo nano /etc/docker/daemon.json
 ```
-shao@shaothinkbook:~$ nano ~/.bashrc
+输入以下内容
 ```
-![image](https://github.com/shaojun/open_docs/assets/3241829/391a3b47-5de3-4a29-b6b3-40359fc9e412)
-
+{
+  "proxies": {
+    "http-proxy": "http://localhost:7890",
+    "https-proxy": "http://localhost:7890",
+    "no-proxy": "*.test.example.com,.example.org,127.0.0.0/8"
+  }
+}
+```
+再:
+```
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
+#### 方法二: 添加proxy到另外一个配置文件中(本人验证过有效)
+```
+nano /lib/systemd/system/docker.service
+```
+在`[Service]`下放入以下2行`Environment`内容:
+```
+...
+...
+[Service]
+Environment="HTTP_PROXY=http://127.0.0.1:7890"
+Environment="HTTPS_PROXY=http://127.0.0.1:7890"
+...
+...
+```
+再:
+```
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+```
 ## Check system's overall tcp status, and increase system's ipv4 tcp_mem
 check the system's `current usage of sockets`, below is a **healthy** server with running for 1K elevators and 2K frp connection:
 ```
@@ -476,3 +483,53 @@ UUID=cbddb781-df6c-4c09-afb6-3730125be486 /data1 ext4 defaults 0 0
 
 ```
 
+## Windows WSL 2 （Ubuntu) 直接使用 Windows Host 的 clash 服务    
+### 开启 `Clash for Windows`程序中的 `Allow LAN`:    
+![image](https://github.com/shaojun/open_docs/assets/3241829/0a28af94-50b8-42ce-9f47-8c0fcbcbb664)
+
+> 注意, 整个过程不需要动任何默认windows 防火墙的配置：    
+> ![image](https://github.com/shaojun/open_docs/assets/3241829/0a92a96b-02ab-4b40-ae20-78797edc899f)
+
+
+
+### 在windows中安装Ubuntu:
+通过打开 `PowerShell`运行命令安装:
+```
+wsl --install -d Ubuntu
+```
+### Ubuntu中开启代理
+在Ubuntu shell 中输入：
+```
+export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
+export https_proxy="http://${hostip}:7890"
+export http_proxy="http://${hostip}:7890"
+```
+> 但是有遇到过获取到nameserver的ip, 即指向host机器的IP貌似有的时候不对.
+> 表现为无法通过此ip从ubuntu中telnet回host的某个已经开放的Port.    
+> 后来通过 ip route list default 来获取到了正确的host ip, 所以在这种情况下, 你得把nameserver手动更新一下?
+再测试：
+```
+shao@shaothinkbook:~$ export hostip=$(cat /etc/resolv.conf |grep -oP '(?<=nameserver\ ).*')
+shao@shaothinkbook:~$ export https_proxy="http://${hostip}:7890"
+shao@shaothinkbook:~$ export http_proxy="http://${hostip}:7890"
+shao@shaothinkbook:~$ wget google.com
+--2024-04-08 18:49:01--  http://google.com/
+Connecting to 172.22.208.1:7890... connected.
+Proxy request sent, awaiting response... 301 Moved Permanently
+Location: http://www.google.com/ [following]
+--2024-04-08 18:49:01--  http://www.google.com/
+Reusing existing connection to 172.22.208.1:7890.
+Proxy request sent, awaiting response... 200 OK
+Length: unspecified [text/html]
+Saving to: ‘index.html’
+
+index.html                       [ <=>                                         ]  19.77K  --.-KB/s    in 0.05s
+
+2024-04-08 18:49:02 (398 KB/s) - ‘index.html’ saved [20247]
+
+```
+但以上`export`会在重启ubuntu系统后丢失，所以可以用以下加入自动启动：  
+```
+shao@shaothinkbook:~$ nano ~/.bashrc
+```
+![image](https://github.com/shaojun/open_docs/assets/3241829/391a3b47-5de3-4a29-b6b3-40359fc9e412)

@@ -1,3 +1,31 @@
+## install node exporter as service
+```
+wget https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+tar xzvf node_exporter-1.8.2.linux-amd64.tar.gz
+```
+```
+nano /etc/systemd/system/node_exporter.service
+```
+input below content **with your file path**:
+```
+[Unit]
+Description=node exporter service
+Wants=network.target
+After=network.target
+[Service]
+WorkingDirectory=/root/node_exporter-1.8.2.linux-amd64
+ExecStart=/root/node_exporter-1.8.2.linux-amd64/node_exporter
+Restart=always
+#Restart service after 10 seconds if this service crashes:
+RestartSec=10
+[Install]
+WantedBy=multi-user.target
+```
+create and start the service, the service will running on port: 9100
+```
+systemctl enable node_exporter.service
+systemctl start node_exporter.service
+```
 ## how to make docker pull works
 两种方法, 二选一    
 ### 通过阿里云镜像加速器

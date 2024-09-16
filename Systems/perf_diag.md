@@ -20,14 +20,14 @@ root@iot-web-4001:~/shao# ./dotnet-trace report dotnet_20240702_144736.nettrace 
 dotnet-counters monitor --process-id $(pidof dotnet) --counters Microsoft.AspNetCore.Hosting 
 ```
 sample:
-> Press p to pause, r to resume, q to quit.
->    Status: Running
-> 
-> [Microsoft.AspNetCore.Hosting]
->     Current Requests                                                       8
->     Failed Requests                                                        0
->     Request Rate (Count / 1 sec)                                         167
->     Total Requests                                                     7,796
+> Press p to pause, r to resume, q to quit.    
+>    Status: Running    
+>     
+> [Microsoft.AspNetCore.Hosting]    
+>     Current Requests                                                       8    
+>     Failed Requests                                                        0    
+>     Request Rate (Count / 1 sec)                                         167    
+>     Total Requests                                                     7,796    
 
 ## Collect all counters at a refresh interval of 3 seconds and generate a csv as output
 ```

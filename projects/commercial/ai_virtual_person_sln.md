@@ -29,3 +29,16 @@
 
 全身对话数字人:    
 ![image](https://github.com/user-attachments/assets/76c84e70-dea1-4435-89d1-66fa9a2d2231)
+
+类似电影片段:    
+![image](https://github.com/user-attachments/assets/87f0a8cb-a9eb-43d0-b308-664370efb6a0)    
+![image](https://github.com/user-attachments/assets/5565d694-913d-4752-8c34-d4dff5889a51)    
+![image](https://github.com/user-attachments/assets/335c6443-1795-46e6-badd-f4a3c0ea2a64)    
+![image](https://github.com/user-attachments/assets/f0958c6f-200a-4e8e-b7fa-508fc29f9048)    
+![image](https://github.com/user-attachments/assets/bace13e8-b5db-44ba-9fd5-521535aae204)    
+![image](https://github.com/user-attachments/assets/c16d8015-d25b-46d8-906b-903837623735)
+
+
+
+
+

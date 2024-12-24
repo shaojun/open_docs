@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/4d80040b-f4f2-4fcf-8f4f-292adfbca5e6)![image](https://github.com/user-attachments/assets/ee05c8cf-465b-44d4-8d5a-e3cc350cb1d3)# Install .NET CORE 6 SDK
+![image](https://github.com/user-attachments/assets/23cc5a8b-0e36-4759-8852-f969096624b3)![image](https://github.com/user-attachments/assets/4d80040b-f4f2-4fcf-8f4f-292adfbca5e6)![image](https://github.com/user-attachments/assets/ee05c8cf-465b-44d4-8d5a-e3cc350cb1d3)# Install .NET CORE 6 SDK
 * for Ubuntu 22.04
 > the original steps: https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-install?tabs=dotnet6&pivots=os-linux-ubuntu-2204
 or just run:
@@ -42,7 +42,7 @@ WorkingDirectory=/home/dae/Downloads/release/linux-x64/
 # every start of the service, include restart, will block 5 seconds
 ExecStartPre=/bin/sleep 5
 
-ExecStart=/root/dotnet/dotnet LiteFccCore.dll
+ExecStart=/usr/bin/dotnet LiteFccCore.dll
 Restart=always
 # Restart service after 10 seconds if this service crashes:
 RestartSec=10
@@ -51,3 +51,28 @@ SyslogIdentifier=LiteFccCore
 [Install]
 WantedBy=multi-user.target
 ```
+then press `Ctrl + o` for saving, when ask for confirmation, press `Enter`:    
+![image](https://github.com/user-attachments/assets/1e0dacd4-62d9-4c04-8b4e-2bc11d9a06ec)    
+press `Ctrl + x` to quit.    
+* Enable the service:    
+```
+sudo systemctl enable LiteFccCore.service
+sudo systemctl start LiteFccCore.service
+```
+* how to test?    
+check the status of `LiteFccCore.service`
+```
+sudo systemctl status LiteFccCore.service
+```
+should see like:    
+![image](https://github.com/user-attachments/assets/444d6d71-05fb-4c60-96f0-dcdc361b305e)
+
+# Activate LiteFccCore
+you must enable the `LicenseManger` app for activating:    
+![image](https://github.com/user-attachments/assets/0b9a47a2-bb1e-4ea5-a385-487c820aec15)    
+then `restart` fcc.    
+then open url `http://localhost:8384/WebConsoleHome`    
+collect the `SN` to administrator to generat auth code for activating:    
+![image](https://github.com/user-attachments/assets/1cf52be5-070a-4426-8aac-2016554795a0)    
+
+finnaly, if activatation done successfully, should restart fcc again to use.

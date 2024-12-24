@@ -32,8 +32,8 @@ the folder strucutre should like:
   ![image](https://github.com/user-attachments/assets/058cbbdb-170a-4402-9f1b-5021e974f82e)
 
 * paste content to `.service` file
-  ```
-  [Unit]
+```
+[Unit]
 Description=LiteFccCore for controlling devices
 Wants=network.target
 After=nerwork.target ntp.service
@@ -50,5 +50,4 @@ SyslogIdentifier=LiteFccCore
 
 [Install]
 WantedBy=multi-user.target
-
-  ```
+```

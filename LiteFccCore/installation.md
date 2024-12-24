@@ -75,4 +75,4 @@ then open url `http://localhost:8384/WebConsoleHome`
 collect the `SN` to administrator to generat auth code for activating:    
 ![image](https://github.com/user-attachments/assets/1cf52be5-070a-4426-8aac-2016554795a0)    
 
-finnaly, if activatation done successfully, should restart fcc again to use.
+finally, if activatation done successfully, should restart fcc again to use.

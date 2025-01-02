@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/23cc5a8b-0e36-4759-8852-f969096624b3)![image](https://github.com/user-attachments/assets/4d80040b-f4f2-4fcf-8f4f-292adfbca5e6)![image](https://github.com/user-attachments/assets/ee05c8cf-465b-44d4-8d5a-e3cc350cb1d3)# Install .NET CORE 6 SDK
+# Install .NET CORE 6 SDK
 * for Ubuntu 22.04
 > the original steps: https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-install?tabs=dotnet6&pivots=os-linux-ubuntu-2204
 or just run:

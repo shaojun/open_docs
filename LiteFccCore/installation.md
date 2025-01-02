@@ -13,25 +13,29 @@ how to test?
 
 
 # Download LiteFccCore release
-open url: https://github.com/shaojun/gogo-litefcccore/releases    
-and choose the project and platform for you to download.    
-`unzip` and make sure the `release` folder is put under path `/home/dae/Downloads`
+open url: 
+> https://github.com/shaojun/gogo-litefcccore/releases
+
+and choose the project and platform for you case to download.    
+`unzip` and make sure the `release` folder is put under path:
+> `/home/dae/Downloads`
+
 
 ![image](https://github.com/user-attachments/assets/abb3bc78-c905-418a-984e-0aa281a093c4)
 
-the folder strucutre should like:    
+the folder strucutre **MUST** like:    
 ![image](https://github.com/user-attachments/assets/7bc29036-736e-41c0-b37e-ef10f858b618)
 
 # Create LiteFccCore service for auto run
 * create `.service` file
-  create with `nano`:
+  create with:
   ```
-  nano /etc/systemd/system/LiteFccCore.service
+  sudo nano /etc/systemd/system/LiteFccCore.service
   ```
-  sample:    
+  refer:    
   ![image](https://github.com/user-attachments/assets/058cbbdb-170a-4402-9f1b-5021e974f82e)
 
-* paste content to `.service` file
+* paste service content to `.service` file
 ```
 [Unit]
 Description=LiteFccCore for controlling devices
@@ -64,7 +68,7 @@ check the status of `LiteFccCore.service`
 ```
 sudo systemctl status LiteFccCore.service
 ```
-should see like:    
+should see like(the Green text):    
 ![image](https://github.com/user-attachments/assets/444d6d71-05fb-4c60-96f0-dcdc361b305e)
 
 # Activate LiteFccCore

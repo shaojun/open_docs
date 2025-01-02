@@ -14,8 +14,8 @@ how to test?
 
 # Download LiteFccCore release
 open url: https://github.com/shaojun/gogo-litefcccore/releases    
-and choose the project and platform for you to download.
-unzip and make sure the `release` folder is put under path `/home/dae/Downloads`
+and choose the project and platform for you to download.    
+`unzip` and make sure the `release` folder is put under path `/home/dae/Downloads`
 
 ![image](https://github.com/user-attachments/assets/abb3bc78-c905-418a-984e-0aa281a093c4)
 

@@ -1,3 +1,7 @@
+# Enable SSH
+```
+sudo apt install openssh-server
+```
 # Install .NET CORE 6 SDK
 * for Ubuntu 22.04
 > the original steps: https://learn.microsoft.com/en-us/dotnet/core/install/linux-ubuntu-install?tabs=dotnet6&pivots=os-linux-ubuntu-2204

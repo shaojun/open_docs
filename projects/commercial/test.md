@@ -135,7 +135,7 @@ variable `self.name` is set to `worker_manager_name` from the `load balancer`'s 
 #### Supported Requests
 
 1. create_worker_and_start    
-    Creates and starts a new worker
+    Creates and starts a new worker.    
     Required parameters:
     - `device_serial_no`: user side handheld device serial number
     - `worker_id`: Custom worker ID
@@ -157,7 +157,7 @@ variable `self.name` is set to `worker_manager_name` from the `load balancer`'s 
     ```
     }
 2. start_agora_rtc_conn      
-    Starts the Agora RTC connection for a worker
+    Starts the Agora RTC connection for a worker.    
     Required parameters:
     - `worker_id`: ID of the worker
     - `agora_channel_name`: Agora channel name
@@ -167,51 +167,51 @@ variable `self.name` is set to `worker_manager_name` from the `load balancer`'s 
     - `agora_token`: Agora token, optional, if not provided, will use the default token
     - `agora_local_user_uid`: the worker run as a agora local user, this id will used to join the channel, leave 0 or empty will get a random value from agora system. 
 3. **stop_agora_rtc_conn**    
-    Stops the Agora RTC connection for a worker
-    - Required parameters:
-      - `worker_id`: ID of the worker
+    Stops the Agora RTC connection for a worker.    
+    Required parameters:
+    - `worker_id`: ID of the worker
 
 4. **stop_worker_and_release**    
-  Stops and releases a worker
-    - Required parameters:
-      - `worker_id`: ID of the worker to stop
+    Stops and releases a worker.    
+    Required parameters:
+    - `worker_id`: ID of the worker to stop
 
 5. **update_worker_runtime_config**    
-  Updates a worker's runtime config, 可发送全量或者部分配置
-   - Required parameters:
-     - `worker_id`: ID of the worker
-     - `runtime_config`: New runtime config,可以是全量,也可以是部分,如果是部分,则需要指定`is_full_update`为false
-       - `enable_interrupt_ongoing_speech_with_new_speech`: Boolean to enable 用户可通过说话来打断正在进行的AI语音, 默认值为false.
+    Updates a worker's runtime config, 可发送全量或者部分配置    
+    Required parameters:
+    - `worker_id`: ID of the worker
+    - `runtime_config`: New runtime config,可以是全量,也可以是部分,如果是部分,则需要指定`is_full_update`为false
+    - `enable_interrupt_ongoing_speech_with_new_speech`: Boolean to enable 用户可通过说话来打断正在进行的AI语音, 默认值为false.
            > 注意, 即对RTC模式下的实时语音有效,对讲机模式下则无效, 因为对讲机模式下的语音打断需要配合设备侧来实现,暂不支持.
 
-       - `use_tts_type`: 指定使用什么类型的TTS引擎: [`"AliyunCosyVoiceV1TTS"`, `"SelfhostKokoroTTS"`, `"SelfhostF5TTS"`], default is `"SelfhostKokoroTTS"`
-       - `use_tts_speaker_voice`: 指定使用的声音,每个不同的TTS引擎都有不同的声音, 阿里云CosyVoiceV1TTS 引擎有: 
+    - `use_tts_type`: 指定使用什么类型的TTS引擎: [`"AliyunCosyVoiceV1TTS"`, `"SelfhostKokoroTTS"`, `"SelfhostF5TTS"`], default is `"SelfhostKokoroTTS"`
+    - `use_tts_speaker_voice`: 指定使用的声音,每个不同的TTS引擎都有不同的声音, 阿里云CosyVoiceV1TTS 引擎有: 
           
-          > full list: https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/voice?currentTab=voiceTts
-          
-          ```
-          longwan - 女中文普通话, 龙婉声音温柔甜美，富有亲和力，给人温暖陪伴感。
-          longcheng - 男中文普通话, 龙橙声音温柔清澈，富有亲和力，是邻家的温暖大哥哥。
-          longxiaochun -(默认) 女中英双语, 龙小淳的嗓音如丝般柔滑，温暖中流淌着亲切与抚慰，恰似春风吹过心田。
-          longyue - 女中文普通话, 龙悦以抑扬顿挫、韵味十足的评书腔调，生动讲述故事，引领听众步入传奇世界！
-          longlaotie - 男东北口音, 龙老铁以纯正东北腔，豪爽直率，幽默风趣，为讲述增添浓郁地方特色与生活气息。
-          ```
-       - `use_asr_type`: 指定使用什么类型的ASR引擎: [`"SelfhostSenseVoiceSmall"`, `"AliyunCompleteSpeechAsr"`], default is `"SelfhostSenseVoiceSmall"`, `AliyunCompleteSpeechAsr`将使用阿里云的基于模型`paraformer-realtime-v2`的公开服务, 速度较慢, 平均延迟在1000ms左右, 但效果较好, 而且支持热词表.
-       - `agora_rtc_idle_timeout_by_seconds`: only for agora rtc conn started worker, controls how long the rtc conn will be kept alive after it is idle, default is 60, after this time, the worker manager will actively stop the agora rtc conn and release the rtc related resources, other functions will not be affected.
-       - `user_environmental_description`: String to describe the user environment, default NONE, 长度有限制, 默认512. 此string将作为context送到LLM中, 让LLM知道用户的环境, 例如: "用户的名字叫AA,他于今天即3月11日早上9:15分入园, 他在9:20分坐上了班车,......"
-       - `dify_llm_endpoint_api_key`: 每个worker中将初始化一个dify client去与dify server中人工预配置和定义好的 `agent/workflow` 进行交互, 这个api key就是指向这个`agent/workflow`的标识, 请到dify web中进行相应查看. 比如,`文化园A`和`文化园B`的`讲解员数字人`则肯定分别对应了不同的`agent/workflow`, 这个api key就是用来区分和指定它们的,如果不提供,则将使用本地配置文件中的默认值.
-           > 注意, 此配置仅在start worker时传入有效, 对于已经创建的worker不再生效.
+        > full list: https://bailian.console.aliyun.com/?tab=model#/efm/model_experience_center/voice?currentTab=voiceTts
+        
+        ```
+        longwan - 女中文普通话, 龙婉声音温柔甜美，富有亲和力，给人温暖陪伴感。
+        longcheng - 男中文普通话, 龙橙声音温柔清澈，富有亲和力，是邻家的温暖大哥哥。
+        longxiaochun -(默认) 女中英双语, 龙小淳的嗓音如丝般柔滑，温暖中流淌着亲切与抚慰，恰似春风吹过心田。
+        longyue - 女中文普通话, 龙悦以抑扬顿挫、韵味十足的评书腔调，生动讲述故事，引领听众步入传奇世界！
+        longlaotie - 男东北口音, 龙老铁以纯正东北腔，豪爽直率，幽默风趣，为讲述增添浓郁地方特色与生活气息。
+        ```
+    - `use_asr_type`: 指定使用什么类型的ASR引擎: [`"SelfhostSenseVoiceSmall"`, `"AliyunCompleteSpeechAsr"`], default is `"SelfhostSenseVoiceSmall"`, `AliyunCompleteSpeechAsr`将使用阿里云的基于模型`paraformer-realtime-v2`的公开服务, 速度较慢, 平均延迟在1000ms左右, 但效果较好, 而且支持热词表.
+    - `agora_rtc_idle_timeout_by_seconds`: only for agora rtc conn started worker, controls how long the rtc conn will be kept alive after it is idle, default is 60, after this time, the worker manager will actively stop the agora rtc conn and release the rtc related resources, other functions will not be affected.
+    - `user_environmental_description`: String to describe the user environment, default NONE, 长度有限制, 默认512. 此string将作为context送到LLM中, 让LLM知道用户的环境, 例如: "用户的名字叫AA,他于今天即3月11日早上9:15分入园, 他在9:20分坐上了班车,......"
+    - `dify_llm_endpoint_api_key`: 每个worker中将初始化一个dify client去与dify server中人工预配置和定义好的 `agent/workflow` 进行交互, 这个api key就是指向这个`agent/workflow`的标识, 请到dify web中进行相应查看. 比如,`文化园A`和`文化园B`的`讲解员数字人`则肯定分别对应了不同的`agent/workflow`, 这个api key就是用来区分和指定它们的,如果不提供,则将使用本地配置文件中的默认值.
+        > 注意, 此配置仅在start worker时传入有效, 对于已经创建的worker不再生效.
 
-       - `use_agora_internal_vad_service_with_parameters_ctor`: 启用`agora server SDK`中的内置`vad`组件(则其它VAD不再启用,例如`self host`的开源的`SileroVad`),并提供指定的参数, 这个参数用于控制vad在不同环境噪音下的灵敏度, 需要传入string类型的值, 示例: `"16, 30, 50, 0.7, 0.5, 70, 70, -50"`,以下是官方说明和建议:
-          ```
-            # For not-so-noisy environments, use this configuration: (16, 30, 50, 0.7, 0.5, 70, 70, -50) 
-            # For noisy environments, use this configuration: (16, 30, 50, 0.7, 0.5, 70, 70, -40)  
-            # For high-noise environments, use this configuration: (16, 30, 50, 0.7, 0.5, 70, 70, -30)
-          ```
-          > **注意** 必须在启用agora RTC之前提供此runtime_config,因为此参数只在初始化agora RTC Conn的时候进行应用一次.
-          > 否则需要关闭当前活跃的agora RTC Conn, 然后再重新启用.
-   - Optional parameters:
-      - `is_full_update`: 默认为bool值:`True`, 否则仅更新本次传入的配置项, 其他的配置项不变
+    - `use_agora_internal_vad_service_with_parameters_ctor`: 启用`agora server SDK`中的内置`vad`组件(则其它VAD不再启用,例如`self host`的开源的`SileroVad`),并提供指定的参数, 这个参数用于控制vad在不同环境噪音下的灵敏度, 需要传入string类型的值, 示例: `"16, 30, 50, 0.7, 0.5, 70, 70, -50"`,以下是官方说明和建议:
+        ```
+          # For not-so-noisy environments, use this configuration: (16, 30, 50, 0.7, 0.5, 70, 70, -50) 
+          # For noisy environments, use this configuration: (16, 30, 50, 0.7, 0.5, 70, 70, -40)  
+          # For high-noise environments, use this configuration: (16, 30, 50, 0.7, 0.5, 70, 70, -30)
+        ```
+        > **注意** 必须在启用agora RTC之前提供此runtime_config,因为此参数只在初始化agora RTC Conn的时候进行应用一次.
+        > 否则需要关闭当前活跃的agora RTC Conn, 然后再重新启用.
+    Optional parameters:
+    - `is_full_update`: 默认为bool值:`True`, 否则仅更新本次传入的配置项, 其他的配置项不变
 6. **start_worker_speak**    
   Makes a worker start speaking text, if agora rtc conn is started, the voice (text process by a TTS) will be sent to the agora rtc conn, otherwise, the voice will be sent to the media service topic(对讲机模式). 
    - Required parameters:

@@ -94,7 +94,7 @@ sequenceDiagram
 sequenceDiagram
     participant Device as 设备
     participant Backend as 后端
-    Backend->>Device: 下发设备硬件服务请求
-    Device->>Device: 执行硬件服务操作
+    Backend->>Device: 下发设备服务请求
+    Device->>Device: 执行服务操作
     Device->>Backend: 上报操作结果
 ```

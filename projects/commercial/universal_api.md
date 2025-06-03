@@ -59,8 +59,7 @@ sequenceDiagram
         实时通话; 拍照; 录音输入.
 
     示例图:    
-      ![image](https://github.com/user-attachments/assets/8e80b439-140d-4ae2-b644-457b0535b5dc)
-
+      <img src="https://github.com/user-attachments/assets/8e80b439-140d-4ae2-b644-457b0535b5dc" width="280" height="300" />
 * 行为    
     即指布局中的 UI 控件的后端交互行为.
     行为是为了行使数字人收集和传送信息, 与用户进行通信交流的目的.

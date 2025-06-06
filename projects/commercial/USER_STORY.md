@@ -1,46 +1,67 @@
+# Basic
+所有用户场景中都有以下启动流程.    
+
+```mermaid
+sequenceDiagram
+    participant Device as 设备
+    participant AIService as AI 服务
+    Device->>Web: 认证
+    Web->>Device: universal_app_api - [launcher app list, app layout]
+    Web->>AIService: inject context - [用户姓名, 性格, 环境]    
+```
 # 导览机
 ## 用户故事
-### 基本语音对话
+* app layout    
+    符合`chatter-basic`
+* app layout style
+    none
+### 基本对话
 用户拿起设备, 用对讲机或者 RTC 进行通话, 设备将用户的语音发送到 AI 服务进行处理, AI 服务将处理结果返回给设备, 设备播放内容。
 ```mermaid
 sequenceDiagram
     participant Device as 设备
-    participant Web as WEB
     participant AIService as AI 服务
-    Device->>Web: 认证
-    Web->>Device: universal_app_api - [app list, app layout]
-    Web->>AIService: inject context - 用户姓名, 性格    
+    
     Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
     Device->>AIService: modality_upward
     AIService->>Device: modality_downward
     Device->>Device: 播放处理结果
     Device->>Device: 移动
     Web->>AIService: inject context - 用户位置  
-    Web->>Device: modality_downward
+    Web->>Device: modality_downward - 新景点播报词
 ```
-### 后台推荐内容
-用户在设备上进行语音对话时, AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐内容。
+### 后台推荐内容 via 用户点击
+AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐后台已经生成的固定内容, 用户需要在触摸屏上点击确认后播放.
 ```mermaid
 sequenceDiagram
     participant Device as 设备
-    participant Web as WEB
     participant AIService as AI 服务
+    Web->>Device: modality_downward - 听关于此地的Podcast吗,请点击确认 
+    Web->>Device: universal_app_api - [popup confirm box, play sound]
+    Device->>Device: 播放提示音和展示提示框
+    Device->>Device: 用户点击确认
+    Device->>Web: universal_app_api - 用户点击了确认
     Web->>AIService: inject context - 已推荐的内容  
     Web->>Device: modality_downward - [podcast, music, video]
 ```
 
+### 后台推荐内容 via Agent
+AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐后台已经生成的固定内容, 用户通过语音选择是否进行播放.
+
+> 技术可行, 暂不实现
 # 相框
+* app layout    
+    `chatter-basic` with dynamic buttons: [克隆声音]
+    需要先定义好`克隆声音`按钮的交互, 可见下文
+* style    
+    设备屏幕尺寸为11寸;设备重量轻(不方便单手指直接点击?);app常规状态下应全屏显示多媒体内容;
 ## 用户故事
-### 基本语音对话
-用户拿起设备, 用对讲机或者 RTC 进行通话, 设备将用户的语音发送到 AI 服务进行处理, AI 服务将处理结果返回给设备, 设备播放内容。
+### 基本对话
+
 ```mermaid
 sequenceDiagram
     participant Device as 设备
-    participant Web as WEB
     participant AIService as AI 服务
-    Device->>Web: 认证
-    Web->>Device: universal_app_api - [app list, app layout]
-    Web->>AIService: inject context - 用户姓名, 性格   
     Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
     Device->>AIService: modality_upward
     AIService->>Device: modality_downward
@@ -48,24 +69,25 @@ sequenceDiagram
 ```
 
 ### 请求定闹钟
-用户在设备上进行语音对话时, 说到: "请为我设置一个`n`分钟后的闹钟" 或者 "请为我设置一个未来时刻的闹钟".    
+用户在设备上进行语音对话时, 说到: "请为我设置一个`n`分钟后的闹钟" 或者 "请为我设置一个`未来时刻`的闹钟".    
 
 ```mermaid
 sequenceDiagram
     participant Device as 设备
-    participant Web as WEB
     participant AIService as AI 服务
     Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
-    Device->>AIService: modality_upward
+    Device->>AIService: modality_upward - 提出设置闹钟请求
     AIService->>AIService: agent 判定 - loop直到满足 tool 调用条件
-    AIService->>WEB: webapi tool 请求 - [set alarm]
-    WEB->>AIService: tool 调用结果
-    AIService->>Device: modality_downward - "已经设置好了"
-    WEB->>WEB: 等待 n 分钟
-    WEB->>Device: universal_app_api - [popup confirm box, play sound]
+    AIService->>Web: webapi tool 请求 - [set alarm, time]
+    Web->>AIService: tool 调用结果
+    AIService->>Device: modality_downward - [已经设置好了]
+     Web->>Device: universal_app_api - [show notify icon, 闹钟设置成功]
+    Web->>Web: 等待 n 分钟
+    Web->>Device: universal_app_api - [popup confirm box]
+    Web->>Device: modality_downward - 播放闹钟提示音
     Device->>Device: 播放闹钟提示音和展示提示框
-    Device->>WEB: universal_app_api - [用户点击确认]
-    WEB->>AIService: inject context - 已经响过闹钟且用户点击了确认
+    Device->>Web: universal_app_api - [用户点击确认]
+    Web->>AIService: inject context - 已经响过闹钟且用户点击了确认
 ```
 
 ### 请求显示下一张图片
@@ -74,14 +96,14 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant Device as 设备
-    participant Web as WEB
     participant AIService as AI 服务
     Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
     Device->>AIService: modality_upward
     AIService->>AIService: agent 判定 - loop直到满足 tool 调用条件
-    AIService->>WEB: webapi tool 请求 - [next image, previous image]
-    WEB->>AIService: tool 调用结果
-    AIService->>Device: modality_downward - "已经显示好了"
+    AIService->>Web: webapi tool 请求 - [show image, index]
+    Web->>AIService: tool 调用结果
+    Web->>Device: modality_downward - [image url]
+    AIService->>Device: modality_downward - "已经执行好了"
     Device->>Device: 播放处理结果
 ```
 
@@ -98,17 +120,16 @@ sequenceDiagram
 sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
-    Device->>WEB: 认证
-    WEB->>Device: universal_app_api - [app list, app layout]
-    Device->>Device: 点击克隆声音按钮
-    Device->>Device: 弹出窗口 - [Title, 指定的朗读文字, 确认开始按钮]
+    Device->>Device: 点击dynamic btn
+    Web-->>Device: universal_app_api - [欠费提示提示框, 需要充值]
+    Device->>Device: popup window- [Title, 指定的朗读文字, 确认开始按钮]
     Device->>Device: 按住确认开始按钮 - 开始录音
     Device->>Device: 展示进度条计时
     Device->>Device: 松开确认开始按钮 - 结束录音
-    Device->>WEB: universal_app_api - 录音文件
-    WEB->>AIService: mqtt api - [clone voice, set voice]
-    WEB->>AIService: inject context - 用户刚才clone了一个新声音
-    WEB-->>Device: universal_app_api - [欠费提示]
+    Device->>Web: universal_app_api - 录音文件
+    Web->>AIService: mqtt api - [set to use new cloned voice]
+    Web->>AIService: inject context - 用户刚才clone了一个新声音
+    Web-->>Device: universal_app_api - [欠费提示提示框, 需要充值]
 ```
 
 ### 点击按钮请求进行会议语音记录

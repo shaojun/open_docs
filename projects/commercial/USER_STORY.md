@@ -76,7 +76,7 @@ sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
     Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
-    Device->>AIService: modality_upward - 提出设置闹钟请求
+    Device->>AIService: modality_upward - 用户语音提出请求
     AIService->>AIService: agent 判定 - loop直到满足 tool 调用条件
     AIService->>Web: webapi tool 请求 - [set alarm, time]
     Web->>AIService: tool 调用结果
@@ -98,13 +98,16 @@ sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
     Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
-    Device->>AIService: modality_upward
+    Device->>AIService: modality_upward - 用户语音提出请求
     AIService->>AIService: agent 判定 - loop直到满足 tool 调用条件
     AIService->>Web: webapi tool 请求 - [show image, index]
     Web->>AIService: tool 调用结果
     Web->>Device: modality_downward - [image url]
     AIService->>Device: modality_downward - "已经执行好了"
     Device->>Device: 播放处理结果
+    Web->>Device: universal_app_api - [屏幕亮度调节, 最低亮度]
+    Device->>Device: 调节屏幕亮度到最低
+    Device->>Web: universal_app_api - 屏幕亮度调节成功
 ```
 
 ### 点击按钮请求克隆声音
@@ -140,3 +143,20 @@ sequenceDiagram
 * 确认开始按钮
 点击后, 开始录音, 按钮变成"取消"; 展示进度条计时, 如果录音时间过短, 则提示内容过短, 将取消本次功能.
 实际的技术实现将是`RTC + ASR + disabled LLM` ??? WEB端收取所有ASR结果, 再单独送到 AI 服务进行处理, 处理结果返回给WEB, WEB再发邮件???
+
+### 语音请求进行设备设置
+调节音量为示例.
+```mermaid
+sequenceDiagram
+    participant Device as 设备
+    participant AIService as AI 服务
+    Device->>Device: 对讲机, 拍摄图片, 或者 开启 RTC 通话
+    Device->>AIService: modality_upward - 用户语音提出请求
+    AIService->>AIService: agent 判定 - loop直到满足 tool 调用条件
+    AIService->>Web: webapi tool 请求 - [set volume, level]
+    Web->>Device: universal_app_api - [set volume, level]
+    Device->>Device: 调节音量
+    Device->>Web: universal_app_api - 音量调节成功
+    Web->>AIService: tool 调用结果
+    AIService->>Device: modality_downward - [已经设置好了]
+```

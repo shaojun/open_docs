@@ -17,7 +17,7 @@
 * 实现全面的多模态内容处理能力    
     要对文生图, 声音生图, 以及视频生成等内容进行支持.
 
-* 落地 Agent 能力
+* 落地 Agent 能力    
     Agent 能力是指基于 AI 模型能力进行的任务的自动化处理, 如预定餐厅, 订购商品等.    
     考虑到当前 LLM 以及 Agent 能力的局限, 对于关键性的 Agent 使用仍需要`human in the loop`式的传统交互, 以达到用户确认和 `auditing` (认证)的目的, 这也要求 APP 能够与用户进行简单的交互, 如点击确认按钮等.    
     > 请想像场景: 用户通过自然语音提出预定一杯咖啡的请求, 后端 Agent 处理请求, 显然此请求涉及线下服务, 涉及支付等关键性功能, 所以往往需要在 APP 侧展示确认按钮, 供用户确认是否继续执行.
@@ -94,14 +94,14 @@ sequenceDiagram
 ```
 ### 行为信息    
 即指布局中的 UI 控件的后端交互行为.    
-对于静态控件, 技术上体现为控件收集和播放的多模态内容所绑定的接口.    
-动态控件, 则采用预先约定的方式实现.
+对于静态控件, 技术上体现为控件绑定的多模态内容的上/下行接口.    
+快捷功能, 采用预先约定的方式进行, 产品化后应该是独立成为一个 APP???
 ```mermaid
 sequenceDiagram
     participant Device as 设备
     participant Backend as 后端
     Device->>Backend: 请求获取 APP 行为信息
-    Backend->>Device: 返回信息(语音上行 topic, 图像上行 topic...)
+    Backend->>Device: 返回信息(语音上/下行 topic, 图像上/下行 topic...)
     Device->>Device: 等待用户选择后启动 APP
 ```
     

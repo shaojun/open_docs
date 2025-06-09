@@ -1,5 +1,5 @@
 # Basic
-所有用户场景中都有以下启动流程.    
+所有用户场景中都有以下前置流程:    
 
 ```mermaid
 sequenceDiagram
@@ -7,8 +7,10 @@ sequenceDiagram
     participant AIService as AI 服务
     Device->>Web: 认证
     Web->>Device: universal_app_api - [launcher app list, app layout]
-    Web->>AIService: inject context - [用户姓名, 性格, 环境]    
+    Web-->>AIService: inject context - [用户姓名, 性格, 环境]    
 ```
+
+---> 代表可选
 # 导览机
 ## 用户故事
 * app layout    
@@ -26,9 +28,9 @@ sequenceDiagram
     Device->>AIService: modality_upward
     AIService->>Device: modality_downward
     Device->>Device: 播放处理结果
-    Device->>Device: 移动
+    Device->>Device: 用户移动
     Web->>AIService: inject context - 用户位置  
-    Web->>Device: modality_downward - 新景点播报词
+    Web->>Device: universal_app_api - [modality msg, 新景点播报词]
 ```
 ### 后台推荐内容 via 用户点击
 AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐后台已经生成的固定内容, 用户需要在触摸屏上点击确认后播放.
@@ -36,13 +38,13 @@ AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐后台已经�
 sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
-    Web->>Device: modality_downward - 听关于此地的Podcast吗,请点击确认 
-    Web->>Device: universal_app_api - [popup confirm box, play sound]
+    Web->>Device: universal_app_api - [modality msg, 音频:"听Podcast吗,请屏幕上请点确认"] 
+    Web->>Device: universal_app_api - [popup confirm box, play sound:"dingdong?"]
     Device->>Device: 播放提示音和展示提示框
     Device->>Device: 用户点击确认
     Device->>Web: universal_app_api - 用户点击了确认
     Web->>AIService: inject context - 已推荐的内容  
-    Web->>Device: modality_downward - [podcast, music, video]
+    Web->>Device: universal_app_api - [modality msg, podcast, music, video]
 ```
 
 ### 后台推荐内容 via Agent
@@ -51,10 +53,10 @@ AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐后台已经�
 > 技术可行, 暂不实现
 # 相框
 * app layout    
-    `chatter-basic` with dynamic buttons: [克隆声音]
-    需要先定义好`克隆声音`按钮的交互, 可见下文
+    `chatter-basic` with dynamic func buttons: [克隆声音]
+    需要线下约定`克隆声音`按钮的交互, 可见下文说明    
 * style    
-    设备屏幕尺寸为11寸;设备重量轻(不方便单手指直接点击?);app常规状态下应全屏显示多媒体内容;
+    请考虑: 设备屏幕尺寸11寸;设备重量轻(不方便单手指直接点击?);app常规状态下应全屏显示多媒体内容;
 ## 用户故事
 ### 基本对话
 
@@ -81,10 +83,9 @@ sequenceDiagram
     AIService->>Web: webapi tool 请求 - [set alarm, time]
     Web->>AIService: tool 调用结果
     AIService->>Device: modality_downward - [已经设置好了]
-     Web->>Device: universal_app_api - [show notify icon, 闹钟设置成功]
+    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 闹钟设置于11:11:11"]
     Web->>Web: 等待 n 分钟
-    Web->>Device: universal_app_api - [popup confirm box]
-    Web->>Device: modality_downward - 播放闹钟提示音
+    Web->>Device: universal_app_api - [popup confirm box, modality msg of 闹钟提示音]
     Device->>Device: 播放闹钟提示音和展示提示框
     Device->>Web: universal_app_api - [用户点击确认]
     Web->>AIService: inject context - 已经响过闹钟且用户点击了确认
@@ -102,15 +103,15 @@ sequenceDiagram
     AIService->>AIService: agent 判定 - loop直到满足 tool 调用条件
     AIService->>Web: webapi tool 请求 - [show image, index]
     Web->>AIService: tool 调用结果
-    Web->>Device: modality_downward - [image url]
-    AIService->>Device: modality_downward - "已经执行好了"
+    Web->>Device: universal_app_api - [modality msg of image url]
+    AIService->>Device: modality_downward - "voice: 已经执行好了"
     Device->>Device: 播放处理结果
     Web->>Device: universal_app_api - [屏幕亮度调节, 最低亮度]
     Device->>Device: 调节屏幕亮度到最低
     Device->>Web: universal_app_api - 屏幕亮度调节成功
 ```
 
-### 点击按钮请求克隆声音
+### 点击设备侧按钮请求克隆声音
 用户在设备上点击触摸屏上的`克隆声音`按钮, 弹窗出现位于**右下角**新窗口, 其中包括:    
 * Title    
 例如: "以正常的 音调 和 语速 朗读下面的文字"
@@ -123,8 +124,8 @@ sequenceDiagram
 sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
-    Device->>Device: 点击dynamic btn
-    Web-->>Device: universal_app_api - [欠费提示提示框, 需要充值]
+    Device->>Device: 点击dynamic func btn
+    Web-->>Device: universal_app_api - [popup confirm box of 欠费提示提示框, 需要充值+ 二维码]
     Device->>Device: popup window- [Title, 指定的朗读文字, 确认开始按钮]
     Device->>Device: 按住确认开始按钮 - 开始录音
     Device->>Device: 展示进度条计时
@@ -132,9 +133,29 @@ sequenceDiagram
     Device->>Web: universal_app_api - 录音文件
     Web->>AIService: mqtt api - [set to use new cloned voice]
     Web->>AIService: inject context - 用户刚才clone了一个新声音
-    Web-->>Device: universal_app_api - [欠费提示提示框, 需要充值]
+    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 克隆声音成功"]
 ```
+### 手机侧进行克隆声音
+用户在设备上点击触摸屏上的`克隆声音`按钮, 弹窗新窗口, 其中包括:    
+* TITLE   
+例如: "在手机上克隆声音"
+* 正文    
+"请用手机扫描以下二维码, 进行克隆声音"
 
+```mermaid
+sequenceDiagram
+    participant Device as 设备
+    participant AIService as AI 服务
+    Device->>Device: 点击dynamic func btn
+    Web-->>Device: universal_app_api - [popup confirm box of 欠费提示提示框, 需要充值+ 二维码]
+    Device->>Device: popup window- [Title, 在手机上克隆声音, 二维码]
+    Device->>Device: 按住确认开始按钮 - 开始录音
+    Device->>Device: 展示进度条计时
+    Device->>Device: 松开确认开始按钮 - 结束录音
+    Web->>AIService: mqtt api - [set to use new cloned voice]
+    Web->>AIService: inject context - 用户刚才clone了一个新声音
+    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 克隆声音成功"]
+```
 ### 点击按钮请求进行会议语音记录
 用户在设备上点击触摸屏上的`会议语音记录`按钮, 点击后先检查后台没有设置电子邮件地址, 如果没有, 则直接提示必须先提供.    
 弹窗出现位于**右下角**新窗口, 其中包括:    

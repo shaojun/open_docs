@@ -5,8 +5,8 @@
 sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
-    Device->>Web: 认证
-    Web->>Device: universal_app_api - [launcher app list, app layout]
+    Device->>Web: Device serial No. 进行认证
+    Web->>Device: universal_app_api - [locale, device info, launcher app list, app layout]
     Web-->>AIService: inject context - [用户姓名, 性格, 环境]    
 ```
 

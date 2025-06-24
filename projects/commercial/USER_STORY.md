@@ -38,10 +38,10 @@ AI 服务根据用户的 context (姓名, 性格, 位置等) 推荐后台已经�
 sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
-    Web->>Device: universal_app_api - [modality msg, 音频:"听Podcast吗,请屏幕上请点确认"] 
+    Web->>Device: universal_app_api - [modality msg, 音频:"听Podcast吗,请在列表上选择一个"] 
     Web->>Device: universal_app_api - [popup confirm box, play sound:"dingdong?"]
-    Device->>Device: 播放提示音和展示提示框
-    Device->>Device: 用户点击确认
+    Device->>Device: 播放提示音和展示列表框
+    Device->>Device: 用户选择了列表中的一个Podcast
     Device->>Web: universal_app_api - 用户点击了确认
     Web->>AIService: inject context - 已推荐的内容  
     Web->>Device: universal_app_api - [modality msg, podcast, music, video]

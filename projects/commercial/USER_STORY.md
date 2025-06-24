@@ -39,7 +39,7 @@ sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
     Web->>Device: universal_app_api - [modality msg, 音频:"听Podcast吗,请在列表上选择一个"] 
-    Web->>Device: universal_app_api - [popup confirm box, play sound:"dingdong?"]
+    Web->>Device: universal_app_api - [popup list box, play sound:"dingdong"]
     Device->>Device: 播放提示音和展示列表框
     Device->>Device: 用户选择了列表中的一个Podcast
     Device->>Web: universal_app_api - 用户点击了确认

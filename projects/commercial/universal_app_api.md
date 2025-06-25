@@ -96,6 +96,9 @@ APP 具体信息由2部分组成:
 `chatter_basic`示例图:    
     <img src="https://github.com/user-attachments/assets/709a2571-c7cf-4934-a8b8-3f7e8137e256" width="280" height="300" />
 
+其中拍照界面的示例图:    
+<img src="https://github.com/user-attachments/assets/a02a64ef-570d-48b4-a31d-a6edbace13c8" width="320" height="550" />
+
 ```mermaid
 sequenceDiagram
     participant Device as 设备

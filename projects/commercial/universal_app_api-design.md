@@ -97,7 +97,7 @@ APP 具体信息由2部分组成:
     <img src="https://github.com/user-attachments/assets/709a2571-c7cf-4934-a8b8-3f7e8137e256" width="280" height="300" />
 
 其中拍照界面的示例图:    
-<img src="https://github.com/user-attachments/assets/a02a64ef-570d-48b4-a31d-a6edbace13c8" width="320" height="550" />
+<img src="https://github.com/user-attachments/assets/85ce00b6-f0b0-40e2-ad6f-d5b82294f1c8" width="320" height="550" />
 
 ```mermaid
 sequenceDiagram

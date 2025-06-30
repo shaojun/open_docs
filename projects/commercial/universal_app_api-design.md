@@ -97,8 +97,12 @@ APP 具体信息由2部分组成:
     <img src="https://github.com/user-attachments/assets/709a2571-c7cf-4934-a8b8-3f7e8137e256" width="280" height="300" />
 
 其中拍照界面的示例图:    
-<img src="https://github.com/user-attachments/assets/85ce00b6-f0b0-40e2-ad6f-d5b82294f1c8" width="320" height="550" />
 
+<img src="https://github.com/user-attachments/assets/0e265fd0-e0bb-4839-a88e-a8ba39ccb11d" width="320" height="550" />    
+
+> 其中的时钟图标表示此功能为耗时任务, 将通过后续通知的方式展现结果.    
+
+基本流程:    
 ```mermaid
 sequenceDiagram
     participant Device as 设备

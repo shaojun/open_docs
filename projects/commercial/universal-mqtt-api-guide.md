@@ -40,8 +40,8 @@ rpc/visitpark-uniapp/system
 rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/dialog          # 对话消息
 rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/notification    # 通知消息
 rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/input           # 输入消息
-rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/list_selection  # 列表选择消息
-rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/context_action  # 上下文操作消息
+rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/list-selection  # 列表选择消息
+rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/request/context-action  # 上下文操作消息
 rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/event/{event_type}      # 事件消息
 rpc/visitpark-uniapp/device/{serial_no}/app/{app_id}/control/{control_type}  # 控制消息
 ```
@@ -102,14 +102,14 @@ rpc/visitpark-uniapp/broadcast                           # 系统广播消息
 统一的动作/指令类型，定义了具体要执行的操作：
 
 - `dialog` - 显示对话框
-- `list_selection` - 列表选择
+- `list-selection` - 列表选择
 - `input` - 请求输入
-- `context_action` - 上下文操作
+- `context-action` - 上下文操作
 - `notification` - 显示通知
-- `device_volume` - 设备音量控制
-- `device_mute` - 静音控制
-- `device_restart` - 重启设备
-- 
+- `device-volume` - 设备音量控制
+- `device-mute` - 静音控制
+- `device-restart` - 重启设备
+
 #### params 字段
 动作参数，控制行为的配置参数，不同action类型有不同的参数结构。
 
@@ -238,7 +238,7 @@ rpc/visitpark-uniapp/broadcast                           # 系统广播消息
   "session_id": "session_123",
   "user_id": "user_456",
   "payload": {
-    "action": "list_selection",
+    "action": "list-selection",
     "params": {
       "timeout": 45000,
       "priority": "normal",
@@ -363,7 +363,7 @@ rpc/visitpark-uniapp/broadcast                           # 系统广播消息
   "session_id": "session_123",
   "user_id": "user_456",
   "payload": {
-    "action": "list_selection",
+    "action": "list-selection",
     "params": {
       "timeout": 60000,
       "priority": "normal",
@@ -420,7 +420,7 @@ rpc/visitpark-uniapp/broadcast                           # 系统广播消息
   "session_id": "session_123",
   "user_id": "user_456",
   "payload": {
-    "action": "context_action",
+    "action": "context-action",
     "params": {
       "timeout": 30000,
       "context_type": "user_profile"
@@ -495,7 +495,7 @@ rpc/visitpark-uniapp/broadcast                           # 系统广播消息
   "session_id": "session_123",
   "user_id": "user_456",
   "payload": {
-    "action": "context_action",
+    "action": "context-action",
     "params": {
       "timeout": 45000,
       "context_type": "document_operations"

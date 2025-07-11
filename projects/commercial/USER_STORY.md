@@ -1,20 +1,110 @@
 # Basic
-所有用户场景中都有以下前置流程:    
+## 基本流程概览   
+> 实线表示当前项目中有实际开发任务.
+> 虚线表示无实际开发任务.
+```mermaid
+sequenceDiagram
+    participant Device as 设备
+    participant AIService as AI 服务
+    Device-->>Device: 设备启动
+    Device->>Web: SN 进行认证请求
+    Web->>Device: universal_app_api - [locale, device info, launcher app list, app layout]
+    Device->>Device: 展示 launcher app with app icon list
+    Device->>Device: 用户选择某个 app 开始使用
+    Device->>Device: 用户退出当前 app, 返回 launcher
+```
+## app layout
+均采用`chatter-basic` 布局.
+
+# 智能相册
+在当前智能相册已经有的功能基础上, 增加 AI 相关的功能.   
+项目将采用创建一个新的 app 来实现, 应与现有智能相册功能隔离, 以下功能实现均于此新 app 中.
+## 用户故事
+### 会议语音记录和整理
+#### 准备会议录音
+```mermaid
+sequenceDiagram
+    participant User as User
+    participant Device as 设备
+    participant Service as 后台
+    User-->>Device: 点击 创建会议录音 按钮, 并可以录入语音, 介绍会议
+    Device->>Service: 申请 创建会议录音
+    Service->>Device: 返回 接收会议纪要注册二维码 - 每15秒更新一次
+    Device->>Device: UI 展现二维码, 供会后, 想接收会议纪要的用户扫码申请
+    User-->>Device: 扫码申请
+    User-->>Service: 申请请求 - [邮箱, wechat id]
+    Service->>Device: 初审通过的用户信息
+    Device->>Device: UI 展现用户列表
+    Device->>Device: 可选择会议管理员, 默认第一位
+    Device->>Device: 展示 开始会议录音 按钮
+    
+```
+#### 开始会议录音
+```mermaid
+sequenceDiagram
+    participant User as User
+    participant Device as 设备
+    participant Service as 后台
+    Device->>Device: 展示时间进度条, 以及暂停录音按钮(敏感内容?)
+    Device->>Service: 录音开始
+    Device->>Service: 持续上传
+    User-->>Device: 点击 结束会议录音 按钮
+    Service->>Service: 语音识别和整理
+    Service->>User: send link to 管理员: 可编辑收件人列表+可编辑会议纪要(说话人1:..., 说话人2:...)
+    Service->>Service: 发送最终会议纪要到确认的申请人员
+```
+
+### 点击设备侧按钮请求克隆声音
+用户在设备上点击触摸屏上的`克隆声音`按钮, 弹窗出现位于**右下角**新窗口, 其中包括:    
+* Title    
+例如: "以正常的 音调 和 语速 朗读下面的文字"
+* 指定的朗读文字    
+正中位置, 内容例如: "如果能再给我一天光明, 我会让你看到我最美的一面! 唉, 可惜了."
+* 确认开始按钮
+按住后, 开始录音, 展示进度条计时, 松开时结束录音, 如果录音时间过长或者过短, 则提示用户重新录音.
 
 ```mermaid
 sequenceDiagram
     participant Device as 设备
     participant AIService as AI 服务
-    Device->>Web: SN + Info (SIM卡ID, 硬件信息等等) 进行认证请求
-    Web->>Device: universal_app_api - [locale, device info, launcher app list, app layout]
-    Web-->>AIService: inject context - [用户姓名, 性格, 环境]    
+    Device->>Device: 点击dynamic func btn
+    Web-->>Device: universal_app_api - [popup confirm box of 欠费提示提示框, 需要充值+ 二维码]
+    Device->>Device: popup window- [Title, 指定的朗读文字, 确认开始按钮]
+    Device->>Device: 按住确认开始按钮 - 开始录音
+    Device->>Device: 展示进度条计时
+    Device->>Device: 松开确认开始按钮 - 结束录音
+    Device->>Web: universal_app_api - 录音文件
+    Web->>AIService: mqtt api - [set to use new cloned voice]
+    Web->>AIService: inject context - 用户刚才clone了一个新声音
+    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 克隆声音成功"]
+```
+### 手机侧进行克隆声音
+用户在设备上点击触摸屏上的`克隆声音`按钮, 弹窗新窗口, 其中包括:    
+* TITLE   
+例如: "在手机上克隆声音"
+* 正文    
+"请用手机扫描以下二维码, 进行克隆声音"
+
+```mermaid
+sequenceDiagram
+    participant Device as 设备
+    participant AIService as AI 服务
+    Device->>Device: 点击dynamic func btn
+    Web-->>Device: universal_app_api - [popup confirm box of 欠费提示提示框, 需要充值+ 二维码]
+    Device->>Device: popup window- [Title, 在手机上克隆声音, 二维码]
+    Device->>Device: 按住确认开始按钮 - 开始录音
+    Device->>Device: 展示进度条计时
+    Device->>Device: 松开确认开始按钮 - 结束录音
+    Web->>AIService: mqtt api - [set to use new cloned voice]
+    Web->>AIService: inject context - 用户刚才clone了一个新声音
+    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 克隆声音成功"]
 ```
 
----> 代表可选
+
 # 导览机
 ## 用户故事
 * app layout    
-    符合`chatter-basic`
+    符合 `chatter-basic`
 * app layout style
     none
 ### 基本对话
@@ -110,60 +200,6 @@ sequenceDiagram
     Device->>Device: 调节屏幕亮度到最低
     Device->>Web: universal_app_api - 屏幕亮度调节成功
 ```
-
-### 点击设备侧按钮请求克隆声音
-用户在设备上点击触摸屏上的`克隆声音`按钮, 弹窗出现位于**右下角**新窗口, 其中包括:    
-* Title    
-例如: "以正常的 音调 和 语速 朗读下面的文字"
-* 指定的朗读文字    
-正中位置, 内容例如: "如果能再给我一天光明, 我会让你看到我最美的一面! 唉, 可惜了."
-* 确认开始按钮
-按住后, 开始录音, 展示进度条计时, 松开时结束录音, 如果录音时间过长或者过短, 则提示用户重新录音.
-
-```mermaid
-sequenceDiagram
-    participant Device as 设备
-    participant AIService as AI 服务
-    Device->>Device: 点击dynamic func btn
-    Web-->>Device: universal_app_api - [popup confirm box of 欠费提示提示框, 需要充值+ 二维码]
-    Device->>Device: popup window- [Title, 指定的朗读文字, 确认开始按钮]
-    Device->>Device: 按住确认开始按钮 - 开始录音
-    Device->>Device: 展示进度条计时
-    Device->>Device: 松开确认开始按钮 - 结束录音
-    Device->>Web: universal_app_api - 录音文件
-    Web->>AIService: mqtt api - [set to use new cloned voice]
-    Web->>AIService: inject context - 用户刚才clone了一个新声音
-    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 克隆声音成功"]
-```
-### 手机侧进行克隆声音
-用户在设备上点击触摸屏上的`克隆声音`按钮, 弹窗新窗口, 其中包括:    
-* TITLE   
-例如: "在手机上克隆声音"
-* 正文    
-"请用手机扫描以下二维码, 进行克隆声音"
-
-```mermaid
-sequenceDiagram
-    participant Device as 设备
-    participant AIService as AI 服务
-    Device->>Device: 点击dynamic func btn
-    Web-->>Device: universal_app_api - [popup confirm box of 欠费提示提示框, 需要充值+ 二维码]
-    Device->>Device: popup window- [Title, 在手机上克隆声音, 二维码]
-    Device->>Device: 按住确认开始按钮 - 开始录音
-    Device->>Device: 展示进度条计时
-    Device->>Device: 松开确认开始按钮 - 结束录音
-    Web->>AIService: mqtt api - [set to use new cloned voice]
-    Web->>AIService: inject context - 用户刚才clone了一个新声音
-    Web->>Device: universal_app_api - [show notify icon btn, click behavior: "show text: 克隆声音成功"]
-```
-### 点击按钮请求进行会议语音记录
-用户在设备上点击触摸屏上的`会议语音记录`按钮, 点击后先检查后台没有设置电子邮件地址, 如果没有, 则直接提示必须先提供.    
-弹窗出现位于**右下角**新窗口, 其中包括:    
-* Title
-例如: "会议语音记录"
-* 确认开始按钮
-点击后, 开始录音, 按钮变成"取消"; 展示进度条计时, 如果录音时间过短, 则提示内容过短, 将取消本次功能.
-实际的技术实现将是`RTC + ASR + disabled LLM` ??? WEB端收取所有ASR结果, 再单独送到 AI 服务进行处理, 处理结果返回给WEB, WEB再发邮件???
 
 ### 语音请求进行设备设置
 调节音量为示例.

@@ -302,6 +302,32 @@ GET /v1/uniapp/sessions/history?session_id={session_id}&pageIndex=0&pageSize=20
   "page_size": 20
 }
 ```
+#### 2.4 启动RTC会话
+创建新AGORA会话。
+
+**请求：**
+```
+POST /v1/uniapp/sessions/start-rtc
+```
+
+**响应：**
+```json
+{
+  "rtc_token": "",
+  "channel_name": "rtc_yufy",
+  "user_id": 83358744,
+  "app_id": "7041fd4d0c604aca995415b5101896c6",
+  "token_expires_at": "2025-07-12T15:12:06.9326084Z",
+  "server_config": null
+}
+```
+
+#### 2.2 停止RTC会话
+
+**请求：**
+```
+POST /v1/uniapp/sessions/close-rtc
+```
 
 ### 3. 推送消息接口 (Client Request)
 

@@ -240,16 +240,46 @@ POST /v1/uniapp/sessions/start
 **响应：**
 ```json
 {
-  "session_id": "会话ID",
-  "status": "active",
-  "created_at": "2024-01-01T00:00:00Z",
-  "expires_at": "2024-01-01T01:00:00Z",
+  "session_id": "",
+  "status": "started",
+  "created_at": "2025-07-12T13:57:46.2046833Z",
+  "expires_at": null,
+  "config": null,
   "mqtt_server": {
-    "ws_endpoint": "wss://mqtt.example.com",
-    "ws_port": 8083
+    "ws_endpoint": "wss://mqtt.visitpark.cn/mqtt",
+    "mqtt_endpoint": "mqtt.visitpark.cn",
+    "ws_port": 443,
+    "mqtt_port": 1883,
+    "use_secure_connection": true,
+    "username": "",
+    "password": "",
+    "topics": {
+      "modality_upward": {
+        "topic": "rpc/visitpark_ai_service/worker_manager/shaoshao/modality_upward/worker/rtc_s3xh",
+        "description": "",
+        "qos": 0,
+        "can_publish": false,
+        "can_subscribe": true
+      },
+      "modality_downward": {
+        "topic": "rpc/visitpark_ai_service/worker_manager/shaoshao/modality_downward/worker/rtc_s3xh",
+        "description": "",
+        "qos": 0,
+        "can_publish": false,
+        "can_subscribe": true
+      },
+      "worker_event": {
+        "topic": "rpc/visitpark_ai_service/worker_manager/shaoshao/worker_event/worker/rtc_s3xh",
+        "description": "",
+        "qos": 0,
+        "can_publish": false,
+        "can_subscribe": true
+      }
+    },
+    "client_id_prefix": "visiontalk_",
+    "connection_parameters": {}
   }
-}
-```
+}```
 
 #### 2.2 停止会话
 停止指定的会话。

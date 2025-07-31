@@ -4,6 +4,11 @@
 
 Uniapp API 是一个用于设备管理和会话控制的云端API服务，主要用于数字人交互、媒体控制和消息通信。
 
+通过接口1.4获取租户API地址
+
+GET https://cloud.uniapp.visitpark.cn/v1/uniapp/tenant/devices?serial_no=xxxx
+
+
 **基础信息：**
 - API版本：v1
 - 基础URL：`https://cloud.uniapp.visitpark.cn`
@@ -26,6 +31,7 @@ headers: {
 在开始使用Uniapp API之前，请按照以下流程进行API调用：
 
 ### 标准调用流程
+
 
 ```mermaid
 graph TD
@@ -216,6 +222,22 @@ GET /v1/uniapp/devices/app-list
   ]
 }
 ```
+
+#### 1.4 根据设备序列号获取租户接口地址
+
+**请求**
+```
+GET /v1/uniapp/tenant/devices?serial_no=xxxx
+```
+
+**响应：**
+```json
+{
+  "tenant_base_url": "https://cloud.uniapp.visitpark.cn"
+}
+```
+
+
 
 ### 2. 会话管理 (Sessions)
 

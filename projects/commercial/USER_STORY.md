@@ -20,24 +20,23 @@ sequenceDiagram
 在当前智能相册已经有的功能基础上, 增加 AI 相关的功能.   
 项目将采用创建一个新的 app 来实现, 应与现有智能相册功能隔离, 以下功能实现均于此新 app 中.
 ## 用户故事
-### 会议语音记录和整理
+### 会议录音纪要应用
 #### 准备会议录音
 ```mermaid
 sequenceDiagram
     participant User as User
     participant Device as 设备
     participant Service as 后台
-    User-->>Device: 点击 创建会议录音 按钮, 并可以录入语音, 介绍会议
+    User-->>Device: 点击 创建会议录音
     Device->>Service: 申请 创建会议录音
     Service->>Device: 返回 接收会议纪要注册二维码 - 每15秒更新一次
-    Device->>Device: UI 展现二维码, 供会后, 想接收会议纪要的用户扫码申请
+    Device->>Device: UI 展现二维码, 供想接收会议纪要的用户扫码申请
     User-->>Device: 扫码申请
     User-->>Service: 申请请求 - [邮箱, wechat id]
-    Service->>Device: 初审通过的用户信息
-    Device->>Device: UI 展现用户列表
-    Device->>Device: 可选择会议管理员, 默认第一位
-    Device->>Device: 展示 开始会议录音 按钮
-    
+    Service->>Device: 初审通过(可选管理员二次审核)的用户信息
+    Device->>Device: UI 展现初审用户列表
+    Device->>Device: 可指定管理员(负责二次审核和编辑会议纪要), 默认第一位
+    Device->>Device: 展示 开始会议录音 按钮    
 ```
 #### 开始会议录音
 ```mermaid
@@ -46,11 +45,13 @@ sequenceDiagram
     participant Device as 设备
     participant Service as 后台
     Device->>Device: 展示时间进度条, 以及暂停录音按钮(敏感内容?)
+    Device->>Device: 可选会议纪要抄送模式(二次审核模式,或者直接发送模式)
     Device->>Service: 录音开始
     Device->>Service: 持续上传
     User-->>Device: 点击 结束会议录音 按钮
-    Service->>Service: 语音识别和整理
-    Service->>User: send link to 管理员: 可编辑收件人列表+可编辑会议纪要(说话人1:..., 说话人2:...)
+    Service->>Service: 长语音识别(调用第三方平台, 耗时操作)和LLM整理
+    Service->>User: web link to 管理员: 可编辑收件人列表+可编辑会议纪要(说话人1:..., 说话人2:...)+ 可编辑说话人姓名
+    User-->>Service: 确认收件人列表和会议纪要
     Service->>Service: 发送最终会议纪要到确认的申请人员
 ```
 

@@ -383,6 +383,22 @@ POST /v1/uniapp/sessions/start-rtc
 POST /v1/uniapp/sessions/close-rtc
 ```
 
+#### 2.3 获取会话状态
+
+**请求：**
+```
+GET /v1/uniapp/sessions/status
+```
+
+**响应：**
+```json
+{
+  "is_normal": true,
+  "status": "Running"
+}
+```
+
+
 ### 3. 推送消息接口 (Client Request)
 
 #### 3.1 确认对话框推送

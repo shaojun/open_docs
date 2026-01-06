@@ -188,6 +188,7 @@ GET /v1/uniapp/devices/app-info?app_id={app_id}
   "current_language": "zh-CN",
   "app_description": "应用描述",
   "supported_languages": ["zh-CN", "en-US"],
+  "enable_agora_rtc": true,
   "style": {
     "primary_color": "#007bff",
     "secondary_color": "#6c757d",
@@ -217,6 +218,7 @@ GET /v1/uniapp/devices/app-list
       "app_name": "应用名称",
       "app_logo": "logo URL",
       "app_type": "应用类型",
+      "enable_agora_rtc": true,
       "current_language": "zh-CN"
     }
   ]
@@ -380,6 +382,22 @@ POST /v1/uniapp/sessions/start-rtc
 ```
 POST /v1/uniapp/sessions/close-rtc
 ```
+
+#### 2.3 获取会话状态
+
+**请求：**
+```
+GET /v1/uniapp/sessions/status
+```
+
+**响应：**
+```json
+{
+  "is_normal": true,
+  "status": "Running"
+}
+```
+
 
 ### 3. 推送消息接口 (Client Request)
 
